@@ -57,29 +57,28 @@ export default function StaffManagement() {
     const [notification, setNotification] = useState<{ message: string; severity: "success" | "error" } | null>(null);
 
     useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const res = await fetch("/api/users");
+                if (res.status === 403) {
+                    throw new Error("Unauthorized");
+                }
+                if (!res.ok) throw new Error("Failed to fetch users");
+                const data = await res.json();
+                setUsers(data);
+            } catch {
+                showNotification("Failed to load users", "error");
+            } finally {
+                setLoading(false);
+            }
+        };
+
         if (session?.user.role === "superAdmin") {
             fetchUsers();
         } else if (!isSessionPending && session?.user.role !== "superAdmin") {
             setLoading(false);
         }
     }, [session, isSessionPending]);
-
-    const fetchUsers = async () => {
-        try {
-            const res = await fetch("/api/users");
-            if (res.status === 403) {
-                throw new Error("Unauthorized");
-            }
-            if (!res.ok) throw new Error("Failed to fetch users");
-            const data = await res.json();
-            setUsers(data);
-        } catch (error) {
-            // console.error("Fetch users error", error);
-            showNotification("Failed to load users", "error");
-        } finally {
-            setLoading(false);
-        }
-    };
 
     if (!isSessionPending && session?.user.role !== "superAdmin") {
         return (
@@ -119,7 +118,7 @@ export default function StaffManagement() {
             // Optimize local update
             setUsers(prev => prev.map(u => u.id === selectedUser.id ? { ...u, role: newRole } : u));
             showNotification(`Role updated to ${getRoleLabel(newRole)}`, "success");
-
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             // console.error("Update role error", error);
             showNotification(error.message || "Failed to update role", "error");

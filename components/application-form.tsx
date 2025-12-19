@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { format } from "date-fns";
-import { CalendarIcon, Loader2 } from "lucide-react";
+import {  Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
@@ -27,9 +27,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { cn } from "@/lib/utils";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
 
 const formSchema = z
     .object({
@@ -39,7 +36,9 @@ const formSchema = z
         email: z.string().email({
             message: "Please enter a valid email address.",
         }),
-        whatsApp: z.string().optional(),
+        whatsApp: z.string().min(1, {
+            message: "WhatsApp number is required.",
+        }),
         startDate: z.date({
             message: "A start date is required.",
         }),
@@ -62,14 +61,15 @@ const formSchema = z
 import { submitApplication } from "@/app/actions/application";
 
 export function ApplicationForm() {
-    const router = useRouter();
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             fullName: "",
             email: "",
             whatsApp: "",
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             startDate: undefined as any,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             endDate: undefined as any,
             message: "",
         },
@@ -87,8 +87,8 @@ export function ApplicationForm() {
 
             toast.success("Application submitted successfully! We will contact you soon.");
             form.reset();
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
-            console.error(error);
             toast.error(error.message || "Something went wrong. Please try again.");
         }
     }

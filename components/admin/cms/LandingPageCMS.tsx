@@ -131,8 +131,7 @@ export default function LandingPageCMS() {
             if (!res.ok) throw new Error("Failed to save");
 
             showNotification("Content saved successfully!", "success");
-        } catch (error) {
-            console.error("Save error", error);
+        } catch {
             showNotification("Failed to save content", "error");
         } finally {
             setSaving(false);
@@ -166,8 +165,7 @@ export default function LandingPageCMS() {
                 }
             }));
             showNotification("Image uploaded successfully!", "success");
-        } catch (error) {
-            console.error("Upload error", error);
+        } catch {
             showNotification("Upload failed", "error");
         } finally {
             setSaving(false);

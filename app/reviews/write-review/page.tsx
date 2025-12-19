@@ -111,7 +111,7 @@ export default function WriteReviewPage() {
           router.replace("/reviews/thank-you");
         }
       } catch (err) {
-        console.error("Failed to check review status");
+        // failed to check review status
       } finally {
         setIsCheckingReview(false);
       }
