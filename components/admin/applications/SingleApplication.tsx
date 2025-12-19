@@ -15,6 +15,7 @@ type IApplication = {
     email: string;
     whatsApp?: string;
     startDate: string;
+    endDate?: string;
     duration: string;
     program: string;
     message?: string;
@@ -67,6 +68,10 @@ export default function SingleApplication() {
                     <Box>
                         <Typography variant="subtitle2" color="text.secondary">Start Date</Typography>
                         <DateField value={data?.startDate} format="LL" />
+                    </Box>
+                    <Box>
+                        <Typography variant="subtitle2" color="text.secondary">End Date</Typography>
+                        {data?.endDate ? <DateField value={data?.endDate} format="LL" /> : "N/A"}
                     </Box>
                     <Box>
                         <Typography variant="subtitle2" color="text.secondary">Applied On</Typography>

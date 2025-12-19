@@ -68,7 +68,7 @@ const Navbar = () => {
     { label: "Contact", id: "contact" },
   ];
 
-  const isSuperUser = user?.role === "superUser" || user?.role === "superAdmin";
+  const isSuperUser = user?.role === "superUser" || user?.role === "superAdmin" || user?.role === "admin";
 
   return (
     <>

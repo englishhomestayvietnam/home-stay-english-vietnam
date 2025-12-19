@@ -11,8 +11,12 @@ import {
 } from "@refinedev/mui";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { Box, Chip, Stack, alpha } from "@mui/material";
+import { useSession } from "@/lib/auth-client";
 
 export default function ApplicationsList() {
+    const { data: session } = useSession();
+    const isSuperAdmin = session?.user.role === "superAdmin";
+
     const { dataGridProps } = useDataGrid({
         resource: "applications",
         sorters: {
@@ -64,6 +68,12 @@ export default function ApplicationsList() {
                 renderCell: ({ value }) => <DateField value={value} format="LL" />,
             },
             {
+                field: "endDate",
+                headerName: "End Date",
+                minWidth: 120,
+                renderCell: ({ value }) => value ? <DateField value={value} format="LL" /> : "-",
+            },
+            {
                 field: "status",
                 headerName: "Status",
                 minWidth: 120,
@@ -102,13 +112,17 @@ export default function ApplicationsList() {
                 renderCell: ({ row }) => (
                     <Stack direction="row" spacing={1} sx={{ height: "100%", alignItems: "center" }}>
                         <ShowButton hideText size="small" recordItemId={row.id} />
-                        <EditButton hideText size="small" recordItemId={row.id} />
-                        <DeleteButton hideText size="small" recordItemId={row.id} />
+                        {isSuperAdmin && (
+                            <>
+                                <EditButton hideText size="small" recordItemId={row.id} />
+                                <DeleteButton hideText size="small" recordItemId={row.id} />
+                            </>
+                        )}
                     </Stack>
                 ),
             },
         ],
-        []
+        [isSuperAdmin]
     );
 
     return (

@@ -2,7 +2,7 @@
 import { Authenticated, Refine } from "@refinedev/core";
 import dataProvider from "@refinedev/simple-rest";
 import routerProvider from "@refinedev/nextjs-router";
-import { RefineSnackbarProvider, useNotificationProvider } from "@refinedev/mui";
+import { NotistackSnackbarContent, RefineSnackbarProvider, useNotificationProvider } from "@refinedev/mui";
 import CssBaseline from "@mui/material/CssBaseline";
 import GlobalStyles from "@mui/material/GlobalStyles";
 import { ThemeProvider } from "@mui/material/styles";
@@ -49,7 +49,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           dataProvider={dataProvider(API_URL)}
           notificationProvider={useNotificationProvider}
         >
-          <Authenticated redirectOnFail="/sign-in" key="superAdmin">
+          <Authenticated redirectOnFail="/sign-in" key="admin-layout">
             <AdminLayout>
               <main className="mt-12 max-w-6xl mx-auto">
                 {children}

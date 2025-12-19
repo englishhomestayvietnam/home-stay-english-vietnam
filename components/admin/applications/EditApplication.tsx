@@ -28,6 +28,7 @@ type IApplication = {
     email: string;
     whatsApp?: string;
     startDate: string;
+    endDate?: string;
     duration: string;
     program: string;
     message?: string;
@@ -185,6 +186,12 @@ export default function EditApplication() {
                     <MuiTextField
                         label="Requested Start Date"
                         defaultValue={new Date(record.startDate).toLocaleDateString()}
+                        InputProps={{ readOnly: true }}
+                        helperText="Read-only"
+                    />
+                    <MuiTextField
+                        label="Requested End Date"
+                        defaultValue={record.endDate ? new Date(record.endDate).toLocaleDateString() : "N/A"}
                         InputProps={{ readOnly: true }}
                         helperText="Read-only"
                     />

@@ -10,8 +10,11 @@ import {
 } from "@refinedev/mui";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { Avatar, Box, Chip, Rating, Stack, alpha } from "@mui/material";
+import { useSession } from "@/lib/auth-client";
 
 export default function ReviewList() {
+  const { data: session } = useSession();
+  const isSuperAdmin = session?.user.role === "superAdmin";
   const { dataGridProps } = useDataGrid({ resource: "get-all-reviews" });
 
   const columns = React.useMemo<GridColDef[]>(
@@ -127,13 +130,17 @@ export default function ReviewList() {
         renderCell: ({ row }) => (
           <Stack direction="row" spacing={0.5} sx={{ height: "100%", alignItems: "center" }}>
             <ShowButton hideText size="small" recordItemId={row.id} />
-            <EditButton hideText size="small" recordItemId={row.id} />
-            <DeleteButton hideText size="small" recordItemId={row.id} />
+            {isSuperAdmin && (
+              <>
+                <EditButton hideText size="small" recordItemId={row.id} />
+                <DeleteButton hideText size="small" recordItemId={row.id} />
+              </>
+            )}
           </Stack>
         ),
       },
     ],
-    []
+    [isSuperAdmin]
   );
 
   return (

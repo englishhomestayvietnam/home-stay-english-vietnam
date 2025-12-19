@@ -17,6 +17,11 @@ export const superUser = ac.newRole({
     dashboard: ["view", "update"]
 })
 
+export const admin = ac.newRole({
+    review: ["write"],
+    dashboard: ["view"]
+})
+
 export const superAdmin = ac.newRole({
     review: ["write"],
     dashboard: ["view", "update", "delete", "approve", "reject"]

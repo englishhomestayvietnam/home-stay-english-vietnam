@@ -106,6 +106,7 @@ model Application {
   email     String
   whatsApp  String?  @map("whatsapp")
   startDate DateTime @map("start_date")
+  endDate   DateTime? @map("end_date")
   duration  String
   program   String
   message   String?

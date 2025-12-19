@@ -115,6 +115,10 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
           {menuItems.map((item) => {
             const isActive = activePath === item.path;
 
+            if (item.text === "Staff" && session.data?.user.role !== "superAdmin") {
+                return null;
+            }
+
             return (
               <ListItem key={item.text} disablePadding sx={{ mb: 0.5 }}>
                 <ListItemButton
