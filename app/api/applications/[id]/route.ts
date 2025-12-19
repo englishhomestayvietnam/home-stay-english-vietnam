@@ -3,6 +3,10 @@ import prisma from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { z } from "zod";
+import { Resend } from "resend";
+import ApplicationApprovedEmail from "@/components/ApplicationApprovedEmail";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function GET(
     req: Request,
@@ -13,7 +17,7 @@ export async function GET(
             headers: await headers(),
         });
 
-        if (!session || (session.user.role !== "superAdmin" && session.user.role !== "superUser")) {
+        if (!session || (session.user.role !== "superAdmin" && session.user.role !== "superUser" && session.user.role !== "admin")) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
         }
 
@@ -50,7 +54,7 @@ export async function PATCH(
             headers: await headers(),
         });
 
-        if (!session || (session.user.role !== "superAdmin" && session.user.role !== "superUser")) {
+        if (!session || session.user.role !== "superAdmin") {
             return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
         }
 
@@ -60,10 +64,37 @@ export async function PATCH(
         // Validate partial update
         const validatedData = updateSchema.parse(body);
 
+        const existing = await prisma.application.findUnique({ where: { id } });
+
+        if (!existing) {
+            return NextResponse.json({ error: "Application not found" }, { status: 404 });
+        }
+
         const application = await prisma.application.update({
             where: { id },
             data: validatedData,
         });
+
+        if (
+            validatedData.status === "APPROVED" &&
+            existing.status !== "APPROVED"
+        ) {
+            try {
+                await resend.emails.send({
+                    from: "English Homestay Vietnam <onboarding@updates.englishhomestayvietnam.com>",
+                    to: [application.email],
+                    subject: "Your application has been approved",
+                    react: ApplicationApprovedEmail({
+                        fullName: application.fullName,
+                        program: application.program,
+                        startDate: application.startDate,
+                        duration: application.duration,
+                    }),
+                });
+            } catch (emailError) {
+                console.error("Failed to send approval email:", emailError);
+            }
+        }
 
         return NextResponse.json(application);
 

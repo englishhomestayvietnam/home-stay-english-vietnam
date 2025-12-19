@@ -36,7 +36,7 @@ export async function PATCH(req: Request) {
             headers: await headers(),
         });
 
-        if (!session || (session.user.role !== "superAdmin" && session.user.role !== "superUser")) {
+        if (!session || (session.user.role !== "superAdmin" && session.user.role !== "superUser" && session.user.role !== "admin")) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
         }
 

@@ -31,25 +31,33 @@ import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 
-const formSchema = z.object({
-    fullName: z.string().min(2, {
-        message: "Full name must be at least 2 characters.",
-    }),
-    email: z.string().email({
-        message: "Please enter a valid email address.",
-    }),
-    whatsApp: z.string().optional(),
-    startDate: z.date({
-        message: "A start date is required.",
-    }),
-    duration: z.string({
-        message: "Please select a duration.",
-    }),
-    program: z.string({
-        message: "Please select a program.",
-    }),
-    message: z.string().optional(),
-});
+const formSchema = z
+    .object({
+        fullName: z.string().min(2, {
+            message: "Full name must be at least 2 characters.",
+        }),
+        email: z.string().email({
+            message: "Please enter a valid email address.",
+        }),
+        whatsApp: z.string().optional(),
+        startDate: z.date({
+            message: "A start date is required.",
+        }),
+        endDate: z.date({
+            message: "An end date is required.",
+        }),
+        duration: z.string({
+            message: "Please select a duration.",
+        }),
+        program: z.string({
+            message: "Please select a program.",
+        }),
+        message: z.string().optional(),
+    })
+    .refine((data) => data.endDate > data.startDate, {
+        path: ["endDate"],
+        message: "End date must be after start date",
+    });
 
 import { submitApplication } from "@/app/actions/application";
 
@@ -61,6 +69,8 @@ export function ApplicationForm() {
             fullName: "",
             email: "",
             whatsApp: "",
+            startDate: undefined as any,
+            endDate: undefined as any,
             message: "",
         },
     });
@@ -187,39 +197,46 @@ export function ApplicationForm() {
                     control={form.control}
                     name="startDate"
                     render={({ field }) => (
-                        <FormItem className="flex flex-col">
+                        <FormItem>
                             <FormLabel>Start Date</FormLabel>
-                            <Popover>
-                                <PopoverTrigger asChild>
-                                    <FormControl>
-                                        <Button
-                                            variant={"outline"}
-                                            className={cn(
-                                                "w-full pl-3 text-left font-normal",
-                                                !field.value && "text-muted-foreground"
-                                            )}
-                                        >
-                                            {field.value ? (
-                                                format(field.value, "PPP")
-                                            ) : (
-                                                <span>Pick a date</span>
-                                            )}
-                                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                        </Button>
-                                    </FormControl>
-                                </PopoverTrigger>
-                                <PopoverContent className="w-auto p-0" align="start">
-                                    <Calendar // Note: Assuming Custom Calendar or standard DayPicker is available. If using shadcn calendar, we need to ensure it's imported correctly.
-                                        mode="single"
-                                        selected={field.value}
-                                        onSelect={field.onChange}
-                                        disabled={(date) =>
-                                            date < new Date() || date < new Date("1900-01-01")
-                                        }
-                                        initialFocus
-                                    />
-                                </PopoverContent>
-                            </Popover>
+                            <FormDescription>Choose a future date to begin your program.</FormDescription>
+                            <FormControl>
+                                <Input
+                                    type="date"
+                                    min={format(new Date(), "yyyy-MM-dd")}
+                                    value={field.value ? format(field.value, "yyyy-MM-dd") : ""}
+                                    onChange={(e) => {
+                                        const val = e.target.value;
+                                        field.onChange(val ? new Date(val) : undefined);
+                                    }}
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+
+                <FormField
+                    control={form.control}
+                    name="endDate"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>End Date</FormLabel>
+                            <FormDescription>Choose your planned end date.</FormDescription>
+                            <FormControl>
+                                <Input
+                                    type="date"
+                                    min={(() => {
+                                        const start = form.watch("startDate");
+                                        return format(start ?? new Date(), "yyyy-MM-dd");
+                                    })()}
+                                    value={field.value ? format(field.value, "yyyy-MM-dd") : ""}
+                                    onChange={(e) => {
+                                        const val = e.target.value;
+                                        field.onChange(val ? new Date(val) : undefined);
+                                    }}
+                                />
+                            </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}

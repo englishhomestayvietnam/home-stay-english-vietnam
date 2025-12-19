@@ -23,6 +23,7 @@ import {
     Snackbar
 } from "@mui/material";
 import { MoreVert, CheckCircle, AdminPanelSettings, Person } from "@mui/icons-material";
+import { useSession } from "@/lib/auth-client";
 
 interface User {
     id: string;
@@ -47,6 +48,7 @@ const ROLES = {
 const TABS = ["Volunteer", "Staff", "Admin"];
 
 export default function StaffManagement() {
+    const { data: session, isPending: isSessionPending } = useSession();
     const [activeTab, setActiveTab] = useState(0);
     const [users, setUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState(true);
@@ -55,22 +57,37 @@ export default function StaffManagement() {
     const [notification, setNotification] = useState<{ message: string; severity: "success" | "error" } | null>(null);
 
     useEffect(() => {
-        fetchUsers();
-    }, []);
+        if (session?.user.role === "superAdmin") {
+            fetchUsers();
+        } else if (!isSessionPending && session?.user.role !== "superAdmin") {
+            setLoading(false);
+        }
+    }, [session, isSessionPending]);
 
     const fetchUsers = async () => {
         try {
             const res = await fetch("/api/users");
+            if (res.status === 403) {
+                throw new Error("Unauthorized");
+            }
             if (!res.ok) throw new Error("Failed to fetch users");
             const data = await res.json();
             setUsers(data);
         } catch (error) {
-            console.error("Fetch users error", error);
+            // console.error("Fetch users error", error);
             showNotification("Failed to load users", "error");
         } finally {
             setLoading(false);
         }
     };
+
+    if (!isSessionPending && session?.user.role !== "superAdmin") {
+        return (
+            <Box p={4} display="flex" justifyContent="center">
+                <Alert severity="error">You do not have permission to view this page.</Alert>
+            </Box>
+        );
+    }
 
     const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, user: User) => {
         setAnchorEl(event.currentTarget);
@@ -104,7 +121,7 @@ export default function StaffManagement() {
             showNotification(`Role updated to ${getRoleLabel(newRole)}`, "success");
 
         } catch (error: any) {
-            console.error("Update role error", error);
+            // console.error("Update role error", error);
             showNotification(error.message || "Failed to update role", "error");
         }
     };

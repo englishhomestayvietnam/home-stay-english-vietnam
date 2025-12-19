@@ -4,28 +4,37 @@ import { z } from "zod";
 import prisma from "@/lib/prisma";
 import { Resend } from "resend";
 import ApplicationThankYouEmail from "@/components/ApplicationThankYouEmail";
+import AdminNewApplicationEmail from "@/components/AdminNewApplicationEmail";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-const applicationSchema = z.object({
-    fullName: z.string().min(2, {
-        message: "Full name must be at least 2 characters.",
-    }),
-    email: z.string().email({
-        message: "Please enter a valid email address.",
-    }),
-    whatsApp: z.string().optional(),
-    startDate: z.date({
-        message: "A start date is required.",
-    }),
-    duration: z.string({
-        message: "Please select a duration.",
-    }),
-    program: z.string({
-        message: "Please select a program.",
-    }),
-    message: z.string().optional(),
-});
+const applicationSchema = z
+    .object({
+        fullName: z.string().min(2, {
+            message: "Full name must be at least 2 characters.",
+        }),
+        email: z.string().email({
+            message: "Please enter a valid email address.",
+        }),
+        whatsApp: z.string().optional(),
+        startDate: z.date({
+            message: "A start date is required.",
+        }),
+        endDate: z.date({
+            message: "An end date is required.",
+        }),
+        duration: z.string({
+            message: "Please select a duration.",
+        }),
+        program: z.string({
+            message: "Please select a program.",
+        }),
+        message: z.string().optional(),
+    })
+    .refine((data) => data.endDate > data.startDate, {
+        path: ["endDate"],
+        message: "End date must be after start date",
+    });
 
 export async function submitApplication(values: z.infer<typeof applicationSchema>) {
     try {
@@ -49,6 +58,32 @@ export async function submitApplication(values: z.infer<typeof applicationSchema
         } catch (emailError) {
             console.error("Failed to send confirmation email:", emailError);
             // We don't fail the submission if email fails, just log it.
+        }
+
+        try {
+            const admins = await prisma.user.findMany({
+                where: { role: "superAdmin" },
+                select: { email: true },
+            });
+            const adminEmails = admins.map((u) => u.email).filter(Boolean);
+            if (adminEmails.length > 0) {
+                await resend.emails.send({
+                    from: "English Homestay Vietnam <onboarding@updates.englishhomestayvietnam.com>",
+                    to: adminEmails,
+                    subject: "New application submitted",
+                    react: AdminNewApplicationEmail({
+                        fullName: validatedData.fullName,
+                        email: validatedData.email,
+                        program: validatedData.program,
+                        startDate: validatedData.startDate,
+                        endDate: validatedData.endDate,
+                        duration: validatedData.duration,
+                        message: validatedData.message,
+                    }),
+                });
+            }
+        } catch (notifyError) {
+            console.error("Failed to notify admins of new application:", notifyError);
         }
 
         return { success: true, data: application };
