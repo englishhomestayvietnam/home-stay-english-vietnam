@@ -13,11 +13,18 @@ const applicationSchema = z
         fullName: z.string().min(1, "Full name is required"),
         email: z.string().email("Invalid email address"),
         whatsApp: z.string().min(1, "WhatsApp number is required"),
+        country: z.string().min(1, "Country is required"),
+        sex: z.string().min(1, "Sex is required"),
         startDate: z.string().pipe(z.coerce.date()),
         endDate: z.string().pipe(z.coerce.date()),
         duration: z.string().min(1, "Duration is required"),
-        program: z.string().min(1, "Program is required"),
+
         message: z.string().optional(),
+        groupMembers: z.array(z.object({
+            fullName: z.string().min(1, "Full name is required"),
+            country: z.string().min(1, "Country is required"),
+            sex: z.string().min(1, "Sex is required"),
+        })).optional(),
     })
     .refine((data) => data.endDate > data.startDate, {
         path: ["endDate"],
@@ -30,7 +37,12 @@ export async function POST(req: Request) {
         const validatedData = applicationSchema.parse(body);
 
         const application = await prisma.application.create({
-            data: validatedData,
+            data: {
+                ...validatedData,
+                groupMembers: {
+                    create: validatedData.groupMembers || [],
+                },
+            },
         });
 
         try {
@@ -47,11 +59,13 @@ export async function POST(req: Request) {
                     react: AdminNewApplicationEmail({
                         fullName: validatedData.fullName,
                         email: validatedData.email,
-                        program: validatedData.program,
+                        country: validatedData.country,
+                        sex: validatedData.sex,
                         startDate: validatedData.startDate,
                         endDate: validatedData.endDate,
                         duration: validatedData.duration,
                         message: validatedData.message,
+                        groupMembers: validatedData.groupMembers,
                     }),
                 });
             }

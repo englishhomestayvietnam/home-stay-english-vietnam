@@ -14,12 +14,10 @@ import * as React from "react";
 
 interface ApplicationThankYouEmailProps {
     fullName: string;
-    program: string;
 }
 
 export default function ApplicationThankYouEmail({
     fullName,
-    program,
 }: ApplicationThankYouEmailProps) {
     return (
         <Html>
@@ -35,7 +33,7 @@ export default function ApplicationThankYouEmail({
                             Hi {fullName},
                         </Text>
                         <Text className="text-gray-700 text-base mb-6">
-                            Thank you for applying to the <strong>{program}</strong> program at English Homestay Vietnam. We have successfully received your application.
+                            Thank you for applying to English Homestay Vietnam. We have successfully received your application.
                         </Text>
                         <Text className="text-gray-700 text-base mb-6">
                             Our team will review your application and get back to you shortly with the next steps.

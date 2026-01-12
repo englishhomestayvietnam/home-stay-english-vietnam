@@ -25,6 +25,7 @@ export async function GET(
 
         const application = await prisma.application.findUnique({
             where: { id },
+            include: { groupMembers: true },
         });
 
         if (!application) {
@@ -40,7 +41,8 @@ export async function GET(
 
 const updateSchema = z.object({
     status: z.enum(["PENDING", "APPROVED", "REJECTED"]).optional(),
-    program: z.string().optional(),
+    country: z.string().optional(),
+    sex: z.string().optional(),
     duration: z.string().optional(),
     // Add other editable fields if necessary
 });
@@ -86,7 +88,6 @@ export async function PATCH(
                     subject: "Your application has been approved",
                     react: ApplicationApprovedEmail({
                         fullName: application.fullName,
-                        program: application.program,
                         startDate: application.startDate,
                         duration: application.duration,
                     }),

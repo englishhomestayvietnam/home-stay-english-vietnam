@@ -14,14 +14,12 @@ import * as React from "react";
 
 interface Props {
   fullName?: string;
-  program?: string;
   startDate?: string | Date;
   duration?: string;
 }
 
 export default function ApplicationApprovedEmail({
   fullName = "Volunteer",
-  program = "Program",
   startDate,
   duration = "",
 }: Props) {
@@ -38,8 +36,7 @@ export default function ApplicationApprovedEmail({
             </Heading>
             <Text className="text-gray-700 text-base mb-6">Hi {fullName},</Text>
             <Text className="text-gray-700 text-base mb-6">
-              Your application for the <strong>{program}</strong> program has
-              been approved.
+              Your application has been approved.
             </Text>
             <Section className="bg-gray-50 border border-gray-200 rounded p-4 mb-6">
               <Text className="text-gray-700 text-base mb-2">

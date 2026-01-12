@@ -7,8 +7,8 @@ import {
     List,
     ShowButton,
     useDataGrid,
-    DateField,
 } from "@refinedev/mui";
+import { format } from "date-fns";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { Box, Chip, Stack, alpha } from "@mui/material";
 import { useSession } from "@/lib/auth-client";
@@ -36,42 +36,39 @@ export default function ApplicationsList() {
                 headerName: "Full Name",
                 minWidth: 150,
                 flex: 1,
+                align: "center",
+                headerAlign: "center",
             },
             {
                 field: "email",
                 headerName: "Email",
                 minWidth: 200,
                 flex: 1,
-            },
-            {
-                field: "program",
-                headerName: "Program",
-                minWidth: 150,
-                renderCell: ({ value }) => (
-                    <Chip
-                        label={value}
-                        size="small"
-                        variant="outlined"
-                        sx={{ textTransform: 'capitalize' }}
-                    />
-                ),
+                align: "center",
+                headerAlign: "center",
             },
             {
                 field: "duration",
                 headerName: "Duration",
                 minWidth: 120,
+                align: "center",
+                headerAlign: "center",
             },
             {
                 field: "startDate",
                 headerName: "Start Date",
                 minWidth: 120,
-                renderCell: ({ value }) => <DateField value={value} format="LL" />,
+                align: "center",
+                headerAlign: "center",
+                renderCell: ({ value }) => value ? format(new Date(value), "dd MMM yyyy") : "-",
             },
             {
                 field: "endDate",
                 headerName: "End Date",
                 minWidth: 120,
-                renderCell: ({ value }) => value ? <DateField value={value} format="LL" /> : "-",
+                align: "center",
+                headerAlign: "center",
+                renderCell: ({ value }) => value ? format(new Date(value), "dd MMM yyyy") : "-",
             },
             {
                 field: "status",
@@ -98,8 +95,10 @@ export default function ApplicationsList() {
             {
                 field: "createdAt",
                 headerName: "Applied At",
-                minWidth: 150,
-                renderCell: ({ value }) => <DateField value={value} format="LLL" />,
+                minWidth: 180,
+                align: "center",
+                headerAlign: "center",
+                renderCell: ({ value }) => value ? format(new Date(value), "dd MMM yyyy, HH:mm") : "-",
             },
             {
                 field: "actions",
@@ -110,7 +109,7 @@ export default function ApplicationsList() {
                 headerAlign: "center",
                 minWidth: 120,
                 renderCell: ({ row }) => (
-                    <Stack direction="row" spacing={1} sx={{ height: "100%", alignItems: "center" }}>
+                    <Stack direction="row" spacing={1} sx={{ height: "100%", alignItems: "center", justifyContent: "center", width: "100%" }}>
                         <ShowButton hideText size="small" recordItemId={row.id} />
                         {isSuperAdmin && (
                             <>
@@ -139,6 +138,17 @@ export default function ApplicationsList() {
                     "& .MuiDataGrid-cell": {
                         borderBottom: "1px solid",
                         borderColor: "divider",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                    },
+                    "& .MuiDataGrid-columnHeader": {
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                    },
+                    "& .MuiDataGrid-columnHeaderTitleContainer": {
+                        justifyContent: "center",
                     },
                     "& .MuiDataGrid-columnHeaders": {
                         bgcolor: "transparent",

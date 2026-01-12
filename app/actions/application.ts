@@ -19,6 +19,8 @@ const applicationSchema = z
         whatsApp: z.string().min(1, {
             message: "WhatsApp number is required.",
         }),
+        country: z.string().min(1, "Country is required"),
+        sex: z.string().min(1, "Sex is required"),
         startDate: z.date({
             message: "A start date is required.",
         }),
@@ -28,10 +30,13 @@ const applicationSchema = z
         duration: z.string({
             message: "Please select a duration.",
         }),
-        program: z.string({
-            message: "Please select a program.",
-        }),
+
         message: z.string().optional(),
+        groupMembers: z.array(z.object({
+            fullName: z.string().min(1, "Full name is required"),
+            country: z.string().min(1, "Country is required"),
+            sex: z.string().min(1, "Sex is required"),
+        })).optional(),
     })
     .refine((data) => data.endDate > data.startDate, {
         path: ["endDate"],
@@ -43,7 +48,12 @@ export async function submitApplication(values: z.infer<typeof applicationSchema
         const validatedData = applicationSchema.parse(values);
 
         const application = await prisma.application.create({
-            data: validatedData,
+            data: {
+                ...validatedData,
+                groupMembers: {
+                    create: validatedData.groupMembers || [],
+                },
+            },
         });
 
         // Send confirmation email
@@ -54,7 +64,6 @@ export async function submitApplication(values: z.infer<typeof applicationSchema
                 subject: "We received your application!",
                 react: ApplicationThankYouEmail({
                     fullName: validatedData.fullName,
-                    program: validatedData.program
                 }),
             });
         } catch (emailError) {
@@ -76,11 +85,13 @@ export async function submitApplication(values: z.infer<typeof applicationSchema
                     react: AdminNewApplicationEmail({
                         fullName: validatedData.fullName,
                         email: validatedData.email,
-                        program: validatedData.program,
+                        country: validatedData.country,
+                        sex: validatedData.sex,
                         startDate: validatedData.startDate,
                         endDate: validatedData.endDate,
                         duration: validatedData.duration,
                         message: validatedData.message,
+                        groupMembers: validatedData.groupMembers,
                     }),
                 });
             }
