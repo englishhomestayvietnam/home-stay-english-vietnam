@@ -12,7 +12,7 @@ const applicationSchema = z
     .object({
         fullName: z.string().min(1, "Full name is required"),
         email: z.string().email("Invalid email address"),
-        whatsApp: z.string().optional(),
+        whatsApp: z.string().min(1, "WhatsApp number is required"),
         startDate: z.string().pipe(z.coerce.date()),
         endDate: z.string().pipe(z.coerce.date()),
         duration: z.string().min(1, "Duration is required"),

@@ -16,7 +16,9 @@ const applicationSchema = z
         email: z.string().email({
             message: "Please enter a valid email address.",
         }),
-        whatsApp: z.string().optional(),
+        whatsApp: z.string().min(1, {
+            message: "WhatsApp number is required.",
+        }),
         startDate: z.date({
             message: "A start date is required.",
         }),

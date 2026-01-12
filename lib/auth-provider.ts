@@ -1,6 +1,5 @@
 import { AuthProvider } from "@refinedev/core";
 import { authClient, getSession, signOut } from "./auth-client";
-import { auth } from "./auth";
 
 export const authProvider: AuthProvider = {
     login: async () => {
@@ -19,7 +18,7 @@ export const authProvider: AuthProvider = {
         };
     },
     logout: async () => {
-        const { data, error } = await signOut()
+        const { error } = await signOut()
 
         if (error) {
             return {
@@ -52,6 +51,7 @@ export const authProvider: AuthProvider = {
             authenticated: userHasPermission.data?.success ? true : false,
         };
     },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError: async (error: any) => {
         const status = error?.status ?? error?.statusCode;
 
