@@ -117,23 +117,37 @@ export default function EditApplication() {
 
                 <Box display="grid" gridTemplateColumns={{ xs: "1fr", md: "1fr 1fr" }} gap={3}>
                     <Controller
-                        name="program"
+                        name="country"
                         control={control}
-                        rules={{ required: "Program is required" }}
+                        rules={{ required: "Country is required" }}
                         render={({ field }) => (
-                            <FormControl fullWidth error={!!errors.program}>
-                                <InputLabel>Program</InputLabel>
+                            <MuiTextField
+                                {...field}
+                                label="Country"
+                                error={!!errors.country}
+                                helperText={errors.country?.message as string}
+                                fullWidth
+                            />
+                        )}
+                    />
+
+                    <Controller
+                        name="sex"
+                        control={control}
+                        rules={{ required: "Sex is required" }}
+                        render={({ field }) => (
+                            <FormControl fullWidth error={!!errors.sex}>
+                                <InputLabel>Sex</InputLabel>
                                 <Select
                                     {...field}
                                     value={field.value ?? ""}
-                                    label="Program"
+                                    label="Sex"
                                 >
-                                    <MenuItem value="volunteer">Volunteer Program</MenuItem>
-                                    <MenuItem value="internship">Internship</MenuItem>
-                                    <MenuItem value="cultural-exchange">Cultural Exchange</MenuItem>
-                                    <MenuItem value="homestay">Homestay Only</MenuItem>
+                                    <MenuItem value="Male">Male</MenuItem>
+                                    <MenuItem value="Female">Female</MenuItem>
+                                    <MenuItem value="Other">Other</MenuItem>
                                 </Select>
-                                <FormHelperText>{errors.program?.message as string}</FormHelperText>
+                                <FormHelperText>{errors.sex?.message as string}</FormHelperText>
                             </FormControl>
                         )}
                     />

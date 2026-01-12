@@ -108,13 +108,28 @@ model Application {
   startDate DateTime @map("start_date")
   endDate   DateTime? @map("end_date")
   duration  String
-  program   String
+  country   String   @default("Unknown")
+  sex       String   @default("Unknown")
   message   String?
   status    String   @default("PENDING") // PENDING, APPROVED, REJECTED
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
+  groupMembers GroupMember[]
+
   @@map("applications")
+}
+
+model GroupMember {
+  id            String      @id @default(cuid())
+  applicationId String      @map("application_id")
+  fullName      String      @map("full_name")
+  sex           String
+  country       String
+
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  @@map("group_members")
 }
 
 model LandingPageContent {

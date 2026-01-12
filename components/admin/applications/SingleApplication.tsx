@@ -17,10 +17,16 @@ type IApplication = {
     startDate: string;
     endDate?: string;
     duration: string;
-    program: string;
+    country: string;
+    sex: string;
     message?: string;
     status: string;
     createdAt: string;
+    groupMembers?: {
+        fullName: string;
+        country: string;
+        sex: string;
+    }[];
 };
 
 export default function SingleApplication() {
@@ -58,8 +64,12 @@ export default function SingleApplication() {
                 {/* Key Details Grid */}
                 <Box display="grid" gridTemplateColumns={{ xs: "1fr", sm: "1fr 1fr" }} gap={4}>
                     <Box>
-                        <Typography variant="subtitle2" color="text.secondary">Program</Typography>
-                        <Typography variant="body1" sx={{ textTransform: 'capitalize' }}>{data?.program}</Typography>
+                        <Typography variant="subtitle2" color="text.secondary">Country</Typography>
+                        <Typography variant="body1">{data?.country}</Typography>
+                    </Box>
+                    <Box>
+                        <Typography variant="subtitle2" color="text.secondary">Sex</Typography>
+                        <Typography variant="body1">{data?.sex}</Typography>
                     </Box>
                     <Box>
                         <Typography variant="subtitle2" color="text.secondary">Duration</Typography>
@@ -94,6 +104,39 @@ export default function SingleApplication() {
                 </Box>
 
                 <Divider />
+
+                {/* Group Members */}
+                {data?.groupMembers && data.groupMembers.length > 0 && (
+                    <>
+                        <Box>
+                            <Typography variant="h6" fontWeight={600} gutterBottom>
+                                Group Members ({data.groupMembers.length})
+                            </Typography>
+                            <Stack spacing={2}>
+                                {data.groupMembers.map((member, index) => (
+                                    <Box key={index} p={2} border={1} borderColor="divider" borderRadius={1}>
+                                        <Typography variant="subtitle2">Member {index + 1}</Typography>
+                                        <Box display="grid" gridTemplateColumns="repeat(3, 1fr)" gap={2} mt={1}>
+                                            <Box>
+                                                <Typography variant="caption" color="text.secondary">Name</Typography>
+                                                <Typography variant="body2">{member.fullName}</Typography>
+                                            </Box>
+                                            <Box>
+                                                <Typography variant="caption" color="text.secondary">Country</Typography>
+                                                <Typography variant="body2">{member.country}</Typography>
+                                            </Box>
+                                            <Box>
+                                                <Typography variant="caption" color="text.secondary">Sex</Typography>
+                                                <Typography variant="body2">{member.sex}</Typography>
+                                            </Box>
+                                        </Box>
+                                    </Box>
+                                ))}
+                            </Stack>
+                        </Box>
+                        <Divider />
+                    </>
+                )}
 
                 {/* Message */}
                 <Box>

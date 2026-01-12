@@ -16,21 +16,29 @@ import * as React from "react";
 interface Props {
   fullName: string;
   email: string;
-  program: string;
+  country : string;
+  sex : string;
   startDate: string | Date;
   endDate?: string | Date;
   duration: string;
   message?: string;
+  groupMembers?: {
+    fullName: string;
+    country: string;
+    sex: string;
+  }[];
 }
 
 export default function AdminNewApplicationEmail({
   fullName,
   email,
-  program,
+  country,
+  sex,
   startDate,
   endDate,
   duration,
   message,
+  groupMembers,
 }: Props) {
   const start = new Date(startDate).toLocaleDateString();
   const end = endDate ? new Date(endDate).toLocaleDateString() : undefined;
@@ -52,7 +60,10 @@ export default function AdminNewApplicationEmail({
                 <strong>Email:</strong> {email}
               </Text>
               <Text className="text-gray-700 text-base">
-                <strong>Program:</strong> {program}
+                <strong>Country:</strong> {country}
+              </Text>
+              <Text className="text-gray-700 text-base">
+                <strong>Sex:</strong> {sex}
               </Text>
               <Text className="text-gray-700 text-base">
                 <strong>Start date:</strong> {start}
@@ -69,6 +80,28 @@ export default function AdminNewApplicationEmail({
                 <Text className="text-gray-700 text-base">
                   <strong>Message:</strong> {message}
                 </Text>
+              )}
+
+              {groupMembers && groupMembers.length > 0 && (
+                <>
+                  <Hr className="border-gray-200 my-4" />
+                  <Heading as="h3" className="text-lg font-bold text-gray-800 mb-2">
+                    Group Members
+                  </Heading>
+                  {groupMembers.map((member, index) => (
+                    <Section key={index} className="mb-2 pl-4 border-l-2 border-gray-300">
+                      <Text className="text-gray-700 text-sm m-1">
+                        <strong>Name:</strong> {member.fullName}
+                      </Text>
+                      <Text className="text-gray-700 text-sm m-1">
+                        <strong>Country:</strong> {member.country}
+                      </Text>
+                      <Text className="text-gray-700 text-sm m-1">
+                        <strong>Sex:</strong> {member.sex}
+                      </Text>
+                    </Section>
+                  ))}
+                </>
               )}
             </Section>
             <Link
