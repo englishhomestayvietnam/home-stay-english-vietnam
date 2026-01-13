@@ -13,6 +13,14 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { Box, Chip, Stack, alpha } from "@mui/material";
 import { useSession } from "@/lib/auth-client";
 
+
+interface GroupMember {
+    id: string;
+    fullName: string;
+    sex: string;
+    country: string;
+}
+
 export default function ApplicationsList() {
     const { data: session } = useSession();
     const isSuperAdmin = session?.user.role === "superAdmin";
@@ -101,6 +109,38 @@ export default function ApplicationsList() {
                 renderCell: ({ value }) => value ? format(new Date(value), "dd MMM yyyy, HH:mm") : "-",
             },
             {
+                field: "groupMembers",
+                headerName: "Group Members",
+                minWidth: 250,
+                flex: 1,
+                align: "center",
+                headerAlign: "center",
+                renderCell: ({ row }) => {
+                    const members = row.groupMembers as GroupMember[];
+                    if (!members || members.length === 0) return "-";
+                    return (
+                        <Stack spacing={0.5} py={1} sx={{ width: "100%" }}>
+                            {members.map((member) => (
+                                <Box key={member.id} sx={{
+                                    p: 1,
+                                    bgcolor: "background.paper",
+                                    borderRadius: 1,
+                                    border: "1px solid",
+                                    borderColor: "divider",
+                                    fontSize: "0.75rem",
+                                    textAlign: "left"
+                                }}>
+                                    <strong>{member.fullName}</strong>
+                                    <Box component="span" sx={{ color: "text.secondary" }}>
+                                        {" • "}{member.sex}{" • "}{member.country}
+                                    </Box>
+                                </Box>
+                            ))}
+                        </Stack>
+                    );
+                },
+            },
+            {
                 field: "actions",
                 headerName: "Actions",
                 sortable: false,
@@ -131,7 +171,7 @@ export default function ApplicationsList() {
                 columns={columns}
                 autoHeight
                 disableRowSelectionOnClick
-                rowHeight={60}
+                getRowHeight={() => "auto"}
                 sx={{
                     border: "none",
                     boxShadow: "none",
