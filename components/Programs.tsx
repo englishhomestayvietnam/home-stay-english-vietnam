@@ -1,187 +1,151 @@
 'use client';
 
-import { GraduationCap, Home } from "lucide-react";
+import React from "react";
+import { Languages, Clock, Home, Map, Users } from "lucide-react";
 import { motion, Variants } from "framer-motion";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
+import Link from "next/link";
+import Image from "next/image";
 
-const Programs = ({ content }: { content?: any }) => {
-  const programs = [
-    // ... items remain hardcoded for now or fetched if we expand schema
-    {
-      icon: <GraduationCap className="w-12 h-12 text-primary" />,
-      title: "Volunteer English Teacher",
-      description:
-        "Share your language skills and help Vietnamese learners improve their English through conversation and interactive lessons.",
-      image: "/home_stay_vietnam_1.jpg",
-      features: [
-        "Free accommodation provided",
-        "Help locals practice English",
-        "Flexible teaching schedule",
-        "Around 15 hours per week",
-      ],
-    },
-    {
-      icon: <Home className="w-12 h-12 text-secondary" />,
-      title: "Homestay Cultural Exchange",
-      description:
-        "Immerse yourself in authentic Vietnamese daily life while sharing your culture with your host family.",
-      image: "/home_stay_vietnam_1.jpg",
-      features: [
-        "Live with a local family",
-        "Share meals and daily activities",
-        "Explore Vietnamese culture",
-        "Preferred stay: 1-3 months",
-      ],
-    },
-  ];
+// Types for the component
+interface ProgramFeature {
+  icon: React.ReactNode;
+  text: string;
+}
+
+interface ProgramData {
+  title: string;
+  description: string;
+  image: string;
+  features: ProgramFeature[];
+}
+
+interface ProgramContent {
+  title?: string;
+  description?: string;
+}
+
+interface ProgramsProps {
+  content?: ProgramContent;
+}
+
+// Mocking UI components with TypeScript
+interface UIComponentProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+const Card: React.FC<UIComponentProps> = ({ children, className }) => (
+  <div className={`rounded-xl border bg-card text-card-foreground shadow-sm ${className}`}>{children}</div>
+);
+
+const CardHeader: React.FC<UIComponentProps> = ({ children, className }) => (
+  <div className={`flex flex-col space-y-1.5 p-6 ${className}`}>{children}</div>
+);
+
+const CardTitle: React.FC<UIComponentProps> = ({ children, className }) => (
+  <h3 className={`text-2xl font-semibold leading-none tracking-tight ${className}`}>{children}</h3>
+);
+
+const CardDescription: React.FC<UIComponentProps> = ({ children, className }) => (
+  <p className={`text-sm text-muted-foreground ${className}`}>{children}</p>
+);
+
+const CardContent: React.FC<UIComponentProps> = ({ children, className }) => (
+  <div className={`p-6 pt-0 ${className}`}>{children}</div>
+);
+
+const Programs: React.FC<ProgramsProps> = ({ content }) => {
+  const program: ProgramData = {
+    title: "Language & Cultural Immersion",
+    description: "Join our community-focused exchange program. Spend your evenings engaging in meaningful English conversations with local Vietnamese people and your days exploring the rich heritage of the region.",
+    image: "/home_stay_vietnam_1.jpg",
+    features: [
+      { icon: <Clock className="w-5 h-5 text-primary" />, text: "Schedule: Mon - Sat, 7:30 PM to 9:30 PM" },
+      { icon: <Users className="w-5 h-5 text-primary" />, text: "English conversation with local residents" },
+      { icon: <Map className="w-5 h-5 text-primary" />, text: "Explore authentic Vietnamese culture" },
+      { icon: <Home className="w-5 h-5 text-primary" />, text: "Free local accommodation included" },
+    ],
+  };
 
   const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.2, delayChildren: 0.3 },
-    },
-  };
-
-  const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
-  };
-
-  const listVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1, delayChildren: 0.2 },
-    },
-  };
-
-  const listItemVariants: Variants = {
-    hidden: { opacity: 0, x: -20 },
-    visible: { opacity: 1, x: 0, transition: { duration: 0.4 } },
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
   };
 
   return (
-    <section id="programs" className="py-10 md:py-12 lg:py-16 bg-linear-to-br from-background to-muted/20">
+    <section id="programs" className="py-16 md:py-24 bg-gradient-to-b from-background to-muted/30">
       <div className="container px-4 mx-auto sm:px-6 lg:px-8">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8 }}
-          className="mb-8 text-center md:mb-10"
-        >
-          <motion.h2
-            initial={{ scale: 0.9, opacity: 0 }}
-            whileInView={{ scale: 1, opacity: 1 }}
+        <div className="mb-12 text-center">
+          <motion.span 
+            className="inline-block px-3 py-1 mb-4 text-xs font-semibold tracking-wider uppercase rounded-full bg-primary/10 text-primary"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="mb-3 text-2xl font-bold sm:text-3xl md:text-4xl text-foreground"
           >
-            {content?.title || "Our Programs"}
-          </motion.h2>
+            Our Unified Program
+          </motion.span>
+          <h2 className="mb-4 text-3xl font-extrabold tracking-tight sm:text-4xl md:text-5xl text-foreground">
+            {content?.title || "Exchange & Explore"}
+          </h2>
+          <div className="w-20 h-1.5 mx-auto mb-6 rounded-full bg-primary" />
+        </div>
 
-          <motion.div
-            initial={{ scaleX: 0 }}
-            whileInView={{ scaleX: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="w-16 h-1 mx-auto mb-4 origin-left bg-linear-to-r from-primary to-secondary"
-          />
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-            className="max-w-2xl px-4 mx-auto text-sm sm:text-base text-muted-foreground"
-          >
-            {content?.description || "Choose the experience that fits your journey. Both programs offer unique opportunities for cultural exchange and personal growth."}
-          </motion.p>
-        </motion.div>
-
-        {/* Cards Grid */}
+        {/* Single Centered Card */}
         <motion.div
-          className="grid max-w-6xl grid-cols-1 gap-6 mx-auto md:grid-cols-2 lg:gap-8"
+          className="max-w-4xl mx-auto"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true }}
         >
-          {programs.map((program, index) => (
-            <motion.div key={index} variants={itemVariants} className="group">
-              <Card className="flex flex-col h-full overflow-hidden transition-all duration-500 border-0 rounded-md shadow-lg cursor-pointer hover:shadow-2xl hover:scale-95 bg-card/90 backdrop-blur-xs hover:bg-card group-hover:-translate-y-2">
-                {/* Image */}
-                <div className="relative h-40 overflow-hidden sm:h-48 lg:h-52">
-                  <motion.img
-                    src={program.image}
-                    alt={program.title}
-                    className="object-cover w-full h-full"
-                    initial={{ scale: 1.1 }}
-                    whileHover={{ scale: 1.15 }}
-                    transition={{ duration: 0.8 }}
-                  />
-                  <div className="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-transparent" />
+          <Card className="flex flex-col overflow-hidden border-none shadow-2xl md:flex-row bg-card group">
+            {/* Image Section */}
+            <div className="relative w-full md:w-1/2 h-64 md:h-auto overflow-hidden">
+              <Image
+                src={program.image}
+                alt={program.title}
+                width={200}
+                height={400}
+                className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent" />
+            </div>
 
-                  <motion.div
-                    className="absolute text-white bottom-3 left-3 drop-shadow-lg"
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.4, delay: 0.3 }}
+            {/* Content Section */}
+            <div className="flex flex-col justify-center w-full p-2 md:w-1/2 md:p-6">
+              <CardHeader>
+                <CardTitle className="text-2xl font-bold md:text-3xl text-primary">
+                  {program.title}
+                </CardTitle>
+                <CardDescription className="text-base leading-relaxed">
+                  {program.description}
+                </CardDescription>
+              </CardHeader>
+
+              <CardContent>
+                <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-1">
+                  {program.features.map((feature, idx) => (
+                    <li key={idx} className="flex items-center gap-3 text-sm font-medium text-muted-foreground">
+                      <div className="flex-shrink-0">
+                        {feature.icon}
+                      </div>
+                      <span>{feature.text}</span>
+                    </li>
+                  ))}
+                </ul>
+                
+                <div className="mt-8">
+                  <Link
+                    href="/apply" 
+                    className="inline-block w-full py-4 text-center text-sm font-bold tracking-widest uppercase transition-all rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-lg active:scale-95"
                   >
-                    <div className="w-8 h-8 sm:w-10 sm:h-10">
-                      {index === 0 ? (
-                        <GraduationCap className="w-full h-full text-primary" />
-                      ) : (
-                        <Home className="w-full h-full text-secondary" />
-                      )}
-                    </div>
-                  </motion.div>
+                    Apply for this Program
+                  </Link>
                 </div>
-
-                {/* Content */}
-                <CardHeader className="flex-1 px-5 pt-5 pb-3">
-                  <CardTitle className="text-xl font-bold transition-colors duration-300 sm:text-2xl text-foreground group-hover:text-primary">
-                    {program.title}
-                  </CardTitle>
-                  <CardDescription className="mt-2 text-sm leading-relaxed sm:text-base text-muted-foreground">
-                    {program.description}
-                  </CardDescription>
-                </CardHeader>
-
-                {/* Features */}
-                <CardContent className="flex-1 px-5 pt-0 pb-6">
-                  <motion.ul
-                    className="space-y-2 text-muted-foreground"
-                    variants={listVariants}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true }}
-                  >
-                    {program.features.map((feature, idx) => (
-                      <motion.li
-                        key={idx}
-                        variants={listItemVariants}
-                        className="flex items-start gap-2 text-xs sm:text-sm"
-                      >
-                        <motion.span
-                          className="text-primary mt-0.5 shrink-0"
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          transition={{ delay: idx * 0.1 + 0.2, type: "spring", stiffness: 300 }}
-                        >
-                          ✓
-                        </motion.span>
-                        <span>{feature}</span>
-                      </motion.li>
-                    ))}
-                  </motion.ul>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
+              </CardContent>
+            </div>
+          </Card>
         </motion.div>
       </div>
     </section>
