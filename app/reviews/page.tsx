@@ -115,7 +115,7 @@ export default async function VolunteerReviews() {
                   )}
 
                   <p className="text-gray-700 italic leading-relaxed text-sm sm:text-base flex-grow line-clamp-4 mb-5">
-                    "{review.reviewText}"
+                    {review.reviewText}
                   </p>
 
                   <div className="flex flex-wrap gap-2 text-xs mt-auto">

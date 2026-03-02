@@ -18,8 +18,14 @@ const Contact = () => {
     {
       icon: <MapPin className="w-6 h-6" />,
       label: "Address",
-      value: "Trâu Quỳ, Gia Lâm, Hà Nội, Vietnam",
+      value: "xã số 21a ngõ 22 Gia Lâm Hà Nội",
       link: "https://maps.google.com/?q=Trâu Quỳ, Gia Lâm, Hà Nội"
+    },
+    {
+      icon: <MapPin className="w-6 h-6" />,
+      label: "Address 2",
+      value: "số 246 Hải Âu 3 Vinhome Ocean Park 1 Gia Lâm Hà Nội",
+      link: "https://share.google/37RlR1DSXLvlWt9hg"
     }
   ];
 
@@ -27,12 +33,12 @@ const Contact = () => {
     {
       icon: <Facebook className="w-6 h-6" />,
       label: "Facebook",
-      link: "#"
+      link: "https://www.facebook.com/EnglishHomestayVietnam"
     },
     {
       icon: <Instagram className="w-6 h-6" />,
       label: "Instagram",
-      link: "#"
+      link: "https://www.instagram.com/englishhomestayvietnam/"
     }
   ];
 

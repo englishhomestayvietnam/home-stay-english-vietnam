@@ -50,13 +50,13 @@ export default async function ThankYouPage() {
         <p className="text-xl text-gray-700 mb-8 leading-relaxed max-w-3xl mx-auto">
           {isApproved ? (
             <>
-              Your review has been <span className="text-[#46b96c] font-bold">approved and published</span>! 
-              It's now helping future volunteers make informed decisions.
+              Your review has been <span className="text-[#46b96c] font-bold">approved and published</span>!
+              It&apos;s now helping future volunteers make informed decisions.
             </>
           ) : (
             <>
-              Your review has been submitted successfully and is currently <span className="text-orange-600 font-bold">under review</span>. 
-              We'll publish it as soon as it's approved — usually within 24 hours.
+              Your review has been submitted successfully and is currently <span className="text-orange-600 font-bold">under review</span>.
+              We&apos;ll publish it as soon as it&apos;s approved — usually within 24 hours.
             </>
           )}
         </p>
@@ -93,11 +93,10 @@ export default async function ThankYouPage() {
         {/* Status Badge */}
         <div className="mt-10">
           <span
-            className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium ${
-              isApproved
+            className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium ${isApproved
                 ? "bg-green-100 text-green-800"
                 : "bg-orange-100 text-orange-800"
-            }`}
+              }`}
           >
             {isApproved ? (
               <>
