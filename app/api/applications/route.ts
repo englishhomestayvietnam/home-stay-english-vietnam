@@ -95,6 +95,7 @@ export async function GET(req: Request) {
 
         const applications = await prisma.application.findMany({
             orderBy: { createdAt: "desc" },
+            include: { groupMembers: true },
         });
 
         return NextResponse.json(applications);
