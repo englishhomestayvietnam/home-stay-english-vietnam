@@ -11,13 +11,15 @@ import {
 import GoogleIcon from "@mui/icons-material/Google"; // MUI Google icon
 import CircularProgress from "@mui/material/CircularProgress"; // MUI loading spinner
 import { signIn, useSession } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 
-export default function Page() {
+function SignInContent() {
   const session = useSession();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get("redirectTo") || "/reviews/write-review";
 
   // All hooks at the top — always called in same order
   const [isLoading, setIsLoading] = useState(false);
@@ -37,10 +39,13 @@ export default function Page() {
     setIsLoading(true);
 
     try {
+      const userRole = session?.data?.user?.role;
+      const callbackURL = (userRole === "superAdmin" || userRole === "superUser") ? "/admin" : redirectTo;
+
       await signIn.social(
         {
           provider: "google",
-          callbackURL: session?.data?.user.role === "superAdmin" || 'superUser' ? "/admin" : "/reviews/write-review",
+          callbackURL,
         },
         {
           onError: (ctx) => {
@@ -48,7 +53,7 @@ export default function Page() {
           },
           onSuccess: () => {
             toast.success("Welcome back!");
-            router.push("/reviews/write-review");
+            router.push(callbackURL);
           },
         }
       );
@@ -102,5 +107,17 @@ export default function Page() {
         </p>
       </CardContent>
     </Card>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center min-h-screen">
+        <CircularProgress />
+      </div>
+    }>
+      <SignInContent />
+    </Suspense>
   );
 }

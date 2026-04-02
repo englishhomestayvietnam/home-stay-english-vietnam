@@ -66,13 +66,18 @@ const formSchema = z
     });
 
 import { submitApplication } from "@/app/actions/application";
+import { useSession } from "@/lib/auth-client";
+import { useEffect } from "react";
 
 export function ApplicationForm() {
+    const { data: session } = useSession();
+    const user = session?.user;
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            fullName: "",
-            email: "",
+            fullName: user?.name || "",
+            email: user?.email || "",
             whatsApp: "",
             country: "",
             sex: "",
@@ -84,6 +89,14 @@ export function ApplicationForm() {
             groupMembers: [],
         },
     });
+
+    // Update form values when session loads
+    useEffect(() => {
+        if (user) {
+            if (user.name) form.setValue("fullName", user.name);
+            if (user.email) form.setValue("email", user.email);
+        }
+    }, [user, form]);
 
     const { fields, append, remove } = useFieldArray({
         control: form.control,
