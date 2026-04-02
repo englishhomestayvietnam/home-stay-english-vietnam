@@ -68,10 +68,12 @@ const formSchema = z
 import { submitApplication } from "@/app/actions/application";
 import { useSession } from "@/lib/auth-client";
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export function ApplicationForm() {
     const { data: session } = useSession();
     const user = session?.user;
+    const router = useRouter();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -115,6 +117,7 @@ export function ApplicationForm() {
 
             toast.success("Application submitted successfully! We will contact you soon.");
             form.reset();
+            router.push("/");
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             toast.error(error.message || "Something went wrong. Please try again.");
