@@ -6,8 +6,6 @@ import { headers } from "next/headers";
 import { Resend } from "resend";
 import AdminNewApplicationEmail from "@/components/AdminNewApplicationEmail";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 const applicationSchema = z
     .object({
         fullName: z.string().min(1, "Full name is required"),
@@ -44,6 +42,8 @@ export async function POST(req: Request) {
                 },
             },
         });
+
+        const resend = new Resend(process.env.RESEND_API_KEY);
 
         try {
             const admins = await prisma.user.findMany({

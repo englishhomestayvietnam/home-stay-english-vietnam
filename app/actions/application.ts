@@ -6,8 +6,6 @@ import { Resend } from "resend";
 import ApplicationThankYouEmail from "@/components/ApplicationThankYouEmail";
 import AdminNewApplicationEmail from "@/components/AdminNewApplicationEmail";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 const applicationSchema = z
     .object({
         fullName: z.string().min(2, {
@@ -55,6 +53,8 @@ export async function submitApplication(values: z.infer<typeof applicationSchema
                 },
             },
         });
+
+        const resend = new Resend(process.env.RESEND_API_KEY);
 
         // Send confirmation email
         try {

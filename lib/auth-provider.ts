@@ -43,7 +43,7 @@ export const authProvider: AuthProvider = {
 
         const userHasPermission = await authClient.admin.hasPermission({
             userId: session.data?.user.id,
-            permission: {
+            permissions: {
                 dashboard: ["view"]
             }
         })

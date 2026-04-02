@@ -6,8 +6,6 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import prisma from "@/lib/prisma";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function POST() {
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -47,6 +45,7 @@ export async function POST() {
   }
 
   if (checkReviewExist) {
+    const resend = new Resend(process.env.RESEND_API_KEY);
     const userName = session.user.name || "Volunteer";
     const reviewTitle = checkReviewExist.title || "Amazing volunteer experience!";
     const rating = checkReviewExist.rating || 5;

@@ -6,8 +6,6 @@ import { z } from "zod";
 import { Resend } from "resend";
 import ApplicationApprovedEmail from "@/components/ApplicationApprovedEmail";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function GET(
     req: Request,
     { params }: { params: Promise<{ id: string }> }
@@ -52,6 +50,7 @@ export async function PATCH(
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
+        const resend = new Resend(process.env.RESEND_API_KEY);
         const session = await auth.api.getSession({
             headers: await headers(),
         });

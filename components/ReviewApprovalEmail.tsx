@@ -23,15 +23,14 @@ interface ReviewThankYouEmailProps {
   rating?: number;
 }
 
-const baseUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "";
-
 export const ReviewThankYouEmail = ({
   userName = "Volunteer",
   reviewTitle = "Amazing volunteer experience!",
   rating = 5,
 }: ReviewThankYouEmailProps) => {
+  const baseUrl = process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : "";
   const previewText = `Thanks for your review, ${userName}!`;
 
   return (

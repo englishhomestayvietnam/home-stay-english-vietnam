@@ -10,11 +10,10 @@ import { AdminLayout } from "@/components/admin/AdminLayout";
 import theme from "@/mui.theme.config";
 import { authProvider } from "@/lib/auth-provider";
 
-const API_URL = process.env.NODE_ENV === "development"
-  ? "http://localhost:3000/api"
-  : "https://www.englishhomestayvietnam.com/api";
-
 export default function Layout({ children }: { children: React.ReactNode }) {
+  const API_URL = process.env.NODE_ENV === "development"
+    ? "http://localhost:3000/api"
+    : "https://www.englishhomestayvietnam.com/api";
 
   return (
     <ThemeProvider theme={theme}>
