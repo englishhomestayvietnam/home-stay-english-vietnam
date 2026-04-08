@@ -106,3 +106,34 @@ export async function PATCH(
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
     }
 }
+
+export async function DELETE(
+    _req: Request,
+    { params }: { params: Promise<{ id: string }> }
+) {
+    try {
+        const session = await auth.api.getSession({
+            headers: await headers(),
+        });
+
+        if (!session || session.user.role !== "superAdmin") {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+        }
+
+        const { id } = await params;
+
+        const existing = await prisma.application.findUnique({ where: { id } });
+        if (!existing) {
+            return NextResponse.json({ error: "Application not found" }, { status: 404 });
+        }
+
+        await prisma.application.delete({
+            where: { id },
+        });
+
+        return NextResponse.json({ success: true });
+    } catch (error) {
+        console.error("Delete application error:", error);
+        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    }
+}

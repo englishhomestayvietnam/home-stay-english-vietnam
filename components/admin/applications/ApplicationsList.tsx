@@ -44,16 +44,16 @@ export default function ApplicationsList() {
                 headerName: "Full Name",
                 minWidth: 150,
                 flex: 1,
-                align: "center",
-                headerAlign: "center",
+                align: "left",
+                headerAlign: "left",
             },
             {
                 field: "email",
                 headerName: "Email",
                 minWidth: 200,
                 flex: 1,
-                align: "center",
-                headerAlign: "center",
+                align: "left",
+                headerAlign: "left",
             },
             {
                 field: "duration",
@@ -61,22 +61,6 @@ export default function ApplicationsList() {
                 minWidth: 120,
                 align: "center",
                 headerAlign: "center",
-            },
-            {
-                field: "startDate",
-                headerName: "Start Date",
-                minWidth: 120,
-                align: "center",
-                headerAlign: "center",
-                renderCell: ({ value }) => value ? format(new Date(value), "dd MMM yyyy") : "-",
-            },
-            {
-                field: "endDate",
-                headerName: "End Date",
-                minWidth: 120,
-                align: "center",
-                headerAlign: "center",
-                renderCell: ({ value }) => value ? format(new Date(value), "dd MMM yyyy") : "-",
             },
             {
                 field: "status",
@@ -107,38 +91,6 @@ export default function ApplicationsList() {
                 align: "center",
                 headerAlign: "center",
                 renderCell: ({ value }) => value ? format(new Date(value), "dd MMM yyyy, HH:mm") : "-",
-            },
-            {
-                field: "groupMembers",
-                headerName: "Group Members",
-                minWidth: 250,
-                flex: 1,
-                align: "center",
-                headerAlign: "center",
-                renderCell: ({ row }) => {
-                    const members = row.groupMembers as GroupMember[];
-                    if (!members || members.length === 0) return "-";
-                    return (
-                        <Stack spacing={0.5} py={1} sx={{ width: "100%" }}>
-                            {members.map((member) => (
-                                <Box key={member.id} sx={{
-                                    p: 1,
-                                    bgcolor: "background.paper",
-                                    borderRadius: 1,
-                                    border: "1px solid",
-                                    borderColor: "divider",
-                                    fontSize: "0.75rem",
-                                    textAlign: "left"
-                                }}>
-                                    <strong>{member.fullName}</strong>
-                                    <Box component="span" sx={{ color: "text.secondary" }}>
-                                        {" • "}{member.sex}{" • "}{member.country}
-                                    </Box>
-                                </Box>
-                            ))}
-                        </Stack>
-                    );
-                },
             },
             {
                 field: "actions",

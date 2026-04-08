@@ -19,7 +19,7 @@ function SignInContent() {
   const session = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirectTo = searchParams.get("redirectTo") || "/reviews/write-review";
+  const redirectTo = searchParams.get("redirectTo") || "/";
 
   // All hooks at the top — always called in same order
   const [isLoading, setIsLoading] = useState(false);

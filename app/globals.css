@@ -241,6 +241,41 @@ All colors MUST be HSL.
 */
 }
 
+@layer utilities {
+  /* Reviews page animation helpers */
+  .animate-v {
+    animation: v-scroll var(--speed, 40s) linear infinite;
+  }
+  .animate-h {
+    animation: h-scroll var(--speed, 40s) linear infinite;
+  }
+  .reverse {
+    animation-direction: reverse;
+  }
+  .pause:hover .animate-v,
+  .pause:hover .animate-h {
+    animation-play-state: paused;
+  }
+
+  @keyframes v-scroll {
+    0% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(-50%);
+    }
+  }
+
+  @keyframes h-scroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+}
+
 /* ---break---
 */
 
