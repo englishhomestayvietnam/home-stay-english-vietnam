@@ -27,6 +27,7 @@ import About from "@/components/About";
 import Programs from "@/components/Programs";
 import Benefits from "@/components/Benefits";
 import Gallery from "@/components/Gallery";
+import Partnership from "@/components/Partnership";
 import Image from "next/image";
 
 interface ContentSection {
@@ -38,7 +39,7 @@ interface ContentSection {
   videoUrl: string;
 }
 
-const SECTIONS = ["hero", "about", "programs", "benefits", "gallery"];
+const SECTIONS = ["hero", "about", "programs", "benefits", "gallery", "partnership"];
 
 const DEFAULTS: Record<string, Partial<ContentSection>> = {
   hero: {
@@ -78,6 +79,13 @@ const DEFAULTS: Record<string, Partial<ContentSection>> = {
     description:
       "See what daily life looks like in our homestay community. These moments capture the friendships, learning, and cultural exchange that make our program special.",
     videoUrl: "0dPxWVHBR8g",
+  },
+  partnership: {
+    title: "Our Partner in Thailand",
+    subtitle: "Looking for the same experience in Thailand?",
+    description:
+      "Our friend runs an English-teaching homestay in Chiang Mai with the same warmth, the same family dinners, and the same idea: real conversations beat scripted lessons. If your route takes you to Northern Thailand, they'd love to host you.",
+    videoUrl: "https://workexchang-szvkwmug.manus.space/",
   },
 };
 
@@ -252,6 +260,8 @@ export default function LandingPageCMS() {
         return <Benefits content={previewContent} />;
       case "gallery":
         return <Gallery content={previewContent} />;
+      case "partnership":
+        return <Partnership content={previewContent} />;
       default:
         return null;
     }
@@ -344,6 +354,16 @@ export default function LandingPageCMS() {
                     value={data.videoUrl || ""}
                     onChange={(e) => handleChange(currentSectionName, "videoUrl", e.target.value)}
                     helperText="Example: 0dPxWVHBR8g (from https://youtu.be/0dPxWVHBR8g)"
+                  />
+                )}
+
+                {currentSectionName === "partnership" && (
+                  <TextField
+                    label="Partner Website Link"
+                    fullWidth
+                    value={data.videoUrl || ""}
+                    onChange={(e) => handleChange(currentSectionName, "videoUrl", e.target.value)}
+                    helperText="The URL to the partner's website"
                   />
                 )}
 

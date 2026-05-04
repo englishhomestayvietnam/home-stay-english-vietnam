@@ -7,6 +7,7 @@ import Gallery from "@/components/Gallery";
 import { HeroSectionDemo } from "@/components/Hero";
 import Navbar from "@/components/Navbar";
 import Programs from "@/components/Programs";
+import Partnership from "@/components/Partnership";
 import VolunteerReviewsSkeleton from "@/components/VolunteerReviewsSkeleton";
 import { Suspense } from "react";
 import prisma from "@/lib/prisma";
@@ -74,6 +75,7 @@ const page = async () => {
       <Programs content={contentMap['programs']} />
       <Benefits content={contentMap['benefits']} />
       <Gallery content={contentMap['gallery']} />
+      <Partnership content={contentMap['partnership']} />
       <ErrorBoundary fallback={<div className="hidden" />}>
         <Suspense fallback={<VolunteerReviewsSkeleton />}>
           <VolunteerReviews/>
