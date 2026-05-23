@@ -31,7 +31,7 @@ const Navbar = () => {
       const scrolled = window.scrollY > 50;
       setIsScrolled(scrolled);
 
-      const sections = ["home", "about", "programs", "benefits", "gallery", "review", "contact"];
+      const sections = ["home", "about", "programs", "benefits", "gallery", "review-videos", "review", "contact"];
       const current = sections.find((id) => {
         const el = document.getElementById(id);
         if (el) {
@@ -64,6 +64,7 @@ const Navbar = () => {
     { label: "Programs", id: "programs" },
     { label: "Benefits", id: "benefits" },
     { label: "Gallery", id: "gallery" },
+    { label: "Videos", id: "review-videos" },
     { label: "Review", id: "review" },
     { label: "Contact", id: "contact" },
   ];

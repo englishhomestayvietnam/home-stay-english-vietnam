@@ -15,6 +15,7 @@ import InfiniteReviewsScroller, {
   type InfiniteReview,
 } from "@/components/InfiniteReviewsScroller";
 import VolunteerReviews from "./reviews/page";
+import ReviewVideos from "@/components/ReviewVideos";
 
 // Add revalidation or dynamic to ensure CMS updates are seen
 export const dynamic = 'force-dynamic';
@@ -74,6 +75,7 @@ const page = async () => {
       <About content={contentMap['about']} />
       <Programs content={contentMap['programs']} />
       <Benefits content={contentMap['benefits']} />
+      <ReviewVideos />
       <Gallery content={contentMap['gallery']} />
       <Partnership content={contentMap['partnership']} />
       <ErrorBoundary fallback={<div className="hidden" />}>
