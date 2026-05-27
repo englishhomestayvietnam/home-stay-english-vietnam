@@ -7,13 +7,52 @@ import { X, Play } from "lucide-react";
 
 const ReviewVideos = () => {
   const [showAll, setShowAll] = useState(false);
-  const imageKitEndpoint = process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT;
+
+  const getYouTubeId = (input: string) => {
+    if (!input) return null;
+
+    if (/^[a-zA-Z0-9_-]{11}$/.test(input)) return input;
+
+    try {
+      const url = new URL(input);
+
+      if (url.hostname === "youtu.be") {
+        const id = url.pathname.replace("/", "");
+        return /^[a-zA-Z0-9_-]{11}$/.test(id) ? id : null;
+      }
+
+      const shortsMatch = url.pathname.match(/\/shorts\/([a-zA-Z0-9_-]{11})/);
+      if (shortsMatch) return shortsMatch[1];
+
+      const watchId = url.searchParams.get("v");
+      if (watchId && /^[a-zA-Z0-9_-]{11}$/.test(watchId)) return watchId;
+
+      const embedMatch = url.pathname.match(/\/embed\/([a-zA-Z0-9_-]{11})/);
+      if (embedMatch) return embedMatch[1];
+    } catch {
+      return null;
+    }
+
+    return null;
+  };
+
+  const toYouTubeEmbedUrl = (input: string) => {
+    const id = getYouTubeId(input);
+    if (!id) return null;
+    const embedUrl = new URL(`https://www.youtube-nocookie.com/embed/${id}`);
+    embedUrl.searchParams.set("playsinline", "1");
+    embedUrl.searchParams.set("rel", "0");
+    return embedUrl.toString();
+  };
   
   const videos = [
-    { src: `${imageKitEndpoint}/cms/review_1.mp4`, title: "Volunteer Review 1" },
-    { src: `${imageKitEndpoint}/cms/review_2.mp4`, title: "Volunteer Review 2" },
-    { src: `${imageKitEndpoint}/cms/review_3.mp4`, title: "Volunteer Review 3" },
-    { src: `${imageKitEndpoint}/cms/review_4.mp4`, title: "Volunteer Review 4" },
+    { src: `https://youtube.com/shorts/2Sb5rf7y9H0?feature=share` },
+    { src: `https://youtube.com/shorts/db6jDhdhENY?feature=share` },
+    { src: `https://youtube.com/shorts/Q6NCwnlXhw4?feature=share` },
+    { src: `https://youtube.com/shorts/qP7QchuxWqQ?feature=share` },
+    { src: `https://youtube.com/shorts/DMmL1NiM9Dg?feature=share` },
+    { src: `https://youtube.com/shorts/_qmCOwT4Zzo?feature=share` },
+    { src: `https://youtube.com/shorts/8auCzW566qQ?feature=share` },
   ];
 
   return (
@@ -60,18 +99,32 @@ const ReviewVideos = () => {
                       className="relative overflow-hidden rounded-xl shadow-lg bg-black"
                       style={{ aspectRatio: '9/16' }}
                     >
-                      <video
-                        src={video.src}
-                        title={video.title}
-                        controls
-                        playsInline
-                        preload="metadata"
-                        className="w-full h-full object-contain"
-                      />
+                      {(() => {
+                        const videoLabel = `Volunteer review video ${index + 1}`;
+                        const embedUrl = toYouTubeEmbedUrl(video.src);
+
+                        return embedUrl ? (
+                          <iframe
+                            src={embedUrl}
+                            title={videoLabel}
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowFullScreen
+                            loading="lazy"
+                            className="absolute inset-0 h-full w-full"
+                          />
+                        ) : (
+                          <video
+                            src={video.src}
+                            title={videoLabel}
+                            aria-label={videoLabel}
+                            controls
+                            playsInline
+                            preload="metadata"
+                            className="w-full h-full object-contain"
+                          />
+                        );
+                      })()}
                     </div>
-                    <p className="mt-2 text-center text-xs sm:text-sm text-muted-foreground font-medium">
-                      {video.title}
-                    </p>
                   </div>
                 </CarouselItem>
               ))}
@@ -153,18 +206,32 @@ const ReviewVideos = () => {
                       className="relative overflow-hidden rounded-xl shadow-md bg-black"
                       style={{ aspectRatio: '9/16' }}
                     >
-                      <video
-                        src={video.src}
-                        title={video.title}
-                        controls
-                        playsInline
-                        preload="metadata"
-                        className="w-full h-full object-contain"
-                      />
+                      {(() => {
+                        const videoLabel = `Volunteer review video ${index + 1}`;
+                        const embedUrl = toYouTubeEmbedUrl(video.src);
+
+                        return embedUrl ? (
+                          <iframe
+                            src={embedUrl}
+                            title={videoLabel}
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowFullScreen
+                            loading="lazy"
+                            className="absolute inset-0 h-full w-full"
+                          />
+                        ) : (
+                          <video
+                            src={video.src}
+                            title={videoLabel}
+                            aria-label={videoLabel}
+                            controls
+                            playsInline
+                            preload="metadata"
+                            className="w-full h-full object-contain"
+                          />
+                        );
+                      })()}
                     </div>
-                    <p className="mt-1.5 text-center text-xs text-muted-foreground font-medium">
-                      {video.title}
-                    </p>
                   </motion.div>
                 ))}
               </div>
