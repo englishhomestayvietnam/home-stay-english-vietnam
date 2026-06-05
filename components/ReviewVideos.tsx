@@ -7,53 +7,115 @@ import { X, Play } from "lucide-react";
 
 const ReviewVideos = () => {
   const [showAll, setShowAll] = useState(false);
+  const [activeVideo, setActiveVideo] = useState<number | null>(null);
+  const [activeModalVideo, setActiveModalVideo] = useState<number | null>(null);
 
-  const getYouTubeId = (input: string) => {
+  const getVimeoId = (input: string) => {
     if (!input) return null;
-
-    if (/^[a-zA-Z0-9_-]{11}$/.test(input)) return input;
-
+    if (/^\d+$/.test(input)) return input;
     try {
       const url = new URL(input);
-
-      if (url.hostname === "youtu.be") {
-        const id = url.pathname.replace("/", "");
-        return /^[a-zA-Z0-9_-]{11}$/.test(id) ? id : null;
+      if (url.hostname === "player.vimeo.com") {
+        const id = url.pathname.replace("/video/", "");
+        return /^\d+$/.test(id) ? id : null;
       }
-
-      const shortsMatch = url.pathname.match(/\/shorts\/([a-zA-Z0-9_-]{11})/);
-      if (shortsMatch) return shortsMatch[1];
-
-      const watchId = url.searchParams.get("v");
-      if (watchId && /^[a-zA-Z0-9_-]{11}$/.test(watchId)) return watchId;
-
-      const embedMatch = url.pathname.match(/\/embed\/([a-zA-Z0-9_-]{11})/);
-      if (embedMatch) return embedMatch[1];
+      const vimeoMatch = url.pathname.match(/\/(\d+)/);
+      if (vimeoMatch) return vimeoMatch[1];
     } catch {
       return null;
     }
-
     return null;
   };
 
-  const toYouTubeEmbedUrl = (input: string) => {
-    const id = getYouTubeId(input);
+  const toVimeoEmbedUrl = (input: string, autoplay = false) => {
+    const id = getVimeoId(input);
     if (!id) return null;
-    const embedUrl = new URL(`https://www.youtube-nocookie.com/embed/${id}`);
-    embedUrl.searchParams.set("playsinline", "1");
-    embedUrl.searchParams.set("rel", "0");
+    const embedUrl = new URL(`https://player.vimeo.com/video/${id}`);
+    embedUrl.searchParams.set("title", "0");
+    embedUrl.searchParams.set("byline", "0");
+    embedUrl.searchParams.set("portrait", "0");
+    embedUrl.searchParams.set("badge", "0");
+    embedUrl.searchParams.set("autopause", "0");
+    embedUrl.searchParams.set("controls", "1");
+    embedUrl.searchParams.set("playbutton", "1");
+    embedUrl.searchParams.set("transparent", "1");
+    embedUrl.searchParams.set("background", "0");
+    if (autoplay) {
+      embedUrl.searchParams.set("autoplay", "1");
+    }
     return embedUrl.toString();
   };
-  
+
   const videos = [
-    { src: `https://youtube.com/shorts/2Sb5rf7y9H0?feature=share` },
-    { src: `https://youtube.com/shorts/db6jDhdhENY?feature=share` },
-    { src: `https://youtube.com/shorts/Q6NCwnlXhw4?feature=share` },
-    { src: `https://youtube.com/shorts/qP7QchuxWqQ?feature=share` },
-    { src: `https://youtube.com/shorts/DMmL1NiM9Dg?feature=share` },
-    { src: `https://youtube.com/shorts/_qmCOwT4Zzo?feature=share` },
-    { src: `https://youtube.com/shorts/8auCzW566qQ?feature=share` },
+    { src: `https://player.vimeo.com/video/1197374581` },
+    { src: `https://player.vimeo.com/video/1197379399` },
+    { src: `https://player.vimeo.com/video/1197367712` },
+    { src: `https://player.vimeo.com/video/1197367684` },
+    { src: `https://player.vimeo.com/video/1197365149` },
   ];
+
+  const VideoCard = ({
+    video,
+    index,
+    isActive,
+    onActivate,
+  }: {
+    video: { src: string };
+    index: number;
+    isActive: boolean;
+    onActivate: () => void;
+  }) => {
+    const videoLabel = `Volunteer review video ${index + 1}`;
+    const embedUrl = toVimeoEmbedUrl(video.src, isActive);
+
+    return (
+      <div
+        className="relative overflow-hidden rounded-xl shadow-lg bg-black"
+        style={{ aspectRatio: "9/16" }}
+      >
+        {embedUrl ? (
+          <>
+            <iframe
+              src={embedUrl}
+              title={videoLabel}
+              allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+              allowFullScreen
+              referrerPolicy="strict-origin-when-cross-origin"
+              loading="lazy"
+              className="absolute inset-0 h-full w-full"
+              style={{ pointerEvents: isActive ? "auto" : "none" }}
+            />
+            {/* Overlay blocks touch/click until user explicitly taps play */}
+            {!isActive && (
+              <button
+                onClick={onActivate}
+                onTouchEnd={(e) => {
+                  e.preventDefault();
+                  onActivate();
+                }}
+                className="absolute inset-0 z-10 flex items-center justify-center w-full h-full bg-black/20 hover:bg-black/30 transition-colors cursor-pointer"
+                aria-label={`Play ${videoLabel}`}
+              >
+                <div className="flex items-center justify-center w-14 h-14 rounded-full bg-white/90 shadow-lg">
+                  <Play className="w-6 h-6 text-black fill-black ml-1" />
+                </div>
+              </button>
+            )}
+          </>
+        ) : (
+          <video
+            src={video.src}
+            title={videoLabel}
+            aria-label={videoLabel}
+            controls
+            playsInline
+            preload="metadata"
+            className="w-full h-full object-contain"
+          />
+        )}
+      </div>
+    );
+  };
 
   return (
     <section id="review-videos" className="py-16 sm:py-20 overflow-hidden bg-background">
@@ -95,36 +157,12 @@ const ReviewVideos = () => {
                   className="pl-2 md:pl-4 basis-[75%] sm:basis-1/2 md:basis-1/3 lg:basis-1/4"
                 >
                   <div className="p-1 sm:p-2">
-                    <div
-                      className="relative overflow-hidden rounded-xl shadow-lg bg-black"
-                      style={{ aspectRatio: '9/16' }}
-                    >
-                      {(() => {
-                        const videoLabel = `Volunteer review video ${index + 1}`;
-                        const embedUrl = toYouTubeEmbedUrl(video.src);
-
-                        return embedUrl ? (
-                          <iframe
-                            src={embedUrl}
-                            title={videoLabel}
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            allowFullScreen
-                            loading="lazy"
-                            className="absolute inset-0 h-full w-full"
-                          />
-                        ) : (
-                          <video
-                            src={video.src}
-                            title={videoLabel}
-                            aria-label={videoLabel}
-                            controls
-                            playsInline
-                            preload="metadata"
-                            className="w-full h-full object-contain"
-                          />
-                        );
-                      })()}
-                    </div>
+                    <VideoCard
+                      video={video}
+                      index={index}
+                      isActive={activeVideo === index}
+                      onActivate={() => setActiveVideo(index)}
+                    />
                   </div>
                 </CarouselItem>
               ))}
@@ -140,24 +178,23 @@ const ReviewVideos = () => {
             Swipe to see more →
           </p>
         </div>
-
-        {/* See All Videos Button */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="flex justify-center mt-10 sm:mt-12"
-        >
-          <button
-            onClick={() => setShowAll(true)}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-primary-foreground font-semibold text-sm sm:text-base shadow-md hover:opacity-90 active:scale-95 transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-          >
-            <Play className="w-4 h-4 fill-current" />
-            See All Videos
-          </button>
-        </motion.div>
       </div>
+
+      {/* See All Videos Button */}
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.4 }}
+        className="flex justify-center mt-10 sm:mt-12"
+      >
+        <button
+          onClick={() => setShowAll(true)}
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary text-primary-foreground font-semibold text-sm sm:text-base shadow-md hover:opacity-90 active:scale-95 transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+        >
+          See All Videos
+        </button>
+      </motion.div>
 
       {/* All Videos Modal */}
       <AnimatePresence>
@@ -202,36 +239,12 @@ const ReviewVideos = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.07 }}
                   >
-                    <div
-                      className="relative overflow-hidden rounded-xl shadow-md bg-black"
-                      style={{ aspectRatio: '9/16' }}
-                    >
-                      {(() => {
-                        const videoLabel = `Volunteer review video ${index + 1}`;
-                        const embedUrl = toYouTubeEmbedUrl(video.src);
-
-                        return embedUrl ? (
-                          <iframe
-                            src={embedUrl}
-                            title={videoLabel}
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            allowFullScreen
-                            loading="lazy"
-                            className="absolute inset-0 h-full w-full"
-                          />
-                        ) : (
-                          <video
-                            src={video.src}
-                            title={videoLabel}
-                            aria-label={videoLabel}
-                            controls
-                            playsInline
-                            preload="metadata"
-                            className="w-full h-full object-contain"
-                          />
-                        );
-                      })()}
-                    </div>
+                    <VideoCard
+                      video={video}
+                      index={index}
+                      isActive={activeModalVideo === index}
+                      onActivate={() => setActiveModalVideo(index)}
+                    />
                   </motion.div>
                 ))}
               </div>
