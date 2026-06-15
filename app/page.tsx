@@ -16,6 +16,9 @@ import InfiniteReviewsScroller, {
 } from "@/components/InfiniteReviewsScroller";
 import VolunteerReviews from "./reviews/page";
 import ReviewVideos from "@/components/ReviewVideos";
+import PromoBanner from "@/components/PromoBanner";
+import FloatingActionMenu from "@/components/floating-menu";
+import FunActivities from "@/components/FunActivities";
 
 // Add revalidation or dynamic to ensure CMS updates are seen
 export const dynamic = 'force-dynamic';
@@ -30,9 +33,9 @@ const page = async () => {
       acc[item.section] = item;
       return acc;
     }, {} as Record<string, any>);
-  } catch (error) {
-    console.error("Failed to fetch landing page content", error);
-    // Fallback to empty map, components will show defaults
+  } catch (error: any) {
+    const errSummary = error instanceof Error ? error.message.split("\n").filter(Boolean)[0] : String(error);
+    console.error("Failed to fetch landing page content (using static fallback):", errSummary);
   }
 
   try {
@@ -64,15 +67,18 @@ const page = async () => {
       ...r,
       date: r.date.toISOString(),
     }));
-  } catch (error) {
-    console.error("Failed to fetch reviews for homepage", error);
+  } catch (error: any) {
+    const errSummary = error instanceof Error ? error.message.split("\n").filter(Boolean)[0] : String(error);
+    console.error("Failed to fetch reviews for homepage (using empty fallback):", errSummary);
   }
 
   return (
     <div className="max-w-full overflow-hidden">
+      <PromoBanner />
       <Navbar />
       <HeroSectionDemo content={contentMap['hero']} />
       <About content={contentMap['about']} />
+      <FunActivities />
       <Programs content={contentMap['programs']} />
       <Benefits content={contentMap['benefits']} />
       <ReviewVideos />
@@ -80,11 +86,12 @@ const page = async () => {
       <Partnership content={contentMap['partnership']} />
       <ErrorBoundary fallback={<div className="hidden" />}>
         <Suspense fallback={<VolunteerReviewsSkeleton />}>
-          <VolunteerReviews/>
+          <VolunteerReviews />
         </Suspense>
       </ErrorBoundary>
       <Contact />
       <Footer />
+      <FloatingActionMenu />
     </div>
   );
 };

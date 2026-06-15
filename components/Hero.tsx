@@ -2,7 +2,7 @@
 import { motion } from "framer-motion";
 import React from "react";
 
-import { ArrowDown, Globe, Heart, Users } from "lucide-react";
+import { ArrowDown, Globe, Heart, Users, Calendar } from "lucide-react";
 import { ImagesSlider } from "./ui/images-slider";
 import { Button } from "./ui/button";
 import Link from "next/link";
@@ -74,7 +74,7 @@ export function HeroSectionDemo({ content }: { content?: any }) {
           transition={{ delay: 0.5, duration: 0.7 }}
           className="max-w-2xl mb-5 text-xl font-light text-gray-100 md:text-2xl"
         >
-          {content?.description || "Live with passionate Vietnamese learners. Share your language. Build lifelong bonds."}
+          {content?.description || "Live with passionate Vietnamese learners. Share your language, enjoy free Saturday cooking classes, and explore Hanoi on monthly trips!"}
         </motion.p>
 
         {/* Trust Indicators */}
@@ -82,7 +82,7 @@ export function HeroSectionDemo({ content }: { content?: any }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.7 }}
-          className="flex items-center gap-8 mb-10 text-sm text-white/90"
+          className="flex flex-wrap items-center justify-center gap-6 md:gap-8 mb-10 text-sm text-white/90"
         >
           <div className="flex items-center gap-2">
             <Users className="w-5 h-5" />
@@ -91,6 +91,10 @@ export function HeroSectionDemo({ content }: { content?: any }) {
           <div className="flex items-center gap-2">
             <Globe className="w-5 h-5" />
             <span>From 40+ Countries</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Calendar className="w-5 h-5 text-lime-300" />
+            <span>Weekly Saturday Cooking & Monthly Hanoi Trips</span>
           </div>
         </motion.div>
 

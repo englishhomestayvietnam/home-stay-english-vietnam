@@ -24,6 +24,20 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
+  const [isBannerVisible, setIsBannerVisible] = useState(false);
+
+  // Sync banner state and custom event
+  useEffect(() => {
+    const isDismissed = sessionStorage.getItem("promo-banner-dismissed");
+    if (!isDismissed) {
+      setIsBannerVisible(true);
+    }
+    const handleBannerDismiss = () => {
+      setIsBannerVisible(false);
+    };
+    window.addEventListener("promo-banner-dismissed", handleBannerDismiss);
+    return () => window.removeEventListener("promo-banner-dismissed", handleBannerDismiss);
+  }, []);
 
   // Simple scroll detection + active section
   useEffect(() => {
@@ -31,7 +45,7 @@ const Navbar = () => {
       const scrolled = window.scrollY > 50;
       setIsScrolled(scrolled);
 
-      const sections = ["home", "about", "programs", "benefits", "gallery", "review-videos", "review", "contact"];
+      const sections = ["home", "about", "programs", "benefits", "activities", "gallery", "review-videos", "review", "contact"];
       const current = sections.find((id) => {
         const el = document.getElementById(id);
         if (el) {
@@ -63,6 +77,7 @@ const Navbar = () => {
     { label: "About", id: "about" },
     { label: "Programs", id: "programs" },
     { label: "Benefits", id: "benefits" },
+    { label: "Activities", id: "activities" },
     { label: "Gallery", id: "gallery" },
     { label: "Videos", id: "review-videos" },
     { label: "Review", id: "review" },
@@ -78,11 +93,12 @@ const Navbar = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        className={`fixed left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled
             ? "bg-white/95 shadow-md backdrop-blur-md py-3"
             : "bg-transparent py-5"
         }`}
+        style={{ top: isBannerVisible && !isScrolled ? "44px" : "0px" }}
       >
         <div className="container mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between">
