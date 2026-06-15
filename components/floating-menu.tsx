@@ -122,7 +122,7 @@ export default function FloatingActionMenu() {
             </div>
           </motion.div>
         ) : (
-          /* COLLAPSED FLOATING BUTTON WITH TEXT & PING ANIMATION */
+          /* COLLAPSED FLOATING BUTTON WITH PING ANIMATION */
           hasLoaded && (
             <motion.div
               key="promo-button-container"
@@ -130,29 +130,18 @@ export default function FloatingActionMenu() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
               transition={{ type: "spring", stiffness: 350, damping: 22 }}
-              className="pointer-events-auto flex flex-col items-center gap-2"
+              className="pointer-events-auto relative"
             >
-              {/* Click me badge with arrow pointing down */}
-              <div 
+              {/* Ping animation effect */}
+              <span className="absolute -inset-1 rounded-full bg-emerald-400 opacity-75 animate-ping pointer-events-none" />
+              
+              <button
                 onClick={handleOpenWidget}
-                className="bg-emerald-500 hover:bg-emerald-600 text-white text-[11px] font-black px-2.5 py-1.5 rounded-xl shadow-lg animate-bounce flex items-center gap-1 cursor-pointer transition-colors whitespace-nowrap select-none"
+                className="relative flex items-center justify-center h-14 w-14 rounded-full bg-gradient-to-r from-emerald-500 to-lime-500 text-white shadow-2xl hover:scale-110 active:scale-95 transition-all duration-300 cursor-pointer"
+                aria-label="View community activities promotion"
               >
-                Click me! &darr;
-              </div>
-
-              {/* Pulsing button */}
-              <div className="relative">
-                {/* Ping animation effect */}
-                <span className="absolute -inset-1 rounded-full bg-emerald-400 opacity-75 animate-ping pointer-events-none" />
-                
-                <button
-                  onClick={handleOpenWidget}
-                  className="relative flex items-center justify-center h-14 w-14 rounded-full bg-gradient-to-r from-emerald-500 to-lime-500 text-white shadow-2xl hover:scale-110 active:scale-95 transition-all duration-300 cursor-pointer"
-                  aria-label="View community activities promotion"
-                >
-                  <Sparkles className="w-6 h-6 animate-pulse" />
-                </button>
-              </div>
+                <Sparkles className="w-6 h-6 animate-pulse" />
+              </button>
             </motion.div>
           )
         )}
