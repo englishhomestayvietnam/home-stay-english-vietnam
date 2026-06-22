@@ -37,17 +37,17 @@ const FunActivities = () => {
         "100% free activity focused on building community and sharing local heritage"
       ],
       images: [
+        "/fun-activities/WhatsApp Image 2026-06-15 at 3.34.54 PM (1).jpeg",
         "/fun-activities/WhatsApp Image 2026-06-15 at 3.34.51 PM.jpeg",
         "/fun-activities/WhatsApp Image 2026-06-15 at 3.34.52 PM (1).jpeg",
         "/fun-activities/WhatsApp Image 2026-06-15 at 3.34.52 PM (2).jpeg",
         "/fun-activities/WhatsApp Image 2026-06-15 at 3.34.52 PM (3).jpeg",
         "/fun-activities/WhatsApp Image 2026-06-15 at 3.34.52 PM.jpeg",
-        "/fun-activities/WhatsApp Image 2026-06-15 at 3.34.53 PM (1).jpeg",
         "/fun-activities/WhatsApp Image 2026-06-15 at 3.34.53 PM (2).jpeg",
         "/fun-activities/WhatsApp Image 2026-06-15 at 3.34.53 PM (3).jpeg",
         "/fun-activities/WhatsApp Image 2026-06-15 at 3.34.53 PM.jpeg",
-        "/fun-activities/WhatsApp Image 2026-06-15 at 3.34.54 PM (1).jpeg",
         "/fun-activities/WhatsApp Image 2026-06-15 at 3.34.54 PM (2).jpeg",
+        "/fun-activities/WhatsApp Image 2026-06-15 at 3.34.53 PM (1).jpeg",
       ]
     },
     {
