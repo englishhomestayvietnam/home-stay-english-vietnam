@@ -194,6 +194,9 @@ import { LazyMotion, domAnimation } from "framer-motion";
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
+      <head>
+        <meta property="og:logo" content="https://www.englishhomestayvietnam.com/logo.png" />
+      </head>
       <body className={`${montserrat.className} antialiased`} suppressHydrationWarning>
         <LazyMotion features={domAnimation}>
           {children}
