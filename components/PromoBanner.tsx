@@ -10,9 +10,12 @@ const PromoBanner = () => {
   useEffect(() => {
     // Show banner only if it hasn't been dismissed in the current session
     const isDismissed = sessionStorage.getItem("promo-banner-dismissed");
-    if (!isDismissed) {
-      setIsVisible(true);
-    }
+    const timer = setTimeout(() => {
+      if (!isDismissed) {
+        setIsVisible(true);
+      }
+    }, 0);
+    return () => clearTimeout(timer);
   }, []);
 
   const handleDismiss = () => {

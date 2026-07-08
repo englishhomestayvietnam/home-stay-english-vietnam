@@ -115,7 +115,7 @@ export default async function VolunteerReviews() {
 
                   {/* Review Text */}
                   <p className="text-gray-700 italic leading-relaxed text-sm flex-grow line-clamp-4 mb-5">
-                    "{review.reviewText}"
+                    &ldquo;{review.reviewText}&rdquo;
                   </p>
 
                   {/* Badges */}

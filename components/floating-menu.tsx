@@ -13,10 +13,13 @@ export default function FloatingActionMenu() {
   useEffect(() => {
     // Determine initial state based on sessionStorage
     const isDismissed = sessionStorage.getItem("promo-widget-dismissed");
-    if (isDismissed) {
-      setIsExpanded(false);
-    }
-    setHasLoaded(true);
+    const timer = setTimeout(() => {
+      if (isDismissed) {
+        setIsExpanded(false);
+      }
+      setHasLoaded(true);
+    }, 0);
+    return () => clearTimeout(timer);
   }, []);
 
   const handleCloseWidget = () => {

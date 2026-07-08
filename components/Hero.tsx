@@ -26,7 +26,7 @@ export function HeroSectionDemo({ content }: { content?: any }) {
 
   return (
     <ImagesSlider
-      className="relative sm:mt-0 w-full aspect-video"
+      className="relative sm:mt-0 w-full h-[80vh] min-h-[480px] xs:min-h-[520px] sm:h-[85vh] sm:min-h-[580px] md:h-[80vh] md:min-h-[600px] lg:h-screen lg:min-h-[750px]"
       images={images}
     >
       {/* Dark overlay for better text readability */}
@@ -44,9 +44,9 @@ export function HeroSectionDemo({ content }: { content?: any }) {
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-          className="inline-flex items-center gap-2 px-3 sm:px-5 py-1.5 sm:py-2 mb-4 sm:mb-6 text-[10px] sm:text-sm font-medium tracking-widest text-white border rounded-full bg-white/20 backdrop-blur-md border-white/30 max-w-[90vw]"
+          className="inline-flex items-center gap-2 px-3 sm:px-5 py-1.5 sm:py-2 mb-3 xs:mb-4 sm:mb-6 text-[9px] xs:text-[10px] sm:text-xs md:text-sm font-medium tracking-widest text-white border rounded-full bg-white/20 backdrop-blur-md border-white/30 max-w-[90vw]"
         >
-          <Heart className="w-3 h-3 sm:w-4 sm:h-4 text-lime-300 fill-lime-300 shrink-0" />
+          <Heart className="w-2.5 h-2.5 xs:w-3 xs:h-3 sm:w-4 sm:h-4 text-lime-300 fill-lime-300 shrink-0" />
           <span className="leading-tight truncate">
             {content?.subtitle || "STAY FREE • TEACH ENGLISH • LIVE LOCAL"}
           </span>
@@ -57,7 +57,7 @@ export function HeroSectionDemo({ content }: { content?: any }) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.7 }}
-          className="mb-3 sm:mb-6 text-[2.4rem] leading-[1.1] sm:text-5xl font-bold text-white md:text-6xl lg:text-7xl xl:text-8xl"
+          className="mb-2.5 xs:mb-4 sm:mb-6 text-3xl xs:text-4xl sm:text-[2.5rem] md:text-5xl lg:text-7xl xl:text-8xl font-bold text-white leading-[1.1]"
         >
           {content?.title ? (
             content.title
@@ -76,7 +76,7 @@ export function HeroSectionDemo({ content }: { content?: any }) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.7 }}
-          className="max-w-xl sm:max-w-2xl mb-5 sm:mb-7 text-sm sm:text-xl font-light text-gray-100 md:text-2xl leading-relaxed"
+          className="max-w-xl sm:max-w-2xl mb-4 xs:mb-5 sm:mb-7 text-xs xs:text-sm sm:text-base md:text-lg lg:text-2xl font-light text-gray-100 leading-relaxed"
         >
           {content?.description || "Live with passionate Vietnamese learners. Share your language, enjoy free Saturday cooking classes, and explore Hanoi on monthly trips!"}
         </motion.p>
@@ -86,18 +86,18 @@ export function HeroSectionDemo({ content }: { content?: any }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.7 }}
-          className="flex flex-row flex-wrap items-center justify-center gap-x-4 gap-y-2 sm:gap-6 md:gap-8 mb-7 sm:mb-10 text-xs sm:text-sm text-white/90"
+          className="flex flex-row flex-wrap items-center justify-center gap-x-3 xs:gap-x-4 gap-y-1.5 xs:gap-y-2 sm:gap-6 md:gap-8 mb-5 xs:mb-7 sm:mb-10 text-[10px] xs:text-xs sm:text-sm md:text-base text-white/90"
         >
           <div className="flex items-center gap-1.5">
-            <Users className="w-3.5 h-3.5 sm:w-5 sm:h-5 shrink-0" />
+            <Users className="w-3 h-3 xs:w-3.5 xs:h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 shrink-0" />
             <span>500+ Homestays</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <Globe className="w-3.5 h-3.5 sm:w-5 sm:h-5 shrink-0" />
+            <Globe className="w-3 h-3 xs:w-3.5 xs:h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 shrink-0" />
             <span>40+ Countries</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <Calendar className="w-3.5 h-3.5 sm:w-5 sm:h-5 text-lime-300 shrink-0" />
+            <Calendar className="w-3 h-3 xs:w-3.5 xs:h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-lime-300 shrink-0" />
             <span className="hidden xs:inline">Weekly Cooking &amp; Hanoi Trips</span>
             <span className="xs:hidden">Cooking &amp; Trips</span>
           </div>
@@ -113,10 +113,10 @@ export function HeroSectionDemo({ content }: { content?: any }) {
           <Link
             href="/apply"
             target="_blank"
-            className="flex items-center gap-2 sm:gap-3 px-7 sm:px-10 py-3.5 sm:py-5 font-semibold text-white transition-all duration-300 rounded-full shadow-2xl cursor-pointer text-sm sm:text-base bg-linear-to-r hover:scale-95 from-emerald-400 to-lime-400 hover:from-emerald-500 hover:to-lime-500 hover:shadow-emerald-400/30"
+            className="flex items-center gap-2 sm:gap-3 px-5 xs:px-7 sm:px-10 py-2.5 xs:py-3.5 sm:py-4 md:py-5 font-semibold text-white transition-all duration-300 rounded-full shadow-2xl cursor-pointer text-xs xs:text-sm sm:text-base bg-linear-to-r hover:scale-95 from-emerald-400 to-lime-400 hover:from-emerald-500 hover:to-lime-500 hover:shadow-emerald-400/30"
           >
             Apply to Stay Free
-            <ArrowDown className="w-4 h-4 sm:w-5 sm:h-5 cursor-pointer animate-bounce" />
+            <ArrowDown className="w-3.5 h-3.5 xs:w-4 xs:h-4 sm:w-5 sm:h-5 cursor-pointer animate-bounce" />
           </Link>
         </motion.div>
 
@@ -125,7 +125,7 @@ export function HeroSectionDemo({ content }: { content?: any }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.1 }}
-          className="mt-3 sm:mt-6 text-[11px] sm:text-sm text-white/60"
+          className="mt-2 xs:mt-3 sm:mt-6 text-[10px] xs:text-[11px] sm:text-xs md:text-sm text-white/60"
         >
           No fees. No catch. Just real cultural exchange.
         </motion.p>

@@ -106,7 +106,7 @@ export const ReviewThankYouEmail = ({
                     ))}
                   </div>
                   <Text className="text-slate-900 font-medium text-base m-0 mt-1">
-                    "{reviewTitle}"
+                    &ldquo;{reviewTitle}&rdquo;
                   </Text>
                 </Column>
               </Row>

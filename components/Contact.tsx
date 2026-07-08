@@ -19,13 +19,15 @@ const Contact = () => {
       icon: <MapPin className="w-6 h-6" />,
       label: "Address",
       value: "xã số 21a ngõ 22 Gia Lâm Hà Nội",
-      link: "https://maps.google.com/?q=Trâu Quỳ, Gia Lâm, Hà Nội"
+      link: "https://maps.app.goo.gl/HHVEqtgasepN6BoP9?g_st=iw"
+
     },
     {
       icon: <MapPin className="w-6 h-6" />,
       label: "Address 2",
       value: "số 246 Hải Âu 3 Vinhome Ocean Park 1 Gia Lâm Hà Nội",
-      link: "https://share.google/37RlR1DSXLvlWt9hg"
+      link: "https://maps.app.goo.gl/6eduRKaLH72ogakt5?g_st=ic"
+
     }
   ];
 
@@ -33,7 +35,7 @@ const Contact = () => {
     {
       icon: <Facebook className="w-6 h-6" />,
       label: "Facebook",
-      link: "https://www.facebook.com/EnglishHomestayVietnam"
+      link: "https://www.facebook.com/share/1H5hU6zbqS/?mibextid=wwXIfr"
     },
     {
       icon: <Instagram className="w-6 h-6" />,
@@ -51,7 +53,7 @@ const Contact = () => {
           </h2>
           <div className="w-20 h-1 bg-primary mx-auto mb-6" />
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
+            {"Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible."}
           </p>
         </div>
 

@@ -127,14 +127,57 @@ export async function generateMetadata(): Promise<Metadata> {
     },
 
     keywords: [
+      // Primary search keywords
+      'volunteer in vietnam',
+      'volunteer opportunities in vietnam',
+      'volunteer in hanoi',
+      'volunteer opportunities in hanoi',
+      'teach english in vietnam volunteer',
+      'volunteer english teacher vietnam',
       'english homestay vietnam',
-      'teach english vietnam free',
+      'vietnam volunteer programs',
+      'cultural exchange vietnam volunteer',
+      'best volunteer programs in vietnam',
+      'volunteer opportunities in hanoi vietnam',
+      'volunteer in vietnam hanoi',
+      'teaching english volunteers in vietnam',
+      
+      // Target programs & experiences
+      'free homestay vietnam volunteer',
+      'teach english vietnam free accommodation',
       'volunteer teaching vietnam',
-      'cultural exchange hanoi',
-      'free accommodation vietnam',
-      'learn vietnamese culture',
-      'english teacher volunteer',
+      'volunteer travel vietnam',
+      'gap year volunteer vietnam',
+      'esl volunteer vietnam',
+      'teach abroad vietnam volunteer',
+      'free volunteer work exchange vietnam',
+      'volunteer work with accommodation vietnam',
+      
+      // Hanoi localized search keywords
+      'volunteer hanoi english',
+      'teaching volunteer hanoi',
+      'cultural immersion volunteer hanoi',
+      'hanoi homestay volunteer program',
+      'work exchange hanoi vietnam',
+      'volunteer teacher programs hanoi',
+      'hanoi volunteer opportunity',
+      'esl hanoi teaching volunteer',
+      
+      // Secondary search keywords
+      'learn vietnamese culture volunteer',
+      'backpack vietnam volunteer teach',
+      'budget travel vietnam volunteering',
+      'meaningful travel vietnam',
+      'homestay exchange teach english vietnam',
+      'vietnam volunteer visa guide',
+      'volunteer in southeast asia',
+      'teach english in southeast asia free accommodation',
+      'vietnam homestay teaching program',
+      'teaching assistant volunteer vietnam',
+      
+      // Vietnamese localization search keywords
       'homestay tiếng anh việt nam',
+      'tình nguyện viên nước ngoài dạy tiếng anh',
       'dạy tiếng anh miễn phí ở việt nam',
       'tình nguyện dạy tiếng anh hà nội',
       'trao đổi văn hóa homestay',
@@ -146,11 +189,15 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
+import { LazyMotion, domAnimation } from "framer-motion";
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body className={`${montserrat.className} antialiased`} suppressHydrationWarning>
-        {children}
+        <LazyMotion features={domAnimation}>
+          {children}
+        </LazyMotion>
         <Toaster />
       </body>
     </html>

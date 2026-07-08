@@ -72,7 +72,7 @@ const ReviewCard = ({
       )}
 
       <p className="text-gray-700 italic leading-relaxed text-sm flex-grow line-clamp-5 mb-5">
-        "{review.reviewText}"
+        &ldquo;{review.reviewText}&rdquo;
       </p>
 
       <div className="flex flex-wrap gap-2 text-xs mt-auto">

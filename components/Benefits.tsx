@@ -98,29 +98,16 @@ const Benefits = ({ content }: { content?: any }) => {
           </motion.p>
         </motion.div>
 
-        <motion.div
-          className="grid max-w-6xl grid-cols-2 gap-4 mx-auto lg:grid-cols-3 sm:gap-6 lg:gap-8"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-        >
+        <div className="grid max-w-6xl grid-cols-2 gap-4 mx-auto lg:grid-cols-3 sm:gap-6 lg:gap-8">
           {benefits.map((benefit, index) => (
-            <motion.div
+            <div
               key={index}
-              variants={itemVariants}
               className="relative flex flex-col justify-between h-full p-4 overflow-hidden transition-all duration-500 border shadow-lg group bg-card/80 backdrop-blur-xs sm:p-6 rounded-xl hover:shadow-2xl border-border/50 hover:border-primary/30 hover:-translate-y-2"
             >
               <div className="flex flex-col items-center text-center">
-                <motion.div
-                  className="flex items-center justify-center w-16 h-16 mb-4 transition-all duration-300 rounded-full bg-linear-to-br from-primary/10 to-secondary/10 group-hover:bg-primary/20"
-                  variants={iconVariants}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                >
+                <div className="flex items-center justify-center w-16 h-16 mb-4 transition-all duration-300 rounded-full bg-linear-to-br from-primary/10 to-secondary/10 group-hover:bg-primary/20">
                   {benefit.icon}
-                </motion.div>
+                </div>
                 <h3 className="mb-3 text-xl font-bold transition-colors duration-300 text-foreground group-hover:text-primary">
                   {benefit.title}
                 </h3>
@@ -129,9 +116,9 @@ const Benefits = ({ content }: { content?: any }) => {
                 </p>
               </div>
               <div className="absolute inset-0 transition-opacity duration-500 opacity-0 bg-linear-to-t from-primary/5 via-transparent to-transparent group-hover:opacity-100" />
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

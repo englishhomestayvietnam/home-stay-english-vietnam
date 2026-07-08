@@ -61,7 +61,7 @@ const Requirements = () => {
             className="w-20 h-1 bg-primary mx-auto mb-6 origin-left"
           />
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            We welcome volunteers from all backgrounds. Here's what makes you a great fit:
+            {"We welcome volunteers from all backgrounds. Here's what makes you a great fit:"}
           </p>
         </motion.div>
 
@@ -110,11 +110,10 @@ const Requirements = () => {
             className="mt-12 p-8 bg-linear-to-r from-primary/5 to-secondary/5 rounded-xl text-center border-2 border-primary/20 hover:border-primary/30 transition-colors duration-300"
           >
             <p className="text-xl font-semibold text-foreground mb-3">
-              Not sure if you're a good fit?
+              {"Not sure if you're a good fit?"}
             </p>
             <p className="text-muted-foreground leading-relaxed">
-              Don't worry! If you have a passion for cultural exchange and are willing to share your 
-              time and knowledge, you're exactly who we're looking for. Let's have a chat!
+              {"Don't worry! If you have a passion for cultural exchange and are willing to share your time and knowledge, you're exactly who we're looking for. Let's have a chat!"}
             </p>
           </motion.div>
         </div>
