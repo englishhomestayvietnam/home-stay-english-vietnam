@@ -54,7 +54,7 @@ export default function FloatingActionMenu() {
             {/* Header Image */}
             <div className="relative h-36 w-full">
               <Image
-                src="/fun-activities/WhatsApp Image 2026-06-15 at 3.34.52 PM.jpeg"
+                src="/fun-activities/extracted/WhatsApp Image 2026-07-04 at 12.28.35 PM.jpeg"
                 alt="Vietnamese Cooking & Community Activities"
                 fill
                 className="object-cover"

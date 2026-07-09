@@ -21,7 +21,6 @@ interface Activity {
 
 const FunActivities = () => {
   const sectionRef = useRef(null);
-  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
   const [activities, setActivities] = useState<Activity[]>([]);
   const [activeTab, setActiveTab] = useState<string>("");
@@ -82,7 +81,8 @@ const FunActivities = () => {
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6 }}
           className="text-center max-w-3xl mx-auto mb-8 sm:mb-10 md:mb-16"
         >
@@ -99,7 +99,8 @@ const FunActivities = () => {
         {/* Custom Tab Switcher */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
           transition={{ delay: 0.2, duration: 0.6 }}
           className="flex justify-center mb-8 sm:mb-12 px-2"
         >
