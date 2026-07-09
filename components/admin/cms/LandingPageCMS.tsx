@@ -29,6 +29,7 @@ import Benefits from "@/components/Benefits";
 import Gallery from "@/components/Gallery";
 import Partnership from "@/components/Partnership";
 import Image from "next/image";
+import FunActivitiesCMS from "./FunActivitiesCMS";
 
 interface ContentSection {
   section: string;
@@ -39,7 +40,7 @@ interface ContentSection {
   videoUrl: string;
 }
 
-const SECTIONS = ["hero", "about", "programs", "benefits", "gallery", "partnership"];
+const SECTIONS = ["hero", "about", "programs", "benefits", "gallery", "partnership", "fun-activities"];
 
 const DEFAULTS: Record<string, Partial<ContentSection>> = {
   hero: {
@@ -274,14 +275,16 @@ export default function LandingPageCMS() {
           <Typography variant="h5" component="h1">
             Landing Page Content Editor
           </Typography>
-          <Button
-            variant="contained"
-            startIcon={saving ? <CircularProgress size={20} color="inherit" /> : <Save />}
-            onClick={() => handleSave(currentSectionName)}
-            disabled={saving || uploading}
-          >
-            {saving ? "Saving..." : "Save Changes"}
-          </Button>
+          {currentSectionName !== "fun-activities" && (
+            <Button
+              variant="contained"
+              startIcon={saving ? <CircularProgress size={20} color="inherit" /> : <Save />}
+              onClick={() => handleSave(currentSectionName)}
+              disabled={saving || uploading}
+            >
+              {saving ? "Saving..." : "Save Changes"}
+            </Button>
+          )}
         </Box>
 
         <Tabs
@@ -292,13 +295,16 @@ export default function LandingPageCMS() {
           scrollButtons="auto"
         >
           {SECTIONS.map((sec) => (
-            <Tab key={sec} label={sec.toUpperCase()} />
+            <Tab key={sec} label={sec.replace("-", " ").toUpperCase()} />
           ))}
         </Tabs>
 
-        <Grid container spacing={4}>
-          {/* ── Live Preview ── */}
-          <Grid item xs={12}>
+        {currentSectionName === "fun-activities" ? (
+          <FunActivitiesCMS />
+        ) : (
+          <Grid container spacing={4}>
+            {/* ── Live Preview ── */}
+            <Grid item xs={12}>
             <Card variant="outlined" sx={{ overflow: "hidden" }}>
               <CardHeader
                 title="Live Preview"
@@ -433,6 +439,7 @@ export default function LandingPageCMS() {
             </Paper>
           </Grid>
         </Grid>
+        )}
 
         <Snackbar
           open={!!notification}

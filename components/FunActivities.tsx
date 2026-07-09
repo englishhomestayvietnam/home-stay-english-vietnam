@@ -2,7 +2,8 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
-import { Calendar, Utensils, Compass, Users, MapPin, ChevronLeft, ChevronRight, X, ZoomIn } from "lucide-react";
+import * as LucideIcons from "lucide-react";
+import { Calendar, Users, MapPin, ChevronLeft, ChevronRight, X, ZoomIn, Compass } from "lucide-react";
 import Image from "next/image";
 import { Button } from "./ui/button";
 import Link from "next/link";
@@ -12,7 +13,7 @@ interface Activity {
   title: string;
   subtitle: string;
   schedule: string;
-  icon: React.ReactNode;
+  icon: string;
   description: string;
   highlights: string[];
   images: string[];
@@ -22,64 +23,27 @@ const FunActivities = () => {
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
-  const activities: Activity[] = [
-    {
-      id: "cooking",
-      title: "Saturday Cultural Exchange & Cooking",
-      subtitle: "Vietnamese Culinary Masterclass & Story Sharing",
-      schedule: "Every Saturday",
-      icon: <Utensils className="w-5 h-5 text-emerald-600" />,
-      description: "Every Saturday afternoon, our homestay community opens its doors for a vibrant cultural exchange and Vietnamese cooking class. Volunteers, students, and local staff gather to learn, cook, and feast together.",
-      highlights: [
-        "Master traditional Vietnamese dishes (Pho, fresh Spring Rolls, Bun Cha, and Vietnamese Egg Coffee)",
-        "Open to all Vietnamese staff, local students, and foreign volunteers",
-        "Exchange languages, stories, and cultural traditions over a family-style meal",
-        "100% free activity focused on building community and sharing local heritage"
-      ],
-      images: [
-        "/fun-activities/WhatsApp Image 2026-06-15 at 3.34.54 PM (1).jpeg",
-        "/fun-activities/WhatsApp Image 2026-06-15 at 3.34.51 PM.jpeg",
-        "/fun-activities/WhatsApp Image 2026-06-15 at 3.34.52 PM (1).jpeg",
-        "/fun-activities/WhatsApp Image 2026-06-15 at 3.34.52 PM (2).jpeg",
-        "/fun-activities/WhatsApp Image 2026-06-15 at 3.34.52 PM (3).jpeg",
-        "/fun-activities/WhatsApp Image 2026-06-15 at 3.34.52 PM.jpeg",
-        "/fun-activities/WhatsApp Image 2026-06-15 at 3.34.53 PM (2).jpeg",
-        "/fun-activities/WhatsApp Image 2026-06-15 at 3.34.53 PM (3).jpeg",
-        "/fun-activities/WhatsApp Image 2026-06-15 at 3.34.53 PM.jpeg",
-        "/fun-activities/WhatsApp Image 2026-06-15 at 3.34.54 PM (2).jpeg",
-        "/fun-activities/WhatsApp Image 2026-06-15 at 3.34.53 PM (1).jpeg",
-      ]
-    },
-    {
-      id: "trips",
-      title: "Monthly Hanoi Trips & Excursions",
-      subtitle: "Explore the Beautiful Landscapes & History of Northern Vietnam",
-      schedule: "Once a Month",
-      icon: <Compass className="w-5 h-5 text-orange-600" />,
-      description: "English Homestay organizes monthly excursions to help volunteers and local students step outside the classroom and discover the wonders of Hanoi and its surrounding areas.",
-      highlights: [
-        "Guided visits to Hanoi's historic quarters, temples, and famous museums",
-        "Trips to traditional craft villages (Bat Trang Ceramics, Quang Phu Cau Incense Village)",
-        "Weekend hikes, nature exploration, and scenic escapes in Hanoi's surrounding provinces",
-        "A fantastic bonding opportunity for the entire community outside the homestay environment"
-      ],
-      images: [
-        "/fun-activities/WhatsApp Image 2026-06-15 at 3.34.54 PM (3).jpeg",
-        "/fun-activities/WhatsApp Image 2026-06-15 at 3.34.54 PM.jpeg",
-        "/fun-activities/WhatsApp Image 2026-06-15 at 3.34.55 PM (1).jpeg",
-        "/fun-activities/WhatsApp Image 2026-06-15 at 3.34.55 PM (2).jpeg",
-        "/fun-activities/WhatsApp Image 2026-06-15 at 3.34.55 PM (3).jpeg",
-        "/fun-activities/WhatsApp Image 2026-06-15 at 3.34.55 PM.jpeg",
-        "/fun-activities/WhatsApp Image 2026-06-15 at 3.34.56 PM (1).jpeg",
-        "/fun-activities/WhatsApp Image 2026-06-15 at 3.34.56 PM (2).jpeg",
-        "/fun-activities/WhatsApp Image 2026-06-15 at 3.34.56 PM (3).jpeg",
-        "/fun-activities/WhatsApp Image 2026-06-15 at 3.34.56 PM.jpeg",
-        "/fun-activities/WhatsApp Image 2026-06-15 at 3.34.57 PM.jpeg",
-      ]
-    }
-  ];
+  const [activities, setActivities] = useState<Activity[]>([]);
+  const [activeTab, setActiveTab] = useState<string>("");
 
-  const [activeTab, setActiveTab] = useState<string>("cooking");
+  useEffect(() => {
+    const fetchActivities = async () => {
+      try {
+        const res = await fetch("/api/fun-activities");
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data) && data.length > 0) {
+            setActivities(data);
+            setActiveTab(data[0].id);
+          }
+        }
+      } catch (error) {
+        console.error("Failed to fetch activities:", error);
+      }
+    };
+    fetchActivities();
+  }, []);
+
   const currentActivity = activities.find((a) => a.id === activeTab) || activities[0];
 
   // Image Gallery Viewer State
@@ -92,12 +56,21 @@ const FunActivities = () => {
   }, [activeTab]);
 
   const handleNextImage = () => {
+    if (!currentActivity?.images?.length) return;
     setActiveImageIndex((prev) => (prev + 1) % currentActivity.images.length);
   };
 
   const handlePrevImage = () => {
+    if (!currentActivity?.images?.length) return;
     setActiveImageIndex((prev) => (prev - 1 + currentActivity.images.length) % currentActivity.images.length);
   };
+
+  const renderIcon = (iconName: string, isActive: boolean) => {
+    const IconComponent = (LucideIcons as any)[iconName] || Compass;
+    return <IconComponent className={`w-4 h-4 flex-shrink-0 ${isActive ? "text-emerald-600 dark:text-emerald-400" : "text-slate-500"}`} />;
+  };
+
+  if (!activities || activities.length === 0) return null;
 
   return (
     <section id="activities" className="py-12 sm:py-16 md:py-24 bg-background relative overflow-hidden" ref={sectionRef}>
@@ -131,23 +104,22 @@ const FunActivities = () => {
           className="flex justify-center mb-8 sm:mb-12 px-2"
         >
           <div className="bg-slate-100/80 dark:bg-slate-900/80 p-1.5 rounded-2xl border border-slate-200/50 dark:border-slate-800/50 flex gap-1.5 sm:gap-2 max-w-full overflow-x-auto no-scrollbar">
-            {activities.map((activity) => (
-              <button
-                key={activity.id}
-                onClick={() => setActiveTab(activity.id)}
-                className={`relative px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 flex items-center gap-1.5 sm:gap-2 cursor-pointer ${activeTab === activity.id
-                  ? "bg-white dark:bg-slate-800 text-emerald-700 dark:text-emerald-400 shadow-md scale-102"
-                  : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
-                  }`}
-              >
-                {activity.id === "cooking" ? (
-                  <Utensils className={`w-4 h-4 flex-shrink-0 ${activeTab === "cooking" ? "text-emerald-600" : "text-slate-500"}`} />
-                ) : (
-                  <Compass className={`w-4 h-4 flex-shrink-0 ${activeTab === "trips" ? "text-orange-600" : "text-slate-500"}`} />
-                )}
-                <span className="whitespace-nowrap">{activity.id === "cooking" ? "Weekly Saturday Cooking" : "Monthly Hanoi Trips"}</span>
-              </button>
-            ))}
+            {activities.map((activity) => {
+              const isActive = activeTab === activity.id;
+              return (
+                <button
+                  key={activity.id}
+                  onClick={() => setActiveTab(activity.id)}
+                  className={`relative px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 flex items-center gap-1.5 sm:gap-2 cursor-pointer ${isActive
+                    ? "bg-white dark:bg-slate-800 text-emerald-700 dark:text-emerald-400 shadow-md scale-102"
+                    : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                    }`}
+                >
+                  {renderIcon(activity.icon, isActive)}
+                  <span className="whitespace-nowrap">{activity.title}</span>
+                </button>
+              );
+            })}
           </div>
         </motion.div>
 

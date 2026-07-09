@@ -17,6 +17,7 @@ const openGraphImage = `https://ik.imagekit.io/rlw77vgih/Today_s%20Adenda.jpg`;
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
+    metadataBase: new URL(siteUrl),
     title: {
       default:
         'English Homestay Vietnam – Teach English, Live with Locals, Explore Real Vietnam',
