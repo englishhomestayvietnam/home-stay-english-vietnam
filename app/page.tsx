@@ -10,6 +10,7 @@ import prisma from "@/lib/prisma";
 import PromoBanner from "@/components/PromoBanner";
 import FloatingActionMenu from "@/components/floating-menu";
 import FunActivities from "@/components/FunActivities";
+import FAQ from "@/components/FAQ";
 
 
 const page = async () => {
@@ -36,6 +37,7 @@ const page = async () => {
       <FunActivities />
       <Gallery content={contentMap['gallery']} />
       <Partnership content={contentMap['partnership']} />
+      <FAQ />
       <Contact />
       <Footer />
       <FloatingActionMenu />

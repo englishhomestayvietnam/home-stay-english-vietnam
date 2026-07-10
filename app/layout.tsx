@@ -18,13 +18,12 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     metadataBase: new URL(siteUrl),
     title: {
-      default:
-        'English Homestay Vietnam – Teach English, Live with Locals, Explore Real Vietnam',
+      default: 'Teach English & Live Free in Vietnam | English Homestay',
       template: '%s | English Homestay Vietnam',
     },
 
     description:
-      'Stay for free in Vietnam, teach English 15 hours/week, and immerse yourself in authentic local life. Perfect for travelers who want cultural exchange, free homestay, and meaningful connections.',
+      'Volunteer to teach English in Vietnam for 15 hours/week. Get free homestay accommodation, immerse in local culture, and make meaningful connections!',
 
     openGraph: {
       type: 'website',
@@ -33,7 +32,7 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: 'English Homestay Vietnam',
       title: 'Teach. Travel. Connect. Live with Vietnamese Learners',
       description:
-        'Free homestay for international English teachers. Practice English with locals, share daily life, explore Vietnam culture. Apply now!',
+        'Free homestay for volunteer English teachers! Teach locals 15 hrs/wk, immerse in culture, and explore Vietnam. Apply now!',
     },
 
     twitter: {

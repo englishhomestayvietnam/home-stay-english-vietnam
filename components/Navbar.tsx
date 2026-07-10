@@ -210,6 +210,13 @@ const Navbar = () => {
           icon: Handshake,
         },
         {
+          label: "FAQs",
+          id: "faq",
+          href: "/#faq",
+          description: "Frequently asked questions.",
+          icon: HelpCircle,
+        },
+        {
           label: "Contact Us",
           id: "contact",
           href: "/#contact",
@@ -264,13 +271,7 @@ const Navbar = () => {
           description: "Evening talk hours & weekly stats.",
           icon: Calendar,
         },
-        {
-          label: "FAQs",
-          id: "faq",
-          href: "/welcome#faq",
-          description: "Helpful Q&A for volunteers.",
-          icon: HelpCircle,
-        },
+
       ],
     },
     {

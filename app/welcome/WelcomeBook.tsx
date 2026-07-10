@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { m, AnimatePresence, Variants } from "framer-motion";
 import { 
   Compass, 
@@ -36,9 +36,6 @@ import Link from "next/link";
 export default function WelcomeBookPage() {
   const [copiedWifi, setCopiedWifi] = useState(false);
   const [copiedAddress, setCopiedAddress] = useState(false);
-  
-  // FAQ accordion open states
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   const handleCopyText = (text: string, type: "wifi" | "address") => {
     navigator.clipboard.writeText(text);
@@ -51,32 +48,7 @@ export default function WelcomeBookPage() {
     }
   };
 
-  const faqs = [
-    {
-      q: "Can I pay by card to the shops or stores?",
-      a: "Mostly NO. Cash (Vietnamese Dong - VND) is highly preferred in local shops, street food vendors, and markets in Vietnam. It is best to keep some cash on you at all times."
-    },
-    {
-      q: "Can I cook in the homestay?",
-      a: "Yes, you are welcome to use the shared kitchen to prepare your meals. Just make sure to wash your dishes immediately and clean up after yourself."
-    },
-    {
-      q: "Is laundry available in the homestay?",
-      a: "Yes, washing machines are available on the rooftop for your convenience. Please ask the hosts first so they can show you how to operate the machines properly."
-    },
-    {
-      q: "Can I check in early?",
-      a: "Early check-in is possible if your room is clean and ready. If not, you are welcome to drop off your luggage and hang out in the common living area."
-    },
-    {
-      q: "How far is the bus station?",
-      a: "The bus station is very close to the homestay, within short walking distance or a quick motor ride, making it easy to catch buses into central Hanoi."
-    },
-    {
-      q: "Is it safe?",
-      a: "Yes, Trâu Quỳ is a peaceful university town and the area is generally very safe. However, please secure your personal belongings and lock your doors when leaving."
-    }
-  ];
+
 
   // Framer motion variants to match Benefits/Programs
   const containerVariants: Variants = {
@@ -697,8 +669,9 @@ export default function WelcomeBookPage() {
         </m.div>
       </section>
 
-      {/* Section 6: FAQ */}
-      <section id="faq" className="py-20 md:py-28 bg-linear-to-br from-muted/30 to-background scroll-mt-20">
+
+      {/* Quick Summary Banner */}
+      <section className="pb-20 md:pb-28 bg-linear-to-br from-muted/30 to-background">
         <m.div 
           className="container px-4 mx-auto sm:px-6 lg:px-8"
           initial="hidden"
@@ -706,57 +679,6 @@ export default function WelcomeBookPage() {
           viewport={{ once: true, margin: "-100px" }}
           variants={containerVariants}
         >
-          {/* Header */}
-          <m.div variants={itemVariants} className="mb-16 text-center">
-            <span className="inline-block px-3 py-1 mb-4 text-xs font-semibold tracking-wider uppercase rounded-full bg-primary/10 text-primary">
-              Volunteer Q&amp;A
-            </span>
-            <h2 className="mb-4 text-3xl font-extrabold tracking-tight sm:text-4xl md:text-5xl text-foreground">
-              Frequently Asked Questions
-            </h2>
-            <div className="w-20 h-1.5 mx-auto mb-6 rounded-full bg-primary" />
-            <p className="max-w-2xl mx-auto text-lg text-muted-foreground">
-              Answers to common concerns and daily life queries from our volunteers.
-            </p>
-          </m.div>
-
-          <m.div variants={itemVariants} className="space-y-4 max-w-4xl mx-auto">
-            {faqs.map((faq, index) => {
-              const isOpen = openFaq === index;
-              return (
-                <div
-                  key={index}
-                  className="border border-border/50 bg-card rounded-xl overflow-hidden"
-                >
-                  <button
-                    onClick={() => setOpenFaq(isOpen ? null : index)}
-                    className="flex items-center justify-between w-full px-6 py-5 text-foreground font-bold text-left text-sm sm:text-base hover:bg-muted/10 transition-colors"
-                  >
-                    <span>{faq.q}</span>
-                    <div className="shrink-0 ml-4 p-1.5 rounded-full bg-muted/40 text-muted-foreground">
-                      {isOpen ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
-                    </div>
-                  </button>
-                  
-                  <AnimatePresence initial={false}>
-                    {isOpen && (
-                      <m.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.25 }}
-                        className="overflow-hidden border-t border-border/50 bg-muted/20"
-                      >
-                        <div className="px-6 py-5 text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                          {faq.a}
-                        </div>
-                      </m.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              );
-            })}
-          </m.div>
 
           {/* Quick Summary Banner */}
           <m.div variants={itemVariants} className="mt-16 max-w-4xl mx-auto">
