@@ -2,7 +2,7 @@ import Navbar from "@/components/Navbar";
 import PromoBanner from "@/components/PromoBanner";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
-import FloatingActionMenu from "@/components/floating-menu";
+
 import HomestayGuides from "@/components/HomestayGuides";
 import { BookOpen } from "lucide-react";
 
@@ -63,7 +63,7 @@ export default function HomestayGuidesPage() {
 
       <Contact />
       <Footer />
-      <FloatingActionMenu />
+
     </div>
   );
 }

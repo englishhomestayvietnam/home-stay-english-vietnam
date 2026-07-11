@@ -30,7 +30,7 @@ import {
 import Navbar from "@/components/Navbar";
 import PromoBanner from "@/components/PromoBanner";
 import Footer from "@/components/Footer";
-import FloatingActionMenu from "@/components/floating-menu";
+
 import Link from "next/link";
 
 export default function WelcomeBookPage() {
@@ -706,7 +706,7 @@ export default function WelcomeBookPage() {
       </section>
 
       <Footer />
-      <FloatingActionMenu />
+
     </div>
   );
 }

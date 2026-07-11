@@ -1,6 +1,6 @@
 import { MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import FloatingActionMenu from "@/components/floating-menu";
+
 import Link from "next/link";
 import InfiniteReviewsScroller, { type InfiniteReview } from "@/components/InfiniteReviewsScroller";
 
@@ -40,7 +40,7 @@ export default async function VolunteerReviews() {
       <div className="mt-20 text-center">
         <p className="text-gray-600 font-medium">Join {approvedCount}+ volunteers who shared their story</p>
       </div>
-      <FloatingActionMenu />
+
     </section>
   );
 }

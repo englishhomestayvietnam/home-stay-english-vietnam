@@ -8,7 +8,7 @@ import Navbar from "@/components/Navbar";
 import Partnership from "@/components/Partnership";
 import prisma from "@/lib/prisma";
 import PromoBanner from "@/components/PromoBanner";
-import FloatingActionMenu from "@/components/floating-menu";
+
 import FunActivities from "@/components/FunActivities";
 import FAQ from "@/components/FAQ";
 
@@ -40,7 +40,7 @@ const page = async () => {
       <FAQ />
       <Contact />
       <Footer />
-      <FloatingActionMenu />
+
     </div>
   );
 };
