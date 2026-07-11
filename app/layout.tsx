@@ -33,6 +33,14 @@ export async function generateMetadata(): Promise<Metadata> {
       title: 'Teach. Travel. Connect. Live with Vietnamese Learners',
       description:
         'Free homestay for volunteer English teachers! Teach locals 15 hrs/wk, immerse in culture, and explore Vietnam. Apply now!',
+      images: [
+        {
+          url: '/opengraph.jpg',
+          width: 1200,
+          height: 630,
+          alt: 'English Homestay Vietnam - Teach, Travel, Connect',
+        },
+      ],
     },
 
     twitter: {
@@ -41,6 +49,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description:
         'Free homestay for international English accommodation, cultural exchange, 15 hrs/week teaching. 2 weeks–3 months. Apply now!',
       creator: '@EnglishHomestayVN',
+      images: ['/opengraph.jpg'],
     },
 
     robots: {

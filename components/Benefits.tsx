@@ -56,14 +56,6 @@ const Benefits = ({ content }: { content?: any }) => {
     }
   };
 
-  const iconVariants: Variants = {
-    hidden: { scale: 0, rotate: -180 },
-    visible: {
-      scale: 1,
-      rotate: 0,
-      transition: { duration: 0.4, type: "spring", stiffness: 300 }
-    }
-  };
 
   return (
     <section id="benefits" className="py-20 bg-linear-to-br from-muted/30 to-background">
@@ -112,9 +104,9 @@ const Benefits = ({ content }: { content?: any }) => {
               className="relative flex flex-col justify-between h-full p-4 overflow-hidden transition-all duration-500 border group bg-card/80 backdrop-blur-xs sm:p-6 rounded-xl border-border/50 hover:border-primary/30 hover:-translate-y-2"
             >
               <div className="flex flex-col items-center text-center">
-                <motion.div variants={iconVariants} className="flex items-center justify-center w-16 h-16 mb-4 transition-all duration-300 rounded-full bg-linear-to-br from-primary/10 to-secondary/10 group-hover:bg-primary/20">
+                <div className="flex items-center justify-center w-16 h-16 mb-4 transition-all duration-300 rounded-full bg-linear-to-br from-primary/10 to-secondary/10 group-hover:bg-primary/20">
                   {benefit.icon}
-                </motion.div>
+                </div>
                 <h3 className="mb-3 text-xl font-bold transition-colors duration-300 text-foreground group-hover:text-primary">
                   {benefit.title}
                 </h3>
