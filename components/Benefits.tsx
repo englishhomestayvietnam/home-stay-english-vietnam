@@ -98,16 +98,23 @@ const Benefits = ({ content }: { content?: any }) => {
           </motion.p>
         </motion.div>
 
-        <div className="grid max-w-6xl grid-cols-2 gap-4 mx-auto lg:grid-cols-3 sm:gap-6 lg:gap-8">
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          className="grid max-w-6xl grid-cols-2 gap-4 mx-auto lg:grid-cols-3 sm:gap-6 lg:gap-8"
+        >
           {benefits.map((benefit, index) => (
-            <div
+            <motion.div
               key={index}
-              className="relative flex flex-col justify-between h-full p-4 overflow-hidden transition-all duration-500 border shadow-lg group bg-card/80 backdrop-blur-xs sm:p-6 rounded-xl hover:shadow-2xl border-border/50 hover:border-primary/30 hover:-translate-y-2"
+              variants={itemVariants}
+              className="relative flex flex-col justify-between h-full p-4 overflow-hidden transition-all duration-500 border group bg-card/80 backdrop-blur-xs sm:p-6 rounded-xl border-border/50 hover:border-primary/30 hover:-translate-y-2"
             >
               <div className="flex flex-col items-center text-center">
-                <div className="flex items-center justify-center w-16 h-16 mb-4 transition-all duration-300 rounded-full bg-linear-to-br from-primary/10 to-secondary/10 group-hover:bg-primary/20">
+                <motion.div variants={iconVariants} className="flex items-center justify-center w-16 h-16 mb-4 transition-all duration-300 rounded-full bg-linear-to-br from-primary/10 to-secondary/10 group-hover:bg-primary/20">
                   {benefit.icon}
-                </div>
+                </motion.div>
                 <h3 className="mb-3 text-xl font-bold transition-colors duration-300 text-foreground group-hover:text-primary">
                   {benefit.title}
                 </h3>
@@ -115,10 +122,11 @@ const Benefits = ({ content }: { content?: any }) => {
                   {benefit.description}
                 </p>
               </div>
-              <div className="absolute inset-0 transition-opacity duration-500 opacity-0 bg-linear-to-t from-primary/5 via-transparent to-transparent group-hover:opacity-100" />
-            </div>
+              {/* Sweeping light animation */}
+              <div className="absolute inset-0 -translate-x-[150%] transition-transform duration-1000 ease-in-out group-hover:translate-x-[150%] bg-linear-to-r from-transparent via-primary/10 to-transparent skew-x-12 pointer-events-none" />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

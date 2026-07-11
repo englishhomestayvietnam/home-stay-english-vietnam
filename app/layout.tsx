@@ -157,6 +157,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 import { LazyMotion, domAnimation } from "framer-motion";
+import FloatingActionButtons from "@/components/FloatingActionButtons";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -168,6 +169,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <LazyMotion features={domAnimation}>
           {children}
         </LazyMotion>
+        <FloatingActionButtons />
         <Toaster />
       </body>
     </html>
