@@ -483,7 +483,7 @@ export default function HomestayGuides() {
             </h2>
             <div className="w-20 h-1.5 mx-auto mb-6 rounded-full bg-primary" />
             <p className="max-w-2xl mx-auto text-lg text-muted-foreground">
-              Area: Trâu Quỳ – Gia Lâm – Hanoi. Eat like locals to save money and enjoy authentic dishes.
+              Area: Vinhomes Ocean Park – Gia Lâm – Hanoi. Eat like locals to save money and enjoy authentic dishes.
             </p>
           </m.div>
 
@@ -497,15 +497,15 @@ export default function HomestayGuides() {
                 <h4 className="font-bold text-primary text-base">🌅 Breakfast (7:00 – 10:30)</h4>
                 <ul className="space-y-3.5 text-xs sm:text-sm text-muted-foreground">
                   <li>
-                    <strong>🥖 Bánh Mì</strong> ($0.60 – $1.00)<br />
+                    <strong>🥖 Bánh Mì</strong> ($1.0 – $1.50)<br />
                     Bread + meat/egg + vegetables. Fast, cheap, and easy!
                   </li>
                   <li>
-                    <strong>🍚 Xôi (Sticky Rice)</strong> ($0.80 – $1.20)<br />
+                    <strong>🍚 Xôi (Sticky Rice)</strong> ($1.0 – $1.70)<br />
                     Sticky rice + egg/pork/chicken. Very filling.
                   </li>
                   <li>
-                    <strong>🍲 Phở / Bún</strong> ($1.50 – $2.50)<br />
+                    <strong>🍲 Phở / Bún</strong> ($2.00 – $3.00)<br />
                     Light beef or chicken rice noodle soup.
                   </li>
                 </ul>
@@ -521,15 +521,15 @@ export default function HomestayGuides() {
                 <h4 className="font-bold text-primary text-base">🌞 Lunch (11:00 – 14:00)</h4>
                 <ul className="space-y-3.5 text-xs sm:text-sm text-muted-foreground">
                   <li>
-                    <strong>🍛 Cơm Bình Dân / Buffet Rice</strong> ($1.50 – $2.00)<br />
+                    <strong>🍛 Cơm Bình Dân / Buffet Rice</strong> ($1.7 – $2.50)<br />
                     Rice + meat + vegetables + soup. <span className="text-primary font-bold">Cheapest full meal! ⭐</span>
                   </li>
                   <li>
-                    <strong>🍲 Phở / Bún</strong> ($1.50 – $2.50)<br />
+                    <strong>🍲 Phở / Bún</strong> ($1.7 – $3.00)<br />
                     Rice noodle soup in standard lunch portions.
                   </li>
                   <li>
-                    <strong>🥩 Bún Chả</strong> ($2.00 – $2.50)<br />
+                    <strong>🥩 Bún Chả</strong> ($2.0 – $3.00)<br />
                     Grilled pork with rice noodles and local herbs.
                   </li>
                 </ul>
@@ -545,15 +545,15 @@ export default function HomestayGuides() {
                 <h4 className="font-bold text-primary text-base">🌙 Dinner (17:00 – 22:00)</h4>
                 <ul className="space-y-3.5 text-xs sm:text-sm text-muted-foreground">
                   <li>
-                    <strong>🍛 Buffet Rice (Cơm Bình Dân)</strong> ($1.50 – $2.00)<br />
+                    <strong>🍛 Buffet Rice (Cơm Bình Dân)</strong> ($1.7 – $2.50)<br />
                     Best budget dinner selection.
                   </li>
                   <li>
-                    <strong>🍲 Noodle Dishes</strong> ($1.50 – $2.50)<br />
+                    <strong>🍲 Noodle Dishes</strong> ($1.7 – $3.00)<br />
                     Phở, bún, or bún chả.
                   </li>
                   <li>
-                    <strong>🍢 Street Snacks</strong> ($1.00 – $3.00)<br />
+                    <strong>🍢 Street Snacks</strong> ($1.50 – $3.50)<br />
                     Skewers, local pancakes, and traditional drinks.
                   </li>
                 </ul>

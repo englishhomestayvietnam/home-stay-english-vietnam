@@ -34,7 +34,7 @@ export default function FAQ() {
       category: "3. Teaching",
       faqs: [
         { q: "What will I teach?", quick: "English", details: "Conversational English and speaking practice." },
-        { q: "How many hours do I teach each week?", quick: "15–18 hrs", details: "Around 15–18 hours per week." },
+        { q: "How many hours do I teach each week?", quick: "18–20 hrs", details: "Around 18–20 hours per week." },
         { q: "Will I teach alone?", quick: "No", details: "Usually not. Our local team will support you." },
         { q: "Are lesson materials provided?", quick: "Yes", details: "-" },
         { q: "What are the class sizes?", quick: "4–8", details: "Usually 4–8 students." },
@@ -109,11 +109,11 @@ export default function FAQ() {
       category: "11. General Homestay",
       faqs: [
         { q: "Can I pay by card to the shops or stores?", quick: "No", details: "Mostly NO. Cash (Vietnamese Dong - VND) is highly preferred in local shops, street food vendors, and markets in Vietnam. It is best to keep some cash on you at all times." },
-        { q: "Can I cook in the homestay?", quick: "Yes", details: "You are welcome to use the shared kitchen to prepare your meals. Just make sure to wash your dishes immediately and clean up after yourself." },
+        { q: "Can I cook in the homestay?", quick: "Yes", details: "You are welcome to prepare simple meals. Please limit complicated or elaborate cooking, and always clean up immediately after preparing your food." },
         { q: "Is laundry available in the homestay?", quick: "Yes", details: "Washing machines are available on the rooftop for your convenience. Please ask the hosts first so they can show you how to operate the machines properly." },
         { q: "Can I check in early?", quick: "Yes", details: "Early check-in is possible if your room is clean and ready. If not, you are welcome to drop off your luggage and hang out in the common living area." },
         { q: "How far is the bus station?", quick: "Close", details: "The bus station is very close to the homestay, within short walking distance or a quick motor ride, making it easy to catch buses into central Hanoi." },
-        { q: "Is it safe?", quick: "Yes", details: "Trâu Quỳ is a peaceful university town and the area is generally very safe. However, please secure your personal belongings and lock your doors when leaving." }
+        { q: "Is it safe?", quick: "Yes", details: "Vinhomes Ocean Park is a modern, vibrant, and well-planned urban area with a peaceful atmosphere, excellent security, and a friendly community. It is surrounded by beautiful green spaces, lakes, cafés, restaurants, shops, and convenient services, making it a comfortable and enjoyable place to live, study, and meet people from different backgrounds." }
       ]
     }
   ];

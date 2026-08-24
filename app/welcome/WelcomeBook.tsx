@@ -104,7 +104,7 @@ export default function WelcomeBookPage() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-base sm:text-lg md:text-xl text-emerald-100/90 font-light max-w-2xl leading-relaxed mb-12"
           >
-            English Homestay Vietnam – Trâu Quỳ, Hanoi. Your complete handbook for checking in, homestay rules, weekly schedules, and local integration.
+            English Homestay Vietnam – Vinhomes Ocean Park, Hanoi. Your complete handbook for checking in, homestay rules, weekly schedules, and local integration.
           </m.p>
 
           {/* Address Card */}
@@ -120,7 +120,7 @@ export default function WelcomeBookPage() {
                 Homestay Address
               </div>
               <p className="text-lg font-bold text-foreground leading-relaxed">
-                21A Alley 22 Nguyen Khiem Ich Street, Trâu Quỳ, Gia Lâm, Hanoi
+                Số 246 Hải Âu 3, Vinhomes Ocean Park 1, Gia Lâm, Hà Nội
               </p>
             </div>
             <div className="flex flex-wrap gap-3 shrink-0 w-full md:w-auto">
@@ -592,7 +592,7 @@ export default function WelcomeBookPage() {
                 <h3 className="font-bold text-slate-900 text-2xl">Speaking Hours</h3>
               </div>
               <div className="my-6">
-                <span className="text-6xl font-black text-primary tracking-tight">15–18</span>
+                <span className="text-6xl font-black text-primary tracking-tight">18–20</span>
                 <span className="text-xs font-bold text-slate-450 block mt-2 uppercase tracking-wider">Hours Per Week Total</span>
               </div>
               <p className="text-muted-foreground text-xs leading-relaxed">

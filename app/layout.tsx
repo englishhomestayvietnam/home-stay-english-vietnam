@@ -23,7 +23,7 @@ export async function generateMetadata(): Promise<Metadata> {
     },
 
     description:
-      'Volunteer to teach English in Vietnam for 15 hours/week. Get free homestay accommodation, immerse in local culture, and make meaningful connections!',
+      'Volunteer to teach English in Vietnam for 18–20 hours/week. Get free homestay accommodation, immerse in local culture, and make meaningful connections!',
 
     openGraph: {
       type: 'website',
@@ -32,7 +32,7 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: 'English Homestay Vietnam',
       title: 'Teach. Travel. Connect. Live with Vietnamese Learners',
       description:
-        'Free homestay for volunteer English teachers! Teach locals 15 hrs/wk, immerse in culture, and explore Vietnam. Apply now!',
+        'Free homestay for volunteer English teachers! Teach locals 18–20 hrs/wk, immerse in culture, and explore Vietnam. Apply now!',
       images: [
         {
           url: '/opengraph.jpg',
@@ -47,7 +47,7 @@ export async function generateMetadata(): Promise<Metadata> {
       card: 'summary_large_image',
       title: 'Teach English & Live Free in Vietnam | English Homestay',
       description:
-        'Free homestay for international English accommodation, cultural exchange, 15 hrs/week teaching. 2 weeks–3 months. Apply now!',
+        'Free homestay for international English accommodation, cultural exchange, 18–20 hrs/week teaching. 2 weeks–3 months. Apply now!',
       creator: '@EnglishHomestayVN',
       images: ['/opengraph.jpg'],
     },
@@ -85,7 +85,7 @@ export async function generateMetadata(): Promise<Metadata> {
           'Cultural exchange program offering free homestay for volunteer English teachers in Hanoi, Vietnam.',
         address: {
           '@type': 'PostalAddress',
-          streetAddress: 'Trâu Quỳ, Gia Lâm',
+          streetAddress: 'Số 246 Hải Âu 3, Vinhomes Ocean Park 1, Gia Lâm',
           addressLocality: 'Hà Nội',
           addressCountry: 'VN',
         },

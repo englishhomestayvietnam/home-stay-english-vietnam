@@ -18,13 +18,6 @@ const Contact = () => {
     {
       icon: <MapPin className="w-6 h-6" />,
       label: "Address",
-      value: "xã số 21a ngõ 22 Gia Lâm Hà Nội",
-      link: "https://maps.app.goo.gl/HHVEqtgasepN6BoP9?g_st=iw"
-
-    },
-    {
-      icon: <MapPin className="w-6 h-6" />,
-      label: "Address 2",
       value: "số 246 Hải Âu 3 Vinhome Ocean Park 1 Gia Lâm Hà Nội",
       link: "https://maps.app.goo.gl/6eduRKaLH72ogakt5?g_st=ic"
 

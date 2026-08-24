@@ -22,7 +22,7 @@ const Benefits = ({ content }: { content?: any }) => {
     {
       icon: <Calendar className="w-8 h-8 text-primary" />,
       title: "Flexible Schedule",
-      description: "Only around 15 hours per week, plenty of time to explore"
+      description: "Only around 18–20 hours per week, plenty of time to explore"
     },
     {
       icon: <FileText className="w-8 h-8 text-primary" />,
