@@ -26,7 +26,16 @@ export const auth = betterAuth({
       }
     }
   },
-  trustedOrigins: ["http://localhost:3000", "https://home-stay-english-vietnam.vercel.app", "https://www.englishhomestayvietnam.com/"],
+  account: {
+    skipStateCookieCheck: true,
+  },
+  trustedOrigins: [
+    "http://localhost:3000",
+    "http://localhost:3001",
+    "https://home-stay-english-vietnam.vercel.app",
+    "https://www.englishhomestayvietnam.com",
+    "https://englishhomestayvietnam.com",
+  ],
   plugins: [
     admin({
       ac,

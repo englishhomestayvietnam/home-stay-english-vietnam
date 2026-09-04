@@ -7,6 +7,8 @@ import { Calendar, Users, MapPin, ChevronLeft, ChevronRight, X, ZoomIn, Compass 
 import Image from "next/image";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import { useSession } from "@/lib/auth-client";
+import { SignInModal } from "./auth/SignInModal";
 
 interface Activity {
   id: string;
@@ -20,6 +22,8 @@ interface Activity {
 }
 
 const FunActivities = () => {
+  const { data: session } = useSession();
+  const user = session?.user;
   const sectionRef = useRef(null);
 
   const [activities, setActivities] = useState<Activity[]>([]);
@@ -171,11 +175,24 @@ const FunActivities = () => {
 
               {/* Call to action */}
               <div className="pt-4 flex flex-col sm:flex-row gap-3 sm:gap-4">
-                <Button asChild size="lg" className="w-full sm:w-auto rounded-xl font-bold bg-gradient-to-r from-emerald-500 to-lime-500 hover:from-emerald-600 hover:to-lime-600 shadow-md">
-                  <Link href="/apply" target="_blank">
-                    Join as a Volunteer
-                  </Link>
-                </Button>
+                {user ? (
+                  <Button asChild size="lg" className="w-full sm:w-auto rounded-xl font-bold bg-gradient-to-r from-emerald-500 to-lime-500 hover:from-emerald-600 hover:to-lime-600 shadow-md cursor-pointer">
+                    <Link href="/apply">
+                      Join as a Volunteer
+                    </Link>
+                  </Button>
+                ) : (
+                  <SignInModal
+                    callbackURL="/apply"
+                    title="Join as a Volunteer"
+                    description="Sign in with Google to start your volunteer application."
+                    trigger={
+                      <Button size="lg" className="w-full sm:w-auto rounded-xl font-bold bg-gradient-to-r from-emerald-500 to-lime-500 hover:from-emerald-600 hover:to-lime-600 shadow-md cursor-pointer">
+                        Join as a Volunteer
+                      </Button>
+                    }
+                  />
+                )}
                 <Button
                   variant="outline"
                   size="lg"

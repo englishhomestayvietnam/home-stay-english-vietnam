@@ -5,8 +5,12 @@ import { ArrowDown, Globe, Heart, Users, Calendar } from "lucide-react";
 import { ImagesSlider } from "./ui/images-slider";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import { useSession } from "@/lib/auth-client";
+import { SignInModal } from "./auth/SignInModal";
 
 export function HeroSectionDemo({ content }: { content?: any }) {
+  const { data: session } = useSession();
+  const user = session?.user;
   const images = content?.images?.length > 0 ? content.images : [
     "/home_stay_vietnam_1.jpg",
     "/home_stay_vietnam_2.jpg",
@@ -110,14 +114,30 @@ export function HeroSectionDemo({ content }: { content?: any }) {
           transition={{ delay: 0.9, type: "spring", stiffness: 150 }}
           className="cursor-pointer"
         >
-          <Link
-            href="/apply"
-            target="_blank"
-            className="flex items-center gap-2 sm:gap-3 px-5 xs:px-7 sm:px-10 py-2.5 xs:py-3.5 sm:py-4 md:py-5 font-semibold text-white transition-all duration-300 rounded-full shadow-2xl cursor-pointer text-xs xs:text-sm sm:text-base bg-linear-to-r hover:scale-95 from-emerald-400 to-lime-400 hover:from-emerald-500 hover:to-lime-500 hover:shadow-emerald-400/30"
-          >
-            Apply to Stay Free
-            <ArrowDown className="w-3.5 h-3.5 xs:w-4 xs:h-4 sm:w-5 sm:h-5 cursor-pointer animate-bounce" />
-          </Link>
+          {user ? (
+            <Link
+              href="/apply"
+              className="flex items-center gap-2 sm:gap-3 px-5 xs:px-7 sm:px-10 py-2.5 xs:py-3.5 sm:py-4 md:py-5 font-semibold text-white transition-all duration-300 rounded-full shadow-2xl cursor-pointer text-xs xs:text-sm sm:text-base bg-linear-to-r hover:scale-95 from-emerald-400 to-lime-400 hover:from-emerald-500 hover:to-lime-500 hover:shadow-emerald-400/30"
+            >
+              Apply to Stay Free
+              <ArrowDown className="w-3.5 h-3.5 xs:w-4 xs:h-4 sm:w-5 sm:h-5 cursor-pointer animate-bounce" />
+            </Link>
+          ) : (
+            <SignInModal
+              callbackURL="/apply"
+              title="Apply to Stay Free"
+              description="Sign in with Google to start your homestay application."
+              trigger={
+                <button
+                  type="button"
+                  className="flex items-center gap-2 sm:gap-3 px-5 xs:px-7 sm:px-10 py-2.5 xs:py-3.5 sm:py-4 md:py-5 font-semibold text-white transition-all duration-300 rounded-full shadow-2xl cursor-pointer text-xs xs:text-sm sm:text-base bg-linear-to-r hover:scale-95 from-emerald-400 to-lime-400 hover:from-emerald-500 hover:to-lime-500 hover:shadow-emerald-400/30"
+                >
+                  Apply to Stay Free
+                  <ArrowDown className="w-3.5 h-3.5 xs:w-4 xs:h-4 sm:w-5 sm:h-5 cursor-pointer animate-bounce" />
+                </button>
+              }
+            />
+          )}
         </motion.div>
 
         {/* Subtle Hint */}

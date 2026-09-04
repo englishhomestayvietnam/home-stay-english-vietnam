@@ -46,6 +46,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { SignInModal } from "@/components/auth/SignInModal";
 
 interface SubItem {
   label: string;
@@ -446,14 +447,15 @@ const Navbar = () => {
               })}
 
               {!user ? (
-                <Button 
-                  asChild 
-                  className="ml-6 rounded-full bg-gradient-to-r from-emerald-500 to-lime-500 hover:from-emerald-600 hover:to-lime-600 text-white font-bold shadow-lg transition-transform transform hover:scale-105"
-                >
-                  <Link href="/sign-in">
-                    Sign In
-                  </Link>
-                </Button>
+                <SignInModal
+                  trigger={
+                    <Button 
+                      className="ml-6 cursor-pointer rounded-full bg-gradient-to-r from-emerald-500 to-lime-500 hover:from-emerald-600 hover:to-lime-600 text-white font-bold shadow-lg transition-transform transform hover:scale-105"
+                    >
+                      Sign In
+                    </Button>
+                  }
+                />
               ) : (
                 <div className="ml-4">
                   <DropdownMenu>
@@ -630,12 +632,17 @@ const Navbar = () => {
                 {/* Sign In / Sign Out CTAs */}
                 <div className="pt-6 space-y-4">
                   {!user ? (
-                    <Link
-                      href="/sign-in"
-                      className="block w-full text-center py-4 text-lg font-bold text-white rounded-xl shadow-lg bg-gradient-to-r from-emerald-500 to-lime-500 hover:from-emerald-600 hover:to-lime-600"
-                    >
-                      Sign In
-                    </Link>
+                    <SignInModal
+                      trigger={
+                        <button
+                          type="button"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className="block w-full cursor-pointer text-center py-4 text-lg font-bold text-white rounded-xl shadow-lg bg-gradient-to-r from-emerald-500 to-lime-500 hover:from-emerald-600 hover:to-lime-600"
+                        >
+                          Sign In
+                        </button>
+                      }
+                    />
                   ) : (
                     <>
                       {isSuperUser && (

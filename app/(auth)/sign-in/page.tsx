@@ -39,27 +39,25 @@ function SignInContent() {
     setIsLoading(true);
 
     try {
-      const userRole = session?.data?.user?.role;
-      const callbackURL = (userRole === "superAdmin" || userRole === "superUser") ? "/admin" : redirectTo;
-
-      await signIn.social(
+      const res = await signIn.social(
         {
           provider: "google",
-          callbackURL,
+          callbackURL: redirectTo,
         },
         {
           onError: (ctx) => {
             toast.error(ctx.error.message || "Google sign-in failed");
-          },
-          onSuccess: () => {
-            toast.success("Welcome back!");
-            router.push(callbackURL);
+            setIsLoading(false);
           },
         }
       );
+
+      // Explicitly redirect to Google OAuth URL if not automatically navigated
+      if (res?.data?.url) {
+        window.location.assign(res.data.url);
+      }
     } catch {
       toast.error("Something went wrong. Please try again.");
-    } finally {
       setIsLoading(false);
     }
   };
