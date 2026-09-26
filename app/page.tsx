@@ -36,10 +36,10 @@ const page = async () => {
       <About content={contentMap['about']} />
       <Benefits content={contentMap['benefits']} />
       <FunActivities />
-      <HanoiGuidesSection />
       <Gallery content={contentMap['gallery']} />
       <Partnership content={contentMap['partnership']} />
       <FAQ />
+      <HanoiGuidesSection />
       <Contact />
       <Footer />
 
