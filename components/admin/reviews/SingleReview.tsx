@@ -27,7 +27,19 @@
     } = useShow<IReview>();
 
     return (
-      <Show isLoading={isLoading} headerProps={{ title: false }}>
+      <Show
+        isLoading={isLoading}
+        headerProps={{ title: false }}
+        wrapperProps={{
+          sx: {
+            borderRadius: "2px",
+            boxShadow: "none !important",
+            border: "1px solid",
+            borderColor: "divider",
+            bgcolor: "background.paper",
+          },
+        }}
+      >
         <Stack spacing={4}>
           {/* Header with Rating */}
           <Box textAlign="start">
@@ -40,7 +52,11 @@
                 mt: 2,
               }}
             >
-              <Avatar src={record?.user?.image} alt={record?.user?.name} />
+              <Avatar
+                src={record?.user?.image}
+                alt={record?.user?.name}
+                sx={{ borderRadius: "2px", width: 44, height: 44 }}
+              />
 
               <Rating
                 value={record?.rating ?? 0}
@@ -109,7 +125,8 @@
               sx={{
                 p: 3,
                 bgcolor: "background.paper",
-                borderRadius: 2,
+                borderRadius: "2px",
+                boxShadow: "none !important",
                 border: "1px solid",
                 borderColor: "divider",
               }}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
     Paper,
     Typography,
@@ -13,6 +13,7 @@ import {
     TableContainer,
     TableHead,
     TableRow,
+    TablePagination,
     Avatar,
     Chip,
     CircularProgress,
@@ -20,10 +21,23 @@ import {
     Menu,
     MenuItem,
     Alert,
-    Snackbar
+    Snackbar,
+    TextField,
+    InputAdornment,
+    Stack,
+    alpha,
 } from "@mui/material";
-import { MoreVert, CheckCircle, AdminPanelSettings, Person } from "@mui/icons-material";
+import {
+    MoreVert,
+    CheckCircle,
+    AdminPanelSettings,
+    Person,
+    Search,
+} from "@mui/icons-material";
 import { useSession } from "@/lib/auth-client";
+
+const ROUNDED_SM = "2px";
+const NO_SHADOW = "none !important";
 
 interface User {
     id: string;
@@ -34,24 +48,23 @@ interface User {
     createdAt: string;
 }
 
-// Mapping DB roles to UI Tabs
-// Volunteer = 'user' (or null)
-// Staff = 'admin'
-// Admin = 'superAdmin' 
-
 const ROLES = {
     VOLUNTEER: "user",
     STAFF: "admin",
-    ADMIN: "superAdmin"
+    ADMIN: "superAdmin",
 };
 
-const TABS = ["Volunteer", "Staff", "Admin"];
+const TABS = ["Volunteers", "Staff", "Admins"];
 
 export default function StaffManagement() {
     const { data: session, isPending: isSessionPending } = useSession();
     const [activeTab, setActiveTab] = useState(0);
     const [users, setUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState(true);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const [notification, setNotification] = useState<{ message: string; severity: "success" | "error" } | null>(null);
@@ -60,9 +73,7 @@ export default function StaffManagement() {
         const fetchUsers = async () => {
             try {
                 const res = await fetch("/api/users");
-                if (res.status === 403) {
-                    throw new Error("Unauthorized");
-                }
+                if (res.status === 403) throw new Error("Unauthorized");
                 if (!res.ok) throw new Error("Failed to fetch users");
                 const data = await res.json();
                 setUsers(data);
@@ -80,14 +91,6 @@ export default function StaffManagement() {
         }
     }, [session, isSessionPending]);
 
-    if (!isSessionPending && session?.user.role !== "superAdmin") {
-        return (
-            <Box p={4} display="flex" justifyContent="center">
-                <Alert severity="error">You do not have permission to view this page.</Alert>
-            </Box>
-        );
-    }
-
     const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, user: User) => {
         setAnchorEl(event.currentTarget);
         setSelectedUser(user);
@@ -100,8 +103,7 @@ export default function StaffManagement() {
 
     const handleRoleChange = async (newRole: string) => {
         if (!selectedUser) return;
-
-        handleMenuClose(); // Close menu immediately
+        handleMenuClose();
 
         try {
             const res = await fetch("/api/users", {
@@ -115,12 +117,11 @@ export default function StaffManagement() {
                 throw new Error(err.error || "Update failed");
             }
 
-            // Optimize local update
-            setUsers(prev => prev.map(u => u.id === selectedUser.id ? { ...u, role: newRole } : u));
+            setUsers((prev) =>
+                prev.map((u) => (u.id === selectedUser.id ? { ...u, role: newRole } : u))
+            );
             showNotification(`Role updated to ${getRoleLabel(newRole)}`, "success");
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
-            // console.error("Update role error", error);
             showNotification(error.message || "Failed to update role", "error");
         }
     };
@@ -129,81 +130,257 @@ export default function StaffManagement() {
         setNotification({ message, severity });
     };
 
-    // Filter users based on active tab
-    const filteredUsers = users.filter(user => {
-        const role = user.role || "user"; // Default to user if null
-        if (activeTab === 0) return role === "user";
-        if (activeTab === 1) return role === "admin";
-        if (activeTab === 2) return role === "superAdmin";
-        return false;
-    });
+    // Filter users based on active tab and search query
+    const filteredUsers = useMemo(() => {
+        return users.filter((user) => {
+            const role = user.role || "user";
+            const matchRole =
+                (activeTab === 0 && role === "user") ||
+                (activeTab === 1 && role === "admin") ||
+                (activeTab === 2 && role === "superAdmin");
+
+            if (!matchRole) return false;
+
+            if (searchQuery.trim() !== "") {
+                const q = searchQuery.toLowerCase();
+                const matchName = user.name?.toLowerCase().includes(q);
+                const matchEmail = user.email?.toLowerCase().includes(q);
+                if (!matchName && !matchEmail) return false;
+            }
+
+            return true;
+        });
+    }, [users, activeTab, searchQuery]);
+
+    // Paginated slice
+    const paginatedUsers = useMemo(() => {
+        const start = page * rowsPerPage;
+        return filteredUsers.slice(start, start + rowsPerPage);
+    }, [filteredUsers, page, rowsPerPage]);
 
     const getRoleLabel = (role: string) => {
-        if (role === 'admin') return 'Staff';
-        if (role === 'superAdmin') return 'Admin';
-        return 'Volunteer';
+        if (role === "admin") return "Staff";
+        if (role === "superAdmin") return "Admin";
+        return "Volunteer";
     };
 
-    if (loading) return <CircularProgress />;
+    if (!isSessionPending && session?.user.role !== "superAdmin") {
+        return (
+            <Box p={4} display="flex" justifyContent="center">
+                <Alert severity="error" sx={{ borderRadius: ROUNDED_SM, boxShadow: NO_SHADOW }}>
+                    You do not have permission to view this page.
+                </Alert>
+            </Box>
+        );
+    }
+
+    if (loading) {
+        return (
+            <Box display="flex" justifyContent="center" py={8}>
+                <CircularProgress />
+            </Box>
+        );
+    }
 
     return (
-        <Paper sx={{ p: 3 }}>
-            <Typography variant="h5" gutterBottom>User Management</Typography>
+        <Paper
+            variant="outlined"
+            sx={{
+                p: { xs: 2, md: 3 },
+                borderRadius: ROUNDED_SM,
+                boxShadow: NO_SHADOW,
+                border: "1px solid",
+                borderColor: "divider",
+                bgcolor: "background.paper",
+            }}
+        >
+            {/* Header */}
+            <Box sx={{ mb: 2 }}>
+                <Typography variant="h5" fontWeight={800} color="text.primary" sx={{ letterSpacing: "-0.5px" }}>
+                    Staff & User Management
+                </Typography>
+                <Typography variant="caption" color="text.secondary">
+                    Manage member permissions, assign staff roles, and view registered volunteers.
+                </Typography>
+            </Box>
 
-            <Tabs
-                value={activeTab}
-                onChange={(_, v) => setActiveTab(v)}
-                sx={{ mb: 3, borderBottom: 1, borderColor: 'divider' }}
+            {/* Filter & Search Bar */}
+            <Box
+                sx={{
+                    display: "flex",
+                    flexDirection: { xs: "column", sm: "row" },
+                    justifyContent: "space-between",
+                    alignItems: { xs: "flex-start", sm: "center" },
+                    gap: 2,
+                    mb: 2.5,
+                    borderBottom: "1px solid",
+                    borderColor: "divider",
+                    pb: 1,
+                }}
             >
-                {TABS.map((label) => (
-                    <Tab key={label} label={label} />
-                ))}
-            </Tabs>
+                <Tabs
+                    value={activeTab}
+                    onChange={(_, v) => {
+                        setActiveTab(v);
+                        setPage(0);
+                    }}
+                    sx={{
+                        "& .MuiTab-root": {
+                            textTransform: "none",
+                            fontWeight: 700,
+                            fontSize: "0.88rem",
+                            borderRadius: ROUNDED_SM,
+                        },
+                    }}
+                >
+                    {TABS.map((label, idx) => {
+                        const count = users.filter((u) => {
+                            const r = u.role || "user";
+                            if (idx === 0) return r === "user";
+                            if (idx === 1) return r === "admin";
+                            if (idx === 2) return r === "superAdmin";
+                            return false;
+                        }).length;
 
-            <TableContainer>
+                        return <Tab key={label} label={`${label} (${count})`} />;
+                    })}
+                </Tabs>
+
+                <TextField
+                    size="small"
+                    placeholder="Search name or email..."
+                    value={searchQuery}
+                    onChange={(e) => {
+                        setSearchQuery(e.target.value);
+                        setPage(0);
+                    }}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <Search fontSize="small" sx={{ color: "text.secondary" }} />
+                            </InputAdornment>
+                        ),
+                        sx: {
+                            borderRadius: ROUNDED_SM,
+                            boxShadow: NO_SHADOW,
+                            height: 36,
+                            fontSize: "0.85rem",
+                        },
+                    }}
+                    sx={{ width: { xs: "100%", sm: 240 } }}
+                />
+            </Box>
+
+            {/* Table */}
+            <TableContainer sx={{ border: "1px solid", borderColor: "divider", borderRadius: ROUNDED_SM }}>
                 <Table>
-                    <TableHead>
+                    <TableHead sx={{ bgcolor: alpha("#46b96c", 0.04) }}>
                         <TableRow>
-                            <TableCell>User</TableCell>
-                            <TableCell>Email</TableCell>
-                            <TableCell>Role</TableCell>
-                            <TableCell align="right">Actions</TableCell>
+                            <TableCell sx={{ fontWeight: 800, textTransform: "uppercase", fontSize: "0.78rem" }}>
+                                Member
+                            </TableCell>
+                            <TableCell sx={{ fontWeight: 800, textTransform: "uppercase", fontSize: "0.78rem" }}>
+                                Email
+                            </TableCell>
+                            <TableCell sx={{ fontWeight: 800, textTransform: "uppercase", fontSize: "0.78rem" }}>
+                                Assigned Role
+                            </TableCell>
+                            <TableCell
+                                align="right"
+                                sx={{ fontWeight: 800, textTransform: "uppercase", fontSize: "0.78rem" }}
+                            >
+                                Actions
+                            </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {filteredUsers.length === 0 ? (
+                        {paginatedUsers.length === 0 ? (
                             <TableRow>
-                                <TableCell colSpan={4} align="center">No users found in this category.</TableCell>
+                                <TableCell colSpan={4} align="center" sx={{ py: 6, color: "text.secondary" }}>
+                                    No members found in this category.
+                                </TableCell>
                             </TableRow>
                         ) : (
-                            filteredUsers.map((user) => (
-                                <TableRow key={user.id}>
+                            paginatedUsers.map((user) => (
+                                <TableRow
+                                    key={user.id}
+                                    sx={{
+                                        "&:hover": { bgcolor: alpha("#46b96c", 0.03) },
+                                        "& td": { borderColor: "divider" },
+                                    }}
+                                >
                                     <TableCell>
-                                        <Box display="flex" alignItems="center" gap={2}>
-                                            <Avatar src={user.image || ""} alt={user.name}>
+                                        <Box display="flex" alignItems="center" gap={1.5}>
+                                            <Avatar
+                                                src={
+                                                    user.image ||
+                                                    `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                                                        user.name || "User"
+                                                    )}&background=46b96c&color=ffffff&bold=true`
+                                                }
+                                                alt={user.name}
+                                                sx={{
+                                                    width: 36,
+                                                    height: 36,
+                                                    borderRadius: ROUNDED_SM,
+                                                    boxShadow: NO_SHADOW,
+                                                    fontWeight: 700,
+                                                    fontSize: "0.85rem",
+                                                }}
+                                            >
                                                 {user.name?.[0]?.toUpperCase()}
                                             </Avatar>
-                                            <Typography variant="body2" fontWeight="medium">
+                                            <Typography variant="body2" fontWeight={700}>
                                                 {user.name}
                                             </Typography>
                                         </Box>
                                     </TableCell>
-                                    <TableCell>{user.email}</TableCell>
+                                    <TableCell sx={{ color: "text.secondary", fontSize: "0.88rem" }}>
+                                        {user.email}
+                                    </TableCell>
                                     <TableCell>
                                         <Chip
-                                            label={getRoleLabel(user.role || 'user')}
+                                            label={getRoleLabel(user.role || "user")}
                                             size="small"
-                                            color={user.role === 'superAdmin' ? 'error' : user.role === 'admin' ? 'primary' : 'default'}
-                                            icon={user.role === 'superAdmin' ? <AdminPanelSettings /> : user.role === 'admin' ? <CheckCircle /> : <Person />}
+                                            color={
+                                                user.role === "superAdmin"
+                                                    ? "error"
+                                                    : user.role === "admin"
+                                                    ? "primary"
+                                                    : "default"
+                                            }
+                                            icon={
+                                                user.role === "superAdmin" ? (
+                                                    <AdminPanelSettings />
+                                                ) : user.role === "admin" ? (
+                                                    <CheckCircle />
+                                                ) : (
+                                                    <Person />
+                                                )
+                                            }
+                                            sx={{
+                                                borderRadius: ROUNDED_SM,
+                                                boxShadow: NO_SHADOW,
+                                                fontWeight: 800,
+                                                fontSize: "0.72rem",
+                                            }}
                                         />
                                     </TableCell>
                                     <TableCell align="right">
                                         <Button
                                             size="small"
+                                            variant="outlined"
                                             endIcon={<MoreVert />}
                                             onClick={(e) => handleMenuOpen(e, user)}
+                                            sx={{
+                                                textTransform: "none",
+                                                borderRadius: ROUNDED_SM,
+                                                boxShadow: NO_SHADOW,
+                                                borderColor: "divider",
+                                                fontWeight: 600,
+                                            }}
                                         >
-                                            Manage
+                                            Change Role
                                         </Button>
                                     </TableCell>
                                 </TableRow>
@@ -213,22 +390,60 @@ export default function StaffManagement() {
                 </Table>
             </TableContainer>
 
+            {/* Pagination Controls */}
+            <TablePagination
+                rowsPerPageOptions={[10, 25, 50]}
+                component="div"
+                count={filteredUsers.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={(_, newPage) => setPage(newPage)}
+                onRowsPerPageChange={(e) => {
+                    setRowsPerPage(parseInt(e.target.value, 10));
+                    setPage(0);
+                }}
+                sx={{
+                    borderTop: "1px solid",
+                    borderColor: "divider",
+                    mt: 1,
+                    "& .MuiTablePagination-select": {
+                        borderRadius: ROUNDED_SM,
+                    },
+                }}
+            />
+
+            {/* Role Change Menu */}
             <Menu
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
                 onClose={handleMenuClose}
+                PaperProps={{
+                    sx: {
+                        borderRadius: ROUNDED_SM,
+                        boxShadow: NO_SHADOW,
+                        border: "1px solid",
+                        borderColor: "divider",
+                    },
+                }}
             >
-                <MenuItem onClick={() => handleRoleChange(ROLES.VOLUNTEER)}>Set as Volunteer</MenuItem>
-                <MenuItem onClick={() => handleRoleChange(ROLES.STAFF)}>Set as Staff</MenuItem>
-                <MenuItem onClick={() => handleRoleChange(ROLES.ADMIN)}>Set as Admin</MenuItem>
+                <MenuItem onClick={() => handleRoleChange(ROLES.VOLUNTEER)} sx={{ fontSize: "0.88rem", fontWeight: 600 }}>
+                    Set as Volunteer
+                </MenuItem>
+                <MenuItem onClick={() => handleRoleChange(ROLES.STAFF)} sx={{ fontSize: "0.88rem", fontWeight: 600 }}>
+                    Set as Staff
+                </MenuItem>
+                <MenuItem onClick={() => handleRoleChange(ROLES.ADMIN)} sx={{ fontSize: "0.88rem", fontWeight: 600 }}>
+                    Set as Admin (SuperAdmin)
+                </MenuItem>
             </Menu>
 
-            <Snackbar
-                open={!!notification}
-                autoHideDuration={6000}
-                onClose={() => setNotification(null)}
-            >
-                <Alert severity={notification?.severity || "info"} onClose={() => setNotification(null)}>
+            {/* Snackbar feedback */}
+            <Snackbar open={!!notification} autoHideDuration={4000} onClose={() => setNotification(null)}>
+                <Alert
+                    severity={notification?.severity || "info"}
+                    onClose={() => setNotification(null)}
+                    sx={{ borderRadius: ROUNDED_SM, boxShadow: NO_SHADOW }}
+                >
                     {notification?.message}
                 </Alert>
             </Snackbar>

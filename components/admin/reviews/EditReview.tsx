@@ -53,8 +53,27 @@ export default function ReviewEdit() {
     userName !== "Anonymous Volunteer" ? userName[0].toUpperCase() : null;
 
   return (
-    <Edit saveButtonProps={saveButtonProps}>
-      <Stack spacing={4}>
+    <Edit
+      saveButtonProps={{
+        ...saveButtonProps,
+        sx: {
+          borderRadius: "2px",
+          boxShadow: "none !important",
+          textTransform: "none",
+          fontWeight: 700,
+        },
+      }}
+      wrapperProps={{
+        sx: {
+          borderRadius: "2px",
+          boxShadow: "none !important",
+          border: "1px solid",
+          borderColor: "divider",
+          bgcolor: "background.paper",
+        },
+      }}
+    >
+      <Stack spacing={4} sx={{ "& .MuiOutlinedInput-root": { borderRadius: "2px" } }}>
         {/* Header */}
         <Box>
           <Box
@@ -68,7 +87,7 @@ export default function ReviewEdit() {
             <Avatar
               src={record.user?.image || undefined}
               alt={userName}
-              sx={{ width: 64, height: 64 }}
+              sx={{ width: 56, height: 56, borderRadius: "2px", boxShadow: "none !important" }}
             >
               {userInitial}
             </Avatar>

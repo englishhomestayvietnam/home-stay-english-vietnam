@@ -39,6 +39,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               meta: { canDelete: true },
             },
             {
+              name: "calendar",
+              list: "/admin/calendar",
+              meta: { label: "Calendar" },
+            },
+            {
               name: "landing-page",
               list: "/admin/landing-page",
               meta: { label: "Site Content" },

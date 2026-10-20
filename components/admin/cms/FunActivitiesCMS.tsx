@@ -25,6 +25,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  alpha,
 } from "@mui/material";
 import { Save, CloudUpload, Delete, Edit, Add } from "@mui/icons-material";
 import Image from "next/image";
@@ -216,42 +217,82 @@ export default function FunActivitiesCMS() {
     <>
       <Box>
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-          <Typography variant="h6">
+          <Typography variant="h6" fontWeight={800} sx={{ letterSpacing: "-0.5px" }}>
             Fun Activities Manager
           </Typography>
-          <Button variant="contained" startIcon={<Add />} onClick={() => handleOpenModal()}>
+          <Button
+            variant="contained"
+            startIcon={<Add />}
+            onClick={() => handleOpenModal()}
+            sx={{
+              borderRadius: "2px",
+              boxShadow: "none !important",
+              textTransform: "none",
+              fontWeight: 700,
+            }}
+          >
             Add New Activity
           </Button>
         </Box>
 
-        <List>
+        <List disablePadding>
           {activities.length === 0 ? (
             <Typography color="textSecondary" align="center" py={4}>
               No fun activities found. Click "Add New Activity" to create one.
             </Typography>
           ) : (
             activities.map((activity) => (
-              <Paper variant="outlined" sx={{ mb: 2, borderRadius: 2 }} key={activity.id}>
-                <ListItem>
+              <Paper
+                variant="outlined"
+                sx={{
+                  mb: 2,
+                  borderRadius: "2px",
+                  boxShadow: "none !important",
+                  border: "1px solid",
+                  borderColor: "divider",
+                  "&:hover": { bgcolor: alpha("#46b96c", 0.03) },
+                }}
+                key={activity.id}
+              >
+                <ListItem sx={{ py: 1.5 }}>
                   <ListItemText
-                    primary={<Typography variant="h6">{activity.title}</Typography>}
+                    primary={<Typography variant="subtitle1" fontWeight={700}>{activity.title}</Typography>}
                     secondary={
                       <>
-                        <Typography variant="body2" component="span" display="block">
+                        <Typography variant="body2" component="span" display="block" color="text.secondary">
                           {activity.subtitle}
                         </Typography>
-                        <Typography variant="caption" color="primary">
+                        <Typography variant="caption" color="primary.main" fontWeight={600}>
                           {activity.schedule} • {activity.images.length} images
                         </Typography>
                       </>
                     }
                   />
                   <ListItemSecondaryAction>
-                    <IconButton edge="end" aria-label="edit" onClick={() => handleOpenModal(activity)} sx={{ mr: 1 }}>
-                      <Edit />
+                    <IconButton
+                      edge="end"
+                      aria-label="edit"
+                      onClick={() => handleOpenModal(activity)}
+                      sx={{
+                        mr: 1,
+                        borderRadius: "2px",
+                        color: "primary.main",
+                        "&:hover": { bgcolor: alpha("#46b96c", 0.1) },
+                      }}
+                    >
+                      <Edit fontSize="small" />
                     </IconButton>
-                    <IconButton edge="end" aria-label="delete" onClick={() => handleDeleteActivity(activity.id!)} color="error">
-                      <Delete />
+                    <IconButton
+                      edge="end"
+                      aria-label="delete"
+                      onClick={() => handleDeleteActivity(activity.id!)}
+                      color="error"
+                      sx={{
+                        borderRadius: "2px",
+                        "&:hover": { bgcolor: alpha("#f44336", 0.1) },
+                      }}
+                    >
+                      <Delete fontSize="small" />
                     </IconButton>
                   </ListItemSecondaryAction>
                 </ListItem>
@@ -262,11 +303,26 @@ export default function FunActivitiesCMS() {
       </Box>
 
       {/* Edit/Create Modal */}
-      <Dialog open={openModal} onClose={handleCloseModal} maxWidth="md" fullWidth>
-        <DialogTitle>{currentActivity?.id ? "Edit Activity" : "Create Activity"}</DialogTitle>
-        <DialogContent dividers>
+      <Dialog
+        open={openModal}
+        onClose={handleCloseModal}
+        maxWidth="md"
+        fullWidth
+        PaperProps={{
+          sx: {
+            borderRadius: "2px",
+            boxShadow: "none !important",
+            border: "1px solid",
+            borderColor: "divider",
+          },
+        }}
+      >
+        <DialogTitle sx={{ fontWeight: 800, borderBottom: "1px solid", borderColor: "divider" }}>
+          {currentActivity?.id ? "Edit Activity" : "Create Activity"}
+        </DialogTitle>
+        <DialogContent dividers sx={{ pt: 2.5 }}>
           {currentActivity && (
-            <Stack spacing={3} sx={{ mt: 1 }}>
+            <Stack spacing={3} sx={{ mt: 1, "& .MuiOutlinedInput-root": { borderRadius: "2px" } }}>
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
                   <TextField
@@ -315,7 +371,7 @@ export default function FunActivitiesCMS() {
 
                 {/* Highlights */}
                 <Grid item xs={12}>
-                  <Typography variant="subtitle1" gutterBottom>
+                  <Typography variant="subtitle2" fontWeight={700} gutterBottom>
                     Highlights
                   </Typography>
                   <List dense disablePadding>
@@ -323,7 +379,7 @@ export default function FunActivitiesCMS() {
                       <ListItem key={index} sx={{ px: 0 }}>
                         <ListItemText primary={`• ${hl}`} />
                         <ListItemSecondaryAction>
-                          <IconButton size="small" edge="end" onClick={() => handleRemoveHighlight(index)}>
+                          <IconButton size="small" edge="end" onClick={() => handleRemoveHighlight(index)} sx={{ borderRadius: "2px" }}>
                             <Delete fontSize="small" />
                           </IconButton>
                         </ListItemSecondaryAction>
@@ -339,7 +395,11 @@ export default function FunActivitiesCMS() {
                       onChange={(e) => setNewHighlight(e.target.value)}
                       onKeyPress={(e) => e.key === "Enter" && handleAddHighlight()}
                     />
-                    <Button variant="outlined" onClick={handleAddHighlight}>
+                    <Button
+                      variant="outlined"
+                      onClick={handleAddHighlight}
+                      sx={{ borderRadius: "2px", boxShadow: "none !important", textTransform: "none", fontWeight: 700 }}
+                    >
                       Add
                     </Button>
                   </Box>
@@ -348,7 +408,7 @@ export default function FunActivitiesCMS() {
                 {/* Images */}
                 <Grid item xs={12}>
                   <Divider sx={{ my: 1 }} />
-                  <Typography variant="subtitle1" gutterBottom>
+                  <Typography variant="subtitle2" fontWeight={700} gutterBottom>
                     Images
                   </Typography>
                   <Button
@@ -356,7 +416,13 @@ export default function FunActivitiesCMS() {
                     component="label"
                     startIcon={uploading ? <CircularProgress size={20} /> : <CloudUpload />}
                     disabled={uploading}
-                    sx={{ mb: 2 }}
+                    sx={{
+                      mb: 2,
+                      borderRadius: "2px",
+                      boxShadow: "none !important",
+                      textTransform: "none",
+                      fontWeight: 700,
+                    }}
                   >
                     {uploading ? "Uploading..." : "Upload Image"}
                     <input type="file" accept="image/*" hidden onChange={handleImageUpload} />
@@ -370,9 +436,9 @@ export default function FunActivitiesCMS() {
                           position: "relative",
                           width: 120,
                           height: 90,
-                          borderRadius: 2,
+                          borderRadius: "2px",
                           overflow: "hidden",
-                          boxShadow: 1,
+                          boxShadow: "none !important",
                           border: "1px solid",
                           borderColor: "divider",
                         }}
@@ -386,6 +452,8 @@ export default function FunActivitiesCMS() {
                             top: 2,
                             right: 2,
                             bgcolor: "white",
+                            borderRadius: "2px",
+                            boxShadow: "none !important",
                             "&:hover": { bgcolor: "#ffebee" },
                           }}
                           onClick={() => handleDeleteImage(idx)}
@@ -405,11 +473,21 @@ export default function FunActivitiesCMS() {
             </Stack>
           )}
         </DialogContent>
-        <DialogActions sx={{ p: 2 }}>
-          <Button onClick={handleCloseModal} disabled={saving}>
+        <DialogActions sx={{ p: 2, borderTop: "1px solid", borderColor: "divider" }}>
+          <Button onClick={handleCloseModal} disabled={saving} sx={{ borderRadius: "2px", textTransform: "none" }}>
             Cancel
           </Button>
-          <Button variant="contained" onClick={handleSave} disabled={saving}>
+          <Button
+            variant="contained"
+            onClick={handleSave}
+            disabled={saving}
+            sx={{
+              borderRadius: "2px",
+              boxShadow: "none !important",
+              textTransform: "none",
+              fontWeight: 700,
+            }}
+          >
             {saving ? "Saving..." : "Save Activity"}
           </Button>
         </DialogActions>

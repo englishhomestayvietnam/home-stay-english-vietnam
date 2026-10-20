@@ -23,6 +23,7 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import CottageIcon from "@mui/icons-material/Cottage";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
+import AssignmentIcon from "@mui/icons-material/Assignment";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import SchoolIcon from "@mui/icons-material/School";
 import HomeIcon from "@mui/icons-material/Home";
@@ -36,7 +37,8 @@ const drawerWidth = 260;
 const menuItems = [
   { text: "Dashboard", icon: <CottageIcon />, path: "/admin/landing-page" },
   { text: "Reviews", icon: <Inventory2Icon />, path: "/admin/reviews" },
-  { text: "Applications", icon: <CalendarMonthIcon />, path: "/admin/applications" },
+  { text: "Applications", icon: <AssignmentIcon />, path: "/admin/applications" },
+  { text: "Calendar", icon: <CalendarMonthIcon />, path: "/admin/calendar" },
   { text: "Staff", icon: <SchoolIcon />, path: "/admin/staff" },
 ];
 
@@ -45,7 +47,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(true);
   const session = useSession();
   const cleanPath = pathname.split("?")[0];
-  const activePath = menuItems.find(item => item.path === cleanPath)?.path || "/admin";
+  const activePath = menuItems.find(item => item.path === cleanPath || (item.path !== "/admin" && cleanPath.startsWith(item.path + "/")) || (item.path !== "/admin" && cleanPath.startsWith(item.path)))?.path || "/admin";
 
   return (
     <Box sx={{ display: "flex", minHeight: "100vh", bgcolor: "background.default", shadow: "none" }}>
@@ -74,15 +76,15 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
               href="/"
               sx={{
                 minHeight: 48,
-                borderRadius: open ? 3 : "50%",
-                mx: open ? 2 : 1.5,
+                borderRadius: "2px",
+                mx: open ? 2 : 1,
                 py: 1.5,
-                px: open ? 2.5 : 0,
-                gap: open ? 3 : 0,
+                px: open ? 2 : 0,
+                gap: open ? 2 : 0,
                 justifyContent: open ? "flex-start" : "center",
-                transition: "all 0.22s ease",
+                transition: "all 0.2s ease",
                 bgcolor: "transparent",
-                "&:hover": { bgcolor: alpha("#000", 0.06) },
+                "&:hover": { bgcolor: alpha("#000", 0.04) },
               }}
             >
               {open ? (
@@ -91,7 +93,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
                   fontWeight={800}
                   letterSpacing="-0.5px"
                   color="primary"
-                  sx={{ fontSize: "1.35rem" }}
+                  sx={{ fontSize: "1.25rem" }}
                 >
                   English Homestay Vietnam
                 </Typography>
@@ -102,7 +104,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
                   width={32}
                   height={32}
                   style={{
-                    borderRadius: 8,
+                    borderRadius: 2,
                   }}
                 />
               )}
@@ -110,8 +112,8 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
           </ListItem>
         </List>
 
-        {/* Navigation - Consistent with logo */}
-        <List sx={{ px: open ? 2 : 0, pt: 1 }}>
+        {/* Navigation - Consistent with flat design */}
+        <List sx={{ px: open ? 1.5 : 0.5, pt: 1 }}>
           {menuItems.map((item) => {
             const isActive = activePath === item.path;
 
@@ -125,37 +127,39 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
                   component={Link}
                   href={item.path}
                   sx={{
-                    minHeight: 48,
-                    borderRadius: open ? 3 : "50%",
-                    mx: open ? 0 : 1.5,
-                    py: 1.5,
-                    px: open ? 2.5 : 0,
-                    gap: open ? 3 : 0,
+                    minHeight: 44,
+                    borderRadius: "2px",
+                    mx: open ? 0 : 0.5,
+                    py: 1.2,
+                    px: open ? 2 : 0,
+                    gap: open ? 2 : 0,
                     justifyContent: open ? "flex-start" : "center",
                     position: "relative",
-                    transition: "all 0.22s ease",
+                    transition: "all 0.18s ease",
+                    boxShadow: "none !important",
 
                     bgcolor: isActive
-                      ? alpha("#46b96c", open ? 0.08 : 0.12)
+                      ? alpha("#46b96c", 0.1)
                       : "transparent",
-                    color: isActive ? "primary.main" : "text.secondary",
-                    fontWeight: isActive ? 600 : 500,
+                    color: isActive ? "primary.dark" : "text.secondary",
+                    fontWeight: isActive ? 700 : 500,
+                    borderLeft: isActive && open ? "3px solid #46b96c" : "3px solid transparent",
 
                     "&:hover": {
                       bgcolor: isActive
-                        ? alpha("#46b96c", open ? 0.14 : 0.18)
-                        : alpha("#000", 0.06),
+                        ? alpha("#46b96c", 0.16)
+                        : alpha("#000", 0.04),
                     },
 
                     "& .MuiListItemIcon-root": {
                       color: isActive ? "primary.main" : "text.secondary",
                       minWidth: 0,
-                      fontSize: "1.35rem",
+                      fontSize: "1.3rem",
                     },
                   }}
                 >
                   <ListItemIcon>{item.icon}</ListItemIcon>
-                  {open && <ListItemText primary={item.text} />}
+                  {open && <ListItemText primary={item.text} primaryTypographyProps={{ fontWeight: isActive ? 700 : 500, fontSize: "0.9rem" }} />}
                 </ListItemButton>
               </ListItem>
             );
@@ -186,6 +190,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
               onClick={() => setOpen(!open)}
               sx={{
                 mr: 2,
+                borderRadius: "2px",
                 color: "primary.main",
                 bgcolor: alpha("#46b96c", 0.1),
                 "&:hover": { bgcolor: alpha("#46b96c", 0.18) },

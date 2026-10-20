@@ -269,18 +269,39 @@ export default function LandingPageCMS() {
   };
 
   return (
-    <Stack spacing={4} sx={{ p: 2 }}>
-      <Paper sx={{ p: 3, borderRadius: 2 }}>
-        <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-          <Typography variant="h5" component="h1">
-            Landing Page Content Editor
-          </Typography>
+    <Stack spacing={3} sx={{ p: 0 }}>
+      <Paper
+        variant="outlined"
+        sx={{
+          p: { xs: 2, md: 3 },
+          borderRadius: "2px",
+          boxShadow: "none !important",
+          border: "1px solid",
+          borderColor: "divider",
+          bgcolor: "background.paper",
+        }}
+      >
+        <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+          <Box>
+            <Typography variant="h5" fontWeight={800} color="text.primary" sx={{ letterSpacing: "-0.5px" }}>
+              Landing Page CMS
+            </Typography>
+            <Typography variant="caption" color="text.secondary">
+              Customize website hero, about, programs, and partnership sections.
+            </Typography>
+          </Box>
           {currentSectionName !== "fun-activities" && (
             <Button
               variant="contained"
               startIcon={saving ? <CircularProgress size={20} color="inherit" /> : <Save />}
               onClick={() => handleSave(currentSectionName)}
               disabled={saving || uploading}
+              sx={{
+                textTransform: "none",
+                borderRadius: "2px",
+                boxShadow: "none !important",
+                fontWeight: 700,
+              }}
             >
               {saving ? "Saving..." : "Save Changes"}
             </Button>
@@ -290,7 +311,23 @@ export default function LandingPageCMS() {
         <Tabs
           value={activeTab}
           onChange={(_, v) => setActiveTab(v)}
-          sx={{ mb: 4, borderBottom: 1, borderColor: "divider" }}
+          sx={{
+            mb: 3,
+            borderBottom: 1,
+            borderColor: "divider",
+            "& .MuiTab-root": {
+              borderRadius: "2px",
+              fontWeight: 700,
+              textTransform: "none",
+              fontSize: "0.85rem",
+              minHeight: 40,
+              px: 2,
+            },
+            "& .MuiTabs-indicator": {
+              height: 2.5,
+              borderRadius: "2px 2px 0 0",
+            },
+          }}
           variant="scrollable"
           scrollButtons="auto"
         >
@@ -302,10 +339,10 @@ export default function LandingPageCMS() {
         {currentSectionName === "fun-activities" ? (
           <FunActivitiesCMS />
         ) : (
-          <Grid container spacing={4}>
+          <Grid container spacing={3}>
             {/* ── Live Preview ── */}
             <Grid item xs={12}>
-            <Card variant="outlined" sx={{ overflow: "hidden" }}>
+            <Card variant="outlined" sx={{ overflow: "hidden", borderRadius: "2px", boxShadow: "none !important", border: "1px solid", borderColor: "divider" }}>
               <CardHeader
                 title="Live Preview"
                 subheader="How visitors will see this section"
@@ -322,12 +359,12 @@ export default function LandingPageCMS() {
 
           {/* ── Edit Form ── */}
           <Grid item xs={12}>
-            <Paper variant="outlined" sx={{ p: 3 }}>
-              <Typography variant="h6" gutterBottom>
+            <Paper variant="outlined" sx={{ p: 3, borderRadius: "2px", boxShadow: "none !important", border: "1px solid", borderColor: "divider" }}>
+              <Typography variant="h6" fontWeight={800} gutterBottom>
                 Edit {currentSectionName.charAt(0).toUpperCase() + currentSectionName.slice(1)}
               </Typography>
 
-              <Stack spacing={3}>
+              <Stack spacing={3} sx={{ "& .MuiOutlinedInput-root": { borderRadius: "2px" } }}>
                 <TextField
                   label="Title"
                   fullWidth
@@ -383,7 +420,13 @@ export default function LandingPageCMS() {
                     component="label"
                     startIcon={uploading ? <CircularProgress size={20} /> : <CloudUpload />}
                     disabled={uploading || saving}
-                    sx={{ mb: 2 }}
+                    sx={{
+                      mb: 2,
+                      borderRadius: "2px",
+                      boxShadow: "none !important",
+                      textTransform: "none",
+                      fontWeight: 700,
+                    }}
                   >
                     {uploading ? "Uploading..." : "Upload Image"}
                     <input
@@ -402,9 +445,9 @@ export default function LandingPageCMS() {
                           position: "relative",
                           width: 140,
                           height: 105,
-                          borderRadius: 2,
+                          borderRadius: "2px",
                           overflow: "hidden",
-                          boxShadow: 1,
+                          boxShadow: "none !important",
                           border: "1px solid",
                           borderColor: "divider",
                         }}
@@ -418,6 +461,8 @@ export default function LandingPageCMS() {
                             top: 4,
                             right: 4,
                             bgcolor: "white",
+                            borderRadius: "2px",
+                            boxShadow: "none !important",
                             "&:hover": { bgcolor: "#ffebee" },
                           }}
                           onClick={() => handleDeleteImage(currentSectionName, idx)}

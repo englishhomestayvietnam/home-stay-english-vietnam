@@ -36,13 +36,25 @@ export default function SingleApplication() {
     } = useShow<IApplication>();
 
     return (
-        <Show isLoading={isLoading} headerProps={{ title: "Application Details" }}>
+        <Show
+            isLoading={isLoading}
+            headerProps={{ title: "Application Details" }}
+            wrapperProps={{
+                sx: {
+                    borderRadius: "2px",
+                    boxShadow: "none !important",
+                    border: "1px solid",
+                    borderColor: "divider",
+                    bgcolor: "background.paper",
+                },
+            }}
+        >
             <Stack spacing={4}>
 
                 {/* Header / Status */}
                 <Box display="flex" justifyContent="space-between" alignItems="center">
                     <Box>
-                        <Typography variant="h5" fontWeight={600}>
+                        <Typography variant="h5" fontWeight={800} sx={{ letterSpacing: "-0.5px" }}>
                             {data?.fullName}
                         </Typography>
                         <Typography variant="caption" color="text.secondary" fontFamily="monospace">
@@ -55,7 +67,7 @@ export default function SingleApplication() {
                             data?.status === "APPROVED" ? "success" :
                                 data?.status === "REJECTED" ? "error" : "warning"
                         }
-                        sx={{ fontWeight: 'bold' }}
+                        sx={{ fontWeight: 800, borderRadius: "2px", boxShadow: "none !important" }}
                     />
                 </Box>
 
@@ -114,7 +126,7 @@ export default function SingleApplication() {
                             </Typography>
                             <Stack spacing={2}>
                                 {data.groupMembers.map((member, index) => (
-                                    <Box key={index} p={2} border={1} borderColor="divider" borderRadius={1}>
+                                    <Box key={index} p={2} border={1} borderColor="divider" borderRadius="2px">
                                         <Typography variant="subtitle2">Member {index + 1}</Typography>
                                         <Box display="grid" gridTemplateColumns="repeat(3, 1fr)" gap={2} mt={1}>
                                             <Box>
@@ -141,7 +153,7 @@ export default function SingleApplication() {
                 {/* Message */}
                 <Box>
                     <Typography variant="subtitle2" color="text.secondary" gutterBottom>Message</Typography>
-                    <Box sx={{ p: 2, bgcolor: "background.default", borderRadius: 1 }}>
+                    <Box sx={{ p: 2, bgcolor: "background.default", borderRadius: "2px", border: "1px solid", borderColor: "divider" }}>
                         <Typography variant="body2" sx={{ whiteSpace: 'pre-wrap' }}>
                             {data?.message || "No message provided."}
                         </Typography>

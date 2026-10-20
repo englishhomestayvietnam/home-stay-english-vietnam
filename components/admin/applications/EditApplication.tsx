@@ -79,10 +79,38 @@ export default function EditApplication() {
     }
 
     return (
-        <Edit saveButtonProps={saveButtonProps} title={`Edit Application: ${record.fullName}`}>
-            <Stack spacing={4}>
+        <Edit
+            saveButtonProps={{
+                ...saveButtonProps,
+                sx: {
+                    borderRadius: "2px",
+                    boxShadow: "none !important",
+                    textTransform: "none",
+                    fontWeight: 700,
+                },
+            }}
+            title={`Edit Application: ${record.fullName}`}
+            wrapperProps={{
+                sx: {
+                    borderRadius: "2px",
+                    boxShadow: "none !important",
+                    border: "1px solid",
+                    borderColor: "divider",
+                    bgcolor: "background.paper",
+                },
+            }}
+        >
+            <Stack spacing={4} sx={{ "& .MuiOutlinedInput-root": { borderRadius: "2px" } }}>
                 {/* Status Section - Highlighted */}
-                <Card variant="outlined" sx={{ bgcolor: 'background.default', borderColor: 'primary.main' }}>
+                <Card
+                    variant="outlined"
+                    sx={{
+                        bgcolor: 'background.default',
+                        borderColor: 'divider',
+                        borderRadius: "2px",
+                        boxShadow: "none !important",
+                    }}
+                >
                     <CardContent>
                         <Stack spacing={2}>
                             <Typography variant="subtitle2" color="primary" fontWeight="bold">
@@ -99,7 +127,7 @@ export default function EditApplication() {
                                             {...field}
                                             value={field.value ?? ""}
                                             label="Update Status"
-                                            sx={{ bgcolor: 'background.paper' }}
+                                            sx={{ bgcolor: 'background.paper', borderRadius: "2px" }}
                                         >
                                             <MenuItem value="PENDING">Pending</MenuItem>
                                             <MenuItem value="APPROVED">Approved</MenuItem>

@@ -56,9 +56,10 @@ export default function UserAvatarDropdown({ session }: { session: any }) {
             src={session?.data?.user?.image || "/logo.svg"}
             alt={session?.data?.user?.name || "User"}
             sx={{
-              width: 40,
-              height: 40,
-              border: "3px solid",
+              width: 38,
+              height: 38,
+              borderRadius: "2px",
+              border: "2px solid",
               borderColor: "primary.main",
             }}
           />
@@ -71,24 +72,14 @@ export default function UserAvatarDropdown({ session }: { session: any }) {
         onClose={handleClose}
         onClick={handleClose}
         PaperProps={{
-          elevation: 3,
+          elevation: 0,
           sx: {
             mt: 1.5,
             minWidth: 200,
-            borderRadius: 2,
-            overflow: "visible",
-            "&:before": {
-              content: '""',
-              display: "block",
-              position: "absolute",
-              top: 0,
-              right: 14,
-              width: 10,
-              height: 10,
-              bgcolor: "background.paper",
-              transform: "translateY(-50%) rotate(45deg)",
-              zIndex: 0,
-            },
+            borderRadius: "2px",
+            boxShadow: "none !important",
+            border: "1px solid",
+            borderColor: "divider",
           },
         }}
         transformOrigin={{ horizontal: "right", vertical: "top" }}

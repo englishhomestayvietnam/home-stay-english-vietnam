@@ -93,12 +93,65 @@ export async function GET(req: Request) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
         }
 
-        const applications = await prisma.application.findMany({
-            orderBy: { createdAt: "desc" },
-            include: { groupMembers: true },
-        });
+        const { searchParams } = new URL(req.url);
 
-        return NextResponse.json(applications);
+        // Handle pagination parameters (_start/_end from simple-rest, or currentPage/pageSize)
+        const hasStart = searchParams.has("_start");
+        const hasEnd = searchParams.has("_end");
+        const hasCurrentPage = searchParams.has("currentPage");
+        const hasPageSize = searchParams.has("pageSize");
+
+        let skip: number | undefined = undefined;
+        let take: number | undefined = undefined;
+
+        if (hasStart && hasEnd) {
+            const start = parseInt(searchParams.get("_start") || "0", 10);
+            const end = parseInt(searchParams.get("_end") || "10", 10);
+            skip = Math.max(0, start);
+            take = Math.max(1, end - start);
+        } else if (hasCurrentPage || hasPageSize) {
+            const page = Math.max(1, parseInt(searchParams.get("currentPage") || "1", 10));
+            const pageSize = Math.max(1, Math.min(100, parseInt(searchParams.get("pageSize") || "10", 10)));
+            skip = (page - 1) * pageSize;
+            take = pageSize;
+        }
+
+        // Handle sorting
+        const sortField = searchParams.get("_sort") || "createdAt";
+        const sortOrder = (searchParams.get("_order") || "desc").toLowerCase() === "asc" ? "asc" : "desc";
+        const validSorts = ["createdAt", "startDate", "endDate", "fullName", "email", "status", "duration", "country"];
+        const safeSortField = validSorts.includes(sortField) ? sortField : "createdAt";
+
+        // Query applications and total count in parallel
+        const [applications, total] = await Promise.all([
+            prisma.application.findMany({
+                skip,
+                take,
+                orderBy: { [safeSortField]: sortOrder },
+                include: { groupMembers: true },
+            }),
+            prisma.application.count(),
+        ]);
+
+        const emails = applications.map((a) => a.email.toLowerCase()).filter(Boolean);
+        const users = await prisma.user.findMany({
+            where: { email: { in: emails } },
+            select: { email: true, image: true },
+        });
+        const userImageMap = new Map(users.map((u) => [u.email.toLowerCase(), u.image]));
+
+        const result = applications.map((app) => ({
+            ...app,
+            userImage: userImageMap.get(app.email.toLowerCase()) || null,
+        }));
+
+        return NextResponse.json(result, {
+            status: 200,
+            headers: {
+                "x-total-count": total.toString(),
+                "Access-Control-Expose-Headers": "x-total-count",
+            },
+        });
     } catch (error) {
         console.error("Fetch applications error:", error);
         return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
