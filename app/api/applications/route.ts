@@ -52,8 +52,8 @@ export async function POST(req: Request) {
             });
             const adminEmails = admins.map((u) => u.email).filter(Boolean);
             if (adminEmails.length > 0) {
-                await resend.emails.send({
-                    from: "English Homestay Vietnam <onboarding@updates.englishhomestayvietnam.com>",
+                const { error: emailError } = await resend.emails.send({
+                    from: "English Homestay Vietnam <onboarding@review.englishhomestayvietnam.com>",
                     to: adminEmails,
                     subject: "New application submitted",
                     react: AdminNewApplicationEmail({
@@ -68,6 +68,9 @@ export async function POST(req: Request) {
                         groupMembers: validatedData.groupMembers,
                     }),
                 });
+                if (emailError) {
+                    console.error("Failed to notify admins of new application:", emailError);
+                }
             }
         } catch (notifyError) {
             console.error("Failed to notify admins of new application:", notifyError);

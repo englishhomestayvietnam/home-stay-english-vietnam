@@ -58,14 +58,17 @@ export async function submitApplication(values: z.infer<typeof applicationSchema
 
         // Send confirmation email
         try {
-            await resend.emails.send({
-                from: "English Homestay Vietnam <onboarding@updates.englishhomestayvietnam.com>", // Using a generic sender or the one from env
+            const { error: emailError } = await resend.emails.send({
+                from: "English Homestay Vietnam <onboarding@review.englishhomestayvietnam.com>",
                 to: [validatedData.email],
                 subject: "We received your application!",
                 react: ApplicationThankYouEmail({
                     fullName: validatedData.fullName,
                 }),
             });
+            if (emailError) {
+                console.error("Failed to send confirmation email:", emailError);
+            }
         } catch (emailError) {
             console.error("Failed to send confirmation email:", emailError);
             // We don't fail the submission if email fails, just log it.
@@ -78,8 +81,8 @@ export async function submitApplication(values: z.infer<typeof applicationSchema
             });
             const adminEmails = admins.map((u) => u.email).filter(Boolean);
             if (adminEmails.length > 0) {
-                await resend.emails.send({
-                    from: "English Homestay Vietnam <onboarding@updates.englishhomestayvietnam.com>",
+                const { error: notifyError } = await resend.emails.send({
+                    from: "English Homestay Vietnam <onboarding@review.englishhomestayvietnam.com>",
                     to: adminEmails,
                     subject: "New application submitted",
                     react: AdminNewApplicationEmail({
@@ -94,6 +97,9 @@ export async function submitApplication(values: z.infer<typeof applicationSchema
                         groupMembers: validatedData.groupMembers,
                     }),
                 });
+                if (notifyError) {
+                    console.error("Failed to notify admins of new application:", notifyError);
+                }
             }
         } catch (notifyError) {
             console.error("Failed to notify admins of new application:", notifyError);

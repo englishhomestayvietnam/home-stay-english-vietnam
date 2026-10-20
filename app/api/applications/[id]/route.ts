@@ -81,8 +81,8 @@ export async function PATCH(
             existing.status !== "APPROVED"
         ) {
             try {
-                await resend.emails.send({
-                    from: "English Homestay Vietnam <onboarding@updates.englishhomestayvietnam.com>",
+                const { error: emailError } = await resend.emails.send({
+                    from: "English Homestay Vietnam <onboarding@review.englishhomestayvietnam.com>",
                     to: [application.email],
                     subject: "Your application has been approved",
                     react: ApplicationApprovedEmail({
@@ -91,6 +91,9 @@ export async function PATCH(
                         duration: application.duration,
                     }),
                 });
+                if (emailError) {
+                    console.error("Failed to send approval email:", emailError);
+                }
             } catch (emailError) {
                 console.error("Failed to send approval email:", emailError);
             }
