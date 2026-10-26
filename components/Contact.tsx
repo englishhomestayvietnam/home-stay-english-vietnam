@@ -6,8 +6,8 @@ const Contact = () => {
     {
       icon: <Mail className="w-6 h-6" />,
       label: "Email",
-      value: "info@englishhomestayvietnam.com",
-      link: "mailto:info@englishhomestayvietnam.com"
+      value: "english.homestaynn@gmail.com",
+      link: "mailto:english.homestaynn@gmail.com"
     },
     {
       icon: <Phone className="w-6 h-6" />,

@@ -48,7 +48,7 @@ export default function ApplicationApprovedEmail({
             </Section>
             <Text className="text-gray-700 text-base mb-6">
               We will contact you soon with next steps. If you have questions,
-              reply to this email.
+              reply to this email or reach us at english.homestaynn@gmail.com.
             </Text>
             <Hr className="border-gray-300 my-6" />
             <Text className="text-gray-500 text-sm">English Homestay Vietnam</Text>

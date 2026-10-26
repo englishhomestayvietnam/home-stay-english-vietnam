@@ -1,5 +1,5 @@
 "use client";
-
+import { useState } from "react";
 import { useShow } from "@refinedev/core";
 import {
     Show,
@@ -7,7 +7,9 @@ import {
     DateField,
     EmailField,
 } from "@refinedev/mui";
-import { Stack, Typography, Box, Divider, Chip } from "@mui/material";
+import { Stack, Typography, Box, Divider, Chip, Button, CircularProgress } from "@mui/material";
+import { ForwardToInbox as NotifyAdminIcon } from "@mui/icons-material";
+import { toast } from "sonner";
 
 type IApplication = {
     id: string;
@@ -35,6 +37,29 @@ export default function SingleApplication() {
         query: { isLoading },
     } = useShow<IApplication>();
 
+    const [isNotifying, setIsNotifying] = useState(false);
+
+    const handleNotifyAdmin = async () => {
+        if (!data?.id) return;
+        try {
+            setIsNotifying(true);
+            const res = await fetch(`/api/applications/${data.id}/notify-admin`, {
+                method: "POST",
+            });
+            const resData = await res.json();
+            if (!res.ok) {
+                throw new Error(resData.error || "Failed to send notification email");
+            }
+            toast.success(
+                `Notification email sent for ${data.fullName || "volunteer"}!`
+            );
+        } catch (err: any) {
+            toast.error(err.message || "Failed to notify admin");
+        } finally {
+            setIsNotifying(false);
+        }
+    };
+
     return (
         <Show
             isLoading={isLoading}
@@ -61,14 +86,37 @@ export default function SingleApplication() {
                             ID: {data?.id}
                         </Typography>
                     </Box>
-                    <Chip
-                        label={data?.status}
-                        color={
-                            data?.status === "APPROVED" ? "success" :
-                                data?.status === "REJECTED" ? "error" : "warning"
-                        }
-                        sx={{ fontWeight: 800, borderRadius: "2px", boxShadow: "none !important" }}
-                    />
+                    <Stack direction="row" spacing={1.5} alignItems="center">
+                        <Button
+                            variant="outlined"
+                            color="info"
+                            size="small"
+                            startIcon={
+                                isNotifying ? (
+                                    <CircularProgress size={16} color="inherit" />
+                                ) : (
+                                    <NotifyAdminIcon />
+                                )
+                            }
+                            disabled={isNotifying || !data?.id}
+                            onClick={handleNotifyAdmin}
+                            sx={{
+                                borderRadius: "2px",
+                                textTransform: "none",
+                                fontWeight: 700,
+                            }}
+                        >
+                            {isNotifying ? "Sending Email..." : "Notify Admin"}
+                        </Button>
+                        <Chip
+                            label={data?.status}
+                            color={
+                                data?.status === "APPROVED" ? "success" :
+                                    data?.status === "REJECTED" ? "error" : "warning"
+                            }
+                            sx={{ fontWeight: 800, borderRadius: "2px", boxShadow: "none !important" }}
+                        />
+                    </Stack>
                 </Box>
 
                 <Divider />

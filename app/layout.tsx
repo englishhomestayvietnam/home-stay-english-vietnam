@@ -91,7 +91,7 @@ export async function generateMetadata(): Promise<Metadata> {
         },
         contactPoint: {
           '@type': 'ContactPoint',
-          email: 'info@englishhomestayvietnam.com',
+          email: 'english.homestaynn@gmail.com',
           telephone: '+84 968 199 900',
           contactType: 'Customer Service',
         },

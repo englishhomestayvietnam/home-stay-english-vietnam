@@ -39,7 +39,9 @@ import {
     FlightLand,
     FlightTakeoff,
     EventNote,
+    ForwardToInbox as NotifyAdminIcon,
 } from "@mui/icons-material";
+import { toast } from "sonner";
 import {
     format,
     addMonths,
@@ -241,6 +243,28 @@ export default function AdminCalendar() {
             alert("Error: " + err.message);
         } finally {
             setUpdatingStatus(false);
+        }
+    };
+
+    const [isNotifying, setIsNotifying] = useState(false);
+
+    const handleNotifyAdmin = async (appId: string, volunteerName?: string) => {
+        try {
+            setIsNotifying(true);
+            const res = await fetch(`/api/applications/${appId}/notify-admin`, {
+                method: "POST",
+            });
+            const data = await res.json();
+            if (!res.ok) {
+                throw new Error(data.error || "Failed to send notification email");
+            }
+            toast.success(
+                `Notification email sent for ${volunteerName || "volunteer"}!`
+            );
+        } catch (err: any) {
+            toast.error(err.message || "Failed to notify admin");
+        } finally {
+            setIsNotifying(false);
         }
     };
 
@@ -1069,72 +1093,97 @@ export default function AdminCalendar() {
                                     </Box>
                                 )}
 
-                                {/* Admin Quick Decision */}
-                                {isSuperAdmin && (
-                                    <Box sx={{ pt: 1 }}>
-                                        <Typography variant="caption" fontWeight={700} color="text.secondary" display="block" sx={{ mb: 1 }}>
-                                            QUICK STATUS DECISION
-                                        </Typography>
-                                        <Stack direction="row" spacing={1}>
-                                            {selectedEvent.person.status !== "APPROVED" && (
-                                                <Button
-                                                    variant="contained"
-                                                    color="success"
-                                                    size="small"
-                                                    startIcon={<CheckCircle />}
-                                                    disabled={updatingStatus}
-                                                    onClick={() => handleQuickStatusUpdate(selectedEvent.person.id, "APPROVED")}
-                                                    sx={{
-                                                        borderRadius: ROUNDED_SM,
-                                                        boxShadow: NO_SHADOW,
-                                                        textTransform: "none",
-                                                        fontWeight: 700,
-                                                    }}
-                                                >
-                                                    Approve
-                                                </Button>
-                                            )}
+                                {/* Admin Actions & Status */}
+                                <Box sx={{ pt: 1 }}>
+                                    <Typography variant="caption" fontWeight={700} color="text.secondary" display="block" sx={{ mb: 1 }}>
+                                        ADMIN ACTIONS & STATUS
+                                    </Typography>
+                                    <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                                        <Button
+                                            variant="outlined"
+                                            color="info"
+                                            size="small"
+                                            startIcon={
+                                                isNotifying ? (
+                                                    <CircularProgress size={16} color="inherit" />
+                                                ) : (
+                                                    <NotifyAdminIcon />
+                                                )
+                                            }
+                                            disabled={isNotifying}
+                                            onClick={() => handleNotifyAdmin(selectedEvent.person.id, selectedEvent.person.fullName)}
+                                            sx={{
+                                                borderRadius: ROUNDED_SM,
+                                                boxShadow: NO_SHADOW,
+                                                textTransform: "none",
+                                                fontWeight: 700,
+                                            }}
+                                        >
+                                            {isNotifying ? "Sending Email..." : "Notify Admin"}
+                                        </Button>
 
-                                            {selectedEvent.person.status !== "PENDING" && (
-                                                <Button
-                                                    variant="outlined"
-                                                    color="warning"
-                                                    size="small"
-                                                    startIcon={<HourglassEmpty />}
-                                                    disabled={updatingStatus}
-                                                    onClick={() => handleQuickStatusUpdate(selectedEvent.person.id, "PENDING")}
-                                                    sx={{
-                                                        borderRadius: ROUNDED_SM,
-                                                        boxShadow: NO_SHADOW,
-                                                        textTransform: "none",
-                                                        fontWeight: 700,
-                                                    }}
-                                                >
-                                                    Set Pending
-                                                </Button>
-                                            )}
+                                        {isSuperAdmin && (
+                                            <>
+                                                {selectedEvent.person.status !== "APPROVED" && (
+                                                    <Button
+                                                        variant="contained"
+                                                        color="success"
+                                                        size="small"
+                                                        startIcon={<CheckCircle />}
+                                                        disabled={updatingStatus}
+                                                        onClick={() => handleQuickStatusUpdate(selectedEvent.person.id, "APPROVED")}
+                                                        sx={{
+                                                            borderRadius: ROUNDED_SM,
+                                                            boxShadow: NO_SHADOW,
+                                                            textTransform: "none",
+                                                            fontWeight: 700,
+                                                        }}
+                                                    >
+                                                        Approve
+                                                    </Button>
+                                                )}
 
-                                            {selectedEvent.person.status !== "REJECTED" && (
-                                                <Button
-                                                    variant="outlined"
-                                                    color="error"
-                                                    size="small"
-                                                    startIcon={<Cancel />}
-                                                    disabled={updatingStatus}
-                                                    onClick={() => handleQuickStatusUpdate(selectedEvent.person.id, "REJECTED")}
-                                                    sx={{
-                                                        borderRadius: ROUNDED_SM,
-                                                        boxShadow: NO_SHADOW,
-                                                        textTransform: "none",
-                                                        fontWeight: 700,
-                                                    }}
-                                                >
-                                                    Reject
-                                                </Button>
-                                            )}
-                                        </Stack>
-                                    </Box>
-                                )}
+                                                {selectedEvent.person.status !== "PENDING" && (
+                                                    <Button
+                                                        variant="outlined"
+                                                        color="warning"
+                                                        size="small"
+                                                        startIcon={<HourglassEmpty />}
+                                                        disabled={updatingStatus}
+                                                        onClick={() => handleQuickStatusUpdate(selectedEvent.person.id, "PENDING")}
+                                                        sx={{
+                                                            borderRadius: ROUNDED_SM,
+                                                            boxShadow: NO_SHADOW,
+                                                            textTransform: "none",
+                                                            fontWeight: 700,
+                                                        }}
+                                                    >
+                                                        Set Pending
+                                                    </Button>
+                                                )}
+
+                                                {selectedEvent.person.status !== "REJECTED" && (
+                                                    <Button
+                                                        variant="outlined"
+                                                        color="error"
+                                                        size="small"
+                                                        startIcon={<Cancel />}
+                                                        disabled={updatingStatus}
+                                                        onClick={() => handleQuickStatusUpdate(selectedEvent.person.id, "REJECTED")}
+                                                        sx={{
+                                                            borderRadius: ROUNDED_SM,
+                                                            boxShadow: NO_SHADOW,
+                                                            textTransform: "none",
+                                                            fontWeight: 700,
+                                                        }}
+                                                    >
+                                                        Reject
+                                                    </Button>
+                                                )}
+                                            </>
+                                        )}
+                                    </Stack>
+                                </Box>
                             </Stack>
                         </DialogContent>
 

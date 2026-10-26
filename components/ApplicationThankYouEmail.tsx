@@ -36,7 +36,7 @@ export default function ApplicationThankYouEmail({
                             Thank you for applying to English Homestay Vietnam. We have successfully received your application.
                         </Text>
                         <Text className="text-gray-700 text-base mb-6">
-                            Our team will review your application and get back to you shortly with the next steps.
+                            Our team will review your application and get back to you shortly with the next steps. If you have any questions in the meantime, feel free to reply directly to this email or reach us at english.homestaynn@gmail.com.
                         </Text>
                         <Hr className="border-gray-300 my-6" />
                         <Text className="text-gray-500 text-sm">

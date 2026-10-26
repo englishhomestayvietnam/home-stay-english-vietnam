@@ -61,6 +61,7 @@ export async function submitApplication(values: z.infer<typeof applicationSchema
             const { error: emailError } = await resend.emails.send({
                 from: "English Homestay Vietnam <onboarding@review.englishhomestayvietnam.com>",
                 to: [validatedData.email],
+                replyTo: "english.homestaynn@gmail.com",
                 subject: "We received your application!",
                 react: ApplicationThankYouEmail({
                     fullName: validatedData.fullName,
@@ -79,15 +80,19 @@ export async function submitApplication(values: z.infer<typeof applicationSchema
                 where: { role: "superAdmin" },
                 select: { email: true },
             });
-            const adminEmails = admins.map((u) => u.email).filter(Boolean);
+            const adminEmails = Array.from(
+                new Set([...admins.map((u) => u.email).filter(Boolean), "english.homestaynn@gmail.com"])
+            );
             if (adminEmails.length > 0) {
                 const { error: notifyError } = await resend.emails.send({
                     from: "English Homestay Vietnam <onboarding@review.englishhomestayvietnam.com>",
                     to: adminEmails,
+                    replyTo: validatedData.email,
                     subject: "New application submitted",
                     react: AdminNewApplicationEmail({
                         fullName: validatedData.fullName,
                         email: validatedData.email,
+                        whatsApp: validatedData.whatsApp,
                         country: validatedData.country,
                         sex: validatedData.sex,
                         startDate: validatedData.startDate,

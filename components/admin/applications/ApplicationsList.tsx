@@ -26,6 +26,7 @@ import {
     Button,
     Paper,
     alpha,
+    CircularProgress,
 } from "@mui/material";
 import {
     VisibilityOutlined as ViewIcon,
@@ -38,8 +39,10 @@ import {
     HourglassEmpty,
     Cancel,
     Edit as EditIcon,
+    ForwardToInbox as NotifyAdminIcon,
 } from "@mui/icons-material";
 import { useSession } from "@/lib/auth-client";
+import { toast } from "sonner";
 
 const ROUNDED_SM = "2px";
 const NO_SHADOW = "none !important";
@@ -114,6 +117,28 @@ export default function ApplicationsList() {
             alert("Error updating status: " + err.message);
         } finally {
             setUpdatingStatus(false);
+        }
+    };
+
+    const [notifyingId, setNotifyingId] = useState<string | null>(null);
+
+    const handleNotifyAdmin = async (appId: string, volunteerName?: string) => {
+        try {
+            setNotifyingId(appId);
+            const res = await fetch(`/api/applications/${appId}/notify-admin`, {
+                method: "POST",
+            });
+            const data = await res.json();
+            if (!res.ok) {
+                throw new Error(data.error || "Failed to send notification email");
+            }
+            toast.success(
+                `Notification email sent for ${volunteerName || "volunteer"}!`
+            );
+        } catch (err: any) {
+            toast.error(err.message || "Failed to notify admin");
+        } finally {
+            setNotifyingId(null);
         }
     };
 
@@ -236,7 +261,7 @@ export default function ApplicationsList() {
                 filterable: false,
                 align: "center",
                 headerAlign: "center",
-                minWidth: 130,
+                minWidth: 165,
                 renderCell: ({ row }) => (
                     <Stack
                         direction="row"
@@ -258,6 +283,28 @@ export default function ApplicationsList() {
                             </IconButton>
                         </Tooltip>
 
+                        {/* Send email to admin for this volunteer */}
+                        <Tooltip title="Notify Admin via Email">
+                            <span>
+                                <IconButton
+                                    size="small"
+                                    onClick={() => handleNotifyAdmin(row.id, row.fullName)}
+                                    disabled={notifyingId === row.id}
+                                    sx={{
+                                        color: "#0284c7",
+                                        borderRadius: ROUNDED_SM,
+                                        "&:hover": { bgcolor: alpha("#0284c7", 0.12) },
+                                    }}
+                                >
+                                    {notifyingId === row.id ? (
+                                        <CircularProgress size={16} color="inherit" />
+                                    ) : (
+                                        <NotifyAdminIcon fontSize="small" />
+                                    )}
+                                </IconButton>
+                            </span>
+                        </Tooltip>
+
                         {isSuperAdmin && (
                             <>
                                 <EditButton hideText size="small" recordItemId={row.id} />
@@ -268,7 +315,7 @@ export default function ApplicationsList() {
                 ),
             },
         ],
-        [isSuperAdmin]
+        [isSuperAdmin, notifyingId]
     );
 
     return (
@@ -574,72 +621,97 @@ export default function ApplicationsList() {
                                     </Box>
                                 )}
 
-                                {/* SuperAdmin Quick Actions */}
-                                {isSuperAdmin && (
-                                    <Box sx={{ pt: 1 }}>
-                                        <Typography variant="caption" fontWeight={700} color="text.secondary" display="block" sx={{ mb: 1 }}>
-                                            QUICK STATUS DECISION
-                                        </Typography>
-                                        <Stack direction="row" spacing={1}>
-                                            {selectedApp.status !== "APPROVED" && (
-                                                <Button
-                                                    variant="contained"
-                                                    color="success"
-                                                    size="small"
-                                                    startIcon={<CheckCircle />}
-                                                    disabled={updatingStatus}
-                                                    onClick={() => handleQuickStatusUpdate(selectedApp.id, "APPROVED")}
-                                                    sx={{
-                                                        borderRadius: ROUNDED_SM,
-                                                        boxShadow: NO_SHADOW,
-                                                        textTransform: "none",
-                                                        fontWeight: 700,
-                                                    }}
-                                                >
-                                                    Approve
-                                                </Button>
-                                            )}
+                                {/* Admin Actions & Status */}
+                                <Box sx={{ pt: 1 }}>
+                                    <Typography variant="caption" fontWeight={700} color="text.secondary" display="block" sx={{ mb: 1 }}>
+                                        ADMIN ACTIONS & STATUS
+                                    </Typography>
+                                    <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                                        <Button
+                                            variant="outlined"
+                                            color="info"
+                                            size="small"
+                                            startIcon={
+                                                notifyingId === selectedApp.id ? (
+                                                    <CircularProgress size={16} color="inherit" />
+                                                ) : (
+                                                    <NotifyAdminIcon />
+                                                )
+                                            }
+                                            disabled={notifyingId === selectedApp.id}
+                                            onClick={() => handleNotifyAdmin(selectedApp.id, selectedApp.fullName)}
+                                            sx={{
+                                                borderRadius: ROUNDED_SM,
+                                                boxShadow: NO_SHADOW,
+                                                textTransform: "none",
+                                                fontWeight: 700,
+                                            }}
+                                        >
+                                            {notifyingId === selectedApp.id ? "Sending Email..." : "Notify Admin"}
+                                        </Button>
 
-                                            {selectedApp.status !== "PENDING" && (
-                                                <Button
-                                                    variant="outlined"
-                                                    color="warning"
-                                                    size="small"
-                                                    startIcon={<HourglassEmpty />}
-                                                    disabled={updatingStatus}
-                                                    onClick={() => handleQuickStatusUpdate(selectedApp.id, "PENDING")}
-                                                    sx={{
-                                                        borderRadius: ROUNDED_SM,
-                                                        boxShadow: NO_SHADOW,
-                                                        textTransform: "none",
-                                                        fontWeight: 700,
-                                                    }}
-                                                >
-                                                    Set Pending
-                                                </Button>
-                                            )}
+                                        {isSuperAdmin && (
+                                            <>
+                                                {selectedApp.status !== "APPROVED" && (
+                                                    <Button
+                                                        variant="contained"
+                                                        color="success"
+                                                        size="small"
+                                                        startIcon={<CheckCircle />}
+                                                        disabled={updatingStatus}
+                                                        onClick={() => handleQuickStatusUpdate(selectedApp.id, "APPROVED")}
+                                                        sx={{
+                                                            borderRadius: ROUNDED_SM,
+                                                            boxShadow: NO_SHADOW,
+                                                            textTransform: "none",
+                                                            fontWeight: 700,
+                                                        }}
+                                                    >
+                                                        Approve
+                                                    </Button>
+                                                )}
 
-                                            {selectedApp.status !== "REJECTED" && (
-                                                <Button
-                                                    variant="outlined"
-                                                    color="error"
-                                                    size="small"
-                                                    startIcon={<Cancel />}
-                                                    disabled={updatingStatus}
-                                                    onClick={() => handleQuickStatusUpdate(selectedApp.id, "REJECTED")}
-                                                    sx={{
-                                                        borderRadius: ROUNDED_SM,
-                                                        boxShadow: NO_SHADOW,
-                                                        textTransform: "none",
-                                                        fontWeight: 700,
-                                                    }}
-                                                >
-                                                    Reject
-                                                </Button>
-                                            )}
-                                        </Stack>
-                                    </Box>
-                                )}
+                                                {selectedApp.status !== "PENDING" && (
+                                                    <Button
+                                                        variant="outlined"
+                                                        color="warning"
+                                                        size="small"
+                                                        startIcon={<HourglassEmpty />}
+                                                        disabled={updatingStatus}
+                                                        onClick={() => handleQuickStatusUpdate(selectedApp.id, "PENDING")}
+                                                        sx={{
+                                                            borderRadius: ROUNDED_SM,
+                                                            boxShadow: NO_SHADOW,
+                                                            textTransform: "none",
+                                                            fontWeight: 700,
+                                                        }}
+                                                    >
+                                                        Set Pending
+                                                    </Button>
+                                                )}
+
+                                                {selectedApp.status !== "REJECTED" && (
+                                                    <Button
+                                                        variant="outlined"
+                                                        color="error"
+                                                        size="small"
+                                                        startIcon={<Cancel />}
+                                                        disabled={updatingStatus}
+                                                        onClick={() => handleQuickStatusUpdate(selectedApp.id, "REJECTED")}
+                                                        sx={{
+                                                            borderRadius: ROUNDED_SM,
+                                                            boxShadow: NO_SHADOW,
+                                                            textTransform: "none",
+                                                            fontWeight: 700,
+                                                        }}
+                                                    >
+                                                        Reject
+                                                    </Button>
+                                                )}
+                                            </>
+                                        )}
+                                    </Stack>
+                                </Box>
                             </Stack>
                         </DialogContent>
 

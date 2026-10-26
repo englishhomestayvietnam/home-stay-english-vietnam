@@ -16,6 +16,7 @@ import * as React from "react";
 interface Props {
   fullName: string;
   email: string;
+  whatsApp?: string;
   country : string;
   sex : string;
   startDate: string | Date;
@@ -32,6 +33,7 @@ interface Props {
 export default function AdminNewApplicationEmail({
   fullName,
   email,
+  whatsApp,
   country,
   sex,
   startDate,
@@ -59,6 +61,17 @@ export default function AdminNewApplicationEmail({
               <Text className="text-gray-700 text-base">
                 <strong>Email:</strong> {email}
               </Text>
+              {whatsApp && (
+                <Text className="text-gray-700 text-base">
+                  <strong>WhatsApp:</strong>{" "}
+                  <Link
+                    href={`https://wa.me/${whatsApp.replace(/[^0-9]/g, "")}`}
+                    className="text-green-600 underline"
+                  >
+                    {whatsApp} (Chat on WhatsApp)
+                  </Link>
+                </Text>
+              )}
               <Text className="text-gray-700 text-base">
                 <strong>Country:</strong> {country}
               </Text>

@@ -54,6 +54,7 @@ export async function POST() {
       const { data, error } = await resend.emails.send({
         from: "English Homestay Vietnam<thank-you@review.englishhomestayvietnam.com>",
         to: [session.user.email || ""],
+        replyTo: "english.homestaynn@gmail.com",
         subject: "Thank you for sharing your story!",
         react: ThankYouReviewEmail({ userName, reviewTitle , rating , reviewText }),
       });

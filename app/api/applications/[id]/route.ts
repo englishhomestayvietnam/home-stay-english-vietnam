@@ -84,6 +84,7 @@ export async function PATCH(
                 const { error: emailError } = await resend.emails.send({
                     from: "English Homestay Vietnam <onboarding@review.englishhomestayvietnam.com>",
                     to: [application.email],
+                    replyTo: "english.homestaynn@gmail.com",
                     subject: "Your application has been approved",
                     react: ApplicationApprovedEmail({
                         fullName: application.fullName,

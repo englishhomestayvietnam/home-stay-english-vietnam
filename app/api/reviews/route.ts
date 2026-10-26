@@ -171,6 +171,7 @@ export async function POST(req: NextRequest) {
       const { error } = await resend.emails.send({
         from: "English Homestay Vietnam <thank-you@review.englishhomestayvietnam.com>",
         to: [review.user.email],
+        replyTo: "english.homestaynn@gmail.com",
         subject: "Thank you for sharing your story!",
         react: ThankYouReviewEmail({ 
           userName: review.user.name || "Guest",
