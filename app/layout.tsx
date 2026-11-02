@@ -85,10 +85,13 @@ export async function generateMetadata(): Promise<Metadata> {
           'Cultural exchange program offering free homestay for volunteer English teachers in Hanoi, Vietnam.',
         address: {
           '@type': 'PostalAddress',
-          streetAddress: 'Số 246 Hải Âu 3, Vinhomes Ocean Park 1, Gia Lâm',
-          addressLocality: 'Hà Nội',
+          streetAddress: 'Số 246 Hải Âu 3, Vinhomes Ocean Park 1, Kiêu Kỵ',
+          addressLocality: 'Gia Lâm',
+          addressRegion: 'Hà Nội',
+          postalCode: '100000',
           addressCountry: 'VN',
         },
+        hasMap: 'https://maps.app.goo.gl/muV15De6xK9ekzUj6?g_st=ic',
         contactPoint: {
           '@type': 'ContactPoint',
           email: 'english.homestaynn@gmail.com',

@@ -120,19 +120,19 @@ export default function WelcomeBookPage() {
                 Homestay Address
               </div>
               <p className="text-lg font-bold text-foreground leading-relaxed">
-                Số 246 Hải Âu 3, Vinhomes Ocean Park 1, Gia Lâm, Hà Nội
+                Số 246 Hải Âu 3, Vinhomes Ocean Park 1, Kiêu Kỵ, Gia Lâm, Hà Nội
               </p>
             </div>
             <div className="flex flex-wrap gap-3 shrink-0 w-full md:w-auto">
               <button
-                onClick={() => handleCopyText("21A Alley 22 Nguyen Khiem Ich Street, Trâu Quỳ, Gia Lâm, Hanoi", "address")}
+                onClick={() => handleCopyText("Số 246 Hải Âu 3, Vinhomes Ocean Park 1, Kiêu Kỵ, Gia Lâm, Hà Nội", "address")}
                 className="flex-1 md:flex-none px-5 py-3 bg-muted/65 hover:bg-muted text-foreground border border-border rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-2"
               >
                 {copiedAddress ? <Check className="w-4 h-4 text-primary" /> : <Copy className="w-4 h-4" />}
                 {copiedAddress ? "Copied" : "Copy Address"}
               </button>
               <a
-                href="https://maps.google.com/?q=English+Homestay+Vietnam"
+                href="https://maps.app.goo.gl/muV15De6xK9ekzUj6?g_st=ic"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex-1 md:flex-none px-5 py-3 bg-primary hover:bg-primary/90 text-primary-foreground font-bold rounded-lg text-xs transition-transform text-center flex items-center justify-center gap-2"

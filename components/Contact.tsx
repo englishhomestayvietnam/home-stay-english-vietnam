@@ -18,9 +18,8 @@ const Contact = () => {
     {
       icon: <MapPin className="w-6 h-6" />,
       label: "Address",
-      value: "số 246 Hải Âu 3 Vinhome Ocean Park 1 Gia Lâm Hà Nội",
-      link: "https://maps.app.goo.gl/6eduRKaLH72ogakt5?g_st=ic"
-
+      value: "Số 246 Hải Âu 3, Vinhomes Ocean Park 1, Kiêu Kỵ, Gia Lâm, Hà Nội",
+      link: "https://maps.app.goo.gl/muV15De6xK9ekzUj6?g_st=ic"
     }
   ];
 
@@ -69,6 +68,44 @@ const Contact = () => {
                 </p>
               </a>
             ))}
+          </div>
+
+          {/* Embedded Google Map Section */}
+          <div className="mb-12 overflow-hidden rounded-xl border border-border/60 bg-card shadow-card">
+            <div className="p-4 sm:p-6 border-b border-border/50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                  <MapPin className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground text-base">Homestay Location</h3>
+                  <p className="text-xs text-muted-foreground">Số 246 Hải Âu 3, Vinhomes Ocean Park 1, Kiêu Kỵ, Gia Lâm, Hà Nội</p>
+                </div>
+              </div>
+              <Button variant="outline" size="sm" asChild className="shrink-0 gap-2 text-xs font-semibold hover:bg-primary hover:text-white transition-smooth">
+                <a
+                  href="https://maps.app.goo.gl/muV15De6xK9ekzUj6?g_st=ic"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5"
+                >
+                  <MapPin className="w-3.5 h-3.5" />
+                  View on Google Maps
+                </a>
+              </Button>
+            </div>
+            <div className="relative w-full h-72 sm:h-88 bg-muted">
+              <iframe
+                title="English Homestay Vietnam Location Map"
+                src="https://maps.google.com/maps?q=English+Homestay+Vi%E1%BB%87t+Nam+-+Ti%E1%BA%BFng+Anh+giao+ti%E1%BA%BFp+to%C3%A0n+c%E1%BA%A7u,+246+H%E1%BA%A3i+%C3%82u+3+Vinhome+Ocean+Park,+1,+Ki%C3%AAu+K%E1%BB%B5,+Gia+L%C3%A2m,+H%C3%A0+N%E1%BB%99i+100000&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen={false}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </div>
           </div>
 
           <div className="text-center bg-card rounded-lg p-8 shadow-card">
